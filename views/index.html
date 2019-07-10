@@ -33,9 +33,16 @@
       <h1>
         Webex Vaporware
       </h1>
+      <h2>
+        Volatile hyperlinks for guest access to meetings!
+      </h2>
     </header>
 
     <main>
+      <section class="dreams">
+      <p lass="bold">Where should we connect the guest to (SIP URI)?</p>
+      <input type="text" id="sipuri">
+      </section>
       
       <section class="dreams">
       <p class="bold">When should this link expire?</p>
@@ -43,10 +50,7 @@
       <input type="radio" id="datepickerq">  
       </section>
       
-      <section class="dreams">
-      <p lass="bold">Where should we connect the user to (SIP URI)?</p>
-      <input type="text" id="sipuri">
-      </section>
+
 
     </main>
 
@@ -61,16 +65,16 @@
 
   </body>
   
-  <script src="pikaday.js"></script>
   <script>
       var picker = new Pikaday({ 
         field: document.getElementById('datepicker'),
         format: 'YYYYMMDD',
-        onSelect: boom()
+        onSelect: boom(),
+        onDraw: boom()
       });
     
       function boom(){
-        console.log(document.get);
+        console.log(document.getElementById('datepicker').value);
       };    
   </script>
   
