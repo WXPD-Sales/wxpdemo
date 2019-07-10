@@ -25,6 +25,7 @@ const listener = app.listen(process.env.PORT, function() {
 });
 
 RedisExpiredEvents();
+//YYYYMMDD
 console.log(expiry.calculateDays('20180714','20190714'));
 console.log(expiry.calculateSeconds('20180714','20190714'));
 

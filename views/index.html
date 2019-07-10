@@ -63,7 +63,15 @@
   
   <script src="pikaday.js"></script>
   <script>
-      var picker = new Pikaday({ field: document.getElementById('datepicker') });
+      var picker = new Pikaday({ 
+        field: document.getElementById('datepicker'),
+        format: 'YYYYMMDD',
+        onSelect: boom()
+      });
+    
+      function boom(){
+        console.log(document.get);
+      };    
   </script>
   
 </html>
