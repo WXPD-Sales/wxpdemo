@@ -1,7 +1,5 @@
 const Redis = require('ioredis');
 
-//connect to RedisLabs
-
 class RedisRepo {
   constructor() {
     this.redis = new Redis(process.env.REDIS_CONN,{connectionName:`vaporware-repo`});

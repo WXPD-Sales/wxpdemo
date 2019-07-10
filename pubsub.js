@@ -6,7 +6,7 @@ const Redis = require('ioredis');
 const subscriber = new Redis(process.env.REDIS_CONN,{connectionName:`vaporware-sub`}); //connection to publish events & write data
 const publisher = new Redis(process.env.REDIS_CONN,{connectionName:`vaporware-pub`}); // connection to subcribe to events
 
-const PubSub = new class PubSub {
+class PubSub {
   publish(channel, message) {
     publisher.publish(channel, message);
   }
@@ -18,6 +18,6 @@ const PubSub = new class PubSub {
       callback(channel, message);
     });
   }
-}();
+};
 
-module.exports = {PubSub};
+module.exports = PubSub;

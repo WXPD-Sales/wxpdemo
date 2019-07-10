@@ -4,7 +4,7 @@
 // init project
 const express = require('express');
 
-const RedisExpiredEvents = require('./redis.expired-events');
+const { RedisExpiredEvents } = require('./redis.expired-events');
 const app = express();
 
 // we've started you off with Express, 
@@ -23,4 +23,4 @@ const listener = app.listen(process.env.PORT, function() {
   console.log('Your app is listening on port ' + listener.address().port);
 });
 
-RedisExpiredEvents;
+RedisExpiredEvents();

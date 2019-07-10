@@ -5,7 +5,8 @@ const RedisRepo = require('./redis.repo');
 
 const redisRepo = new RedisRepo();
 
-const RedisExpiredEvents = function(){
+//const RedisExpiredEvents = function(){
+module.exports = function (){
   PubSub.subscribe("__keyevent@0__:expired");
   PubSub.on("message", async (channel, message) => {
     // Handle event
@@ -20,6 +21,6 @@ const RedisExpiredEvents = function(){
         }
     }
   });
-}
+};
 
-module.exports = RedisExpiredEvents;
+//module.exports.RedisExpiredEvents = RedisExpiredEvents;
