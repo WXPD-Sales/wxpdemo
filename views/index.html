@@ -44,7 +44,7 @@
 
     <main>
       <section class="dreams">
-      <p>Where should we connect the guest to (SIP URI)?</p>
+      <p class="bold">Where should we connect the Guest to (SIP URI)?</p>
       <input type="text" id="sipuri">
       </section>
       
@@ -58,14 +58,25 @@
       <section class="dreams">
       <p class="bold">When should this link expire?</p>
       <input type="text" id="flatpckr">  
-       
       </section>
       
       <section class="dreams">
-      <p>What email should we send the linke to?</p>
-      <input type="email" id="email">  
-       
+      <p class="bold">Generated Link: </p>
       </section>
+      
+      <section class="dreams">
+      <p class="bold">Send the link to Guest as..</p>
+      E-Mail: <input type="email" id="email">  
+      SMS: <input type="number" id="sms">  
+      </section>
+      
+      <section class="dreams">
+      <button id="send_button">
+        Send  
+      </button> 
+      </section>
+      
+      
       
 
 
@@ -114,6 +125,11 @@
         console.log(`expriy selected`);
       } );
       */
+    
+    let send_button = document.getElementById('send_button');
+    send_button.onClick = function (){
+      console.log(` button clicked`)
+    }
     
   </script>
   
