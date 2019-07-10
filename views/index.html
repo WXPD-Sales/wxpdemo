@@ -84,6 +84,10 @@
         enableTime: true,
         dateFormat: "Y-m-d H:i",
         minDate: "today",
+        onChange: function(selectedDates, dateStr, instance) {
+          console.log(`selection changed ${dateStr} `);
+        },
+        allowInput: true
       });
     
       var picker = new Pikaday({ 
@@ -94,8 +98,16 @@
       });
     
       function boom(){
-        console.log(document.getElementById('datepicker').value);
+        //console.log(document.getElementById('datepicker').value);
       };    
+    
+      /*
+      //let instance = document.getElementById('faltpckr');
+      document.getElementById('flatpckr').config.onChange.push(function() { 
+        console.log(`expriy selected`);
+      } );
+      */
+    
   </script>
   
 </html>
