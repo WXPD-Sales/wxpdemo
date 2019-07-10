@@ -4,7 +4,8 @@
 // init project
 const express = require('express');
 
-const RedisExpiredEvents = require('./redis.expired-events');
+const RedisExpiredEvents = require('./redis-expired-events');
+const expiry = require('./expiry');
 const app = express();
 
 // we've started you off with Express, 

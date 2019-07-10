@@ -1,7 +1,7 @@
 //import PubSub from "./pubsub";
 
 const PubSub = require('./pubsub');
-const RedisRepo = require('./redis.repo');
+const RedisRepo = require('./redis-repo');
 
 const redisRepo = new RedisRepo();
 
