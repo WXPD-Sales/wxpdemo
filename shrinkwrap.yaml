@@ -1,4 +1,5 @@
 dependencies:
+  dotenv: 8.0.0
   express: 4.16.4
   ioredis: 4.11.1
 packages:
@@ -94,6 +95,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA=
+  /dotenv/8.0.0:
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-30xVGqjLjiUOArT4+M5q9sYdvuR4riM6yK9wMcas9Vbp6zZa+ocC9dp6QoftuhTPhFAiLK/0C5Ni2nou/Bk8lg==
   /ee-first/1.1.1:
     dev: false
     resolution:
@@ -437,5 +444,6 @@ registry: 'https://registry.npmjs.org/'
 shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
 specifiers:
+  dotenv: ^8.0.0
   express: ^4.16.4
   ioredis: ^4.11.1
