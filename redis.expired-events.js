@@ -9,6 +9,4 @@ const RedisExpiredEvents = function(){
   });
 }
 
-
-
-module.exports = {RedisExpiredEvents};
+module.exports = RedisExpiredEvents;

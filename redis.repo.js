@@ -1,8 +1,8 @@
-import Redis from "ioredis";
+const Redis = require('ioredis');
 
 //connect to RedisLabs
 
-export default class RedisRepo {
+const RedisRepo =  new class RedisRepo {
   constructor() {
     this.redis = new Redis(process.env.REDIS_CONN,{connectionName:`vaporware-repo`});
     this.redis.on("ready", () => {
@@ -10,3 +10,5 @@ export default class RedisRepo {
     });
   }
 }
+
+module.exports = RedisRepo;
