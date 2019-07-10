@@ -1,11 +1,9 @@
 import Redis from "ioredis";
 
+//connect to RedisLabs
+const subscriber = new Redis(process.env.REDIS_CONN,{connectionName:`vaporware-sub`}); //connection to publish events & write data
+const publisher = new Redis(process.env.REDIS_CONN,{connectionName:`vaporware-pub`}); // connection to subcribe to events
 
-const host = "localhost";
-const port = 6379;
-const db = 0;
-const subscriber = new Redis({ host, port, db });
-const publisher = new Redis({ host, port, db });
 export default new class PubSub {
   publish(channel, message) {
     publisher.publish(channel, message);
