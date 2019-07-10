@@ -10,6 +10,7 @@ module.exports = function (){
   PubSub.subscribe("__keyevent@0__:expired");
   PubSub.on("message", async (channel, message) => {
     // Handle event
+    console.log(`Received message ${message} on ${channel}`);
     const [type, key] = message.split(":");
     switch (type) {
       case "reminder": {
