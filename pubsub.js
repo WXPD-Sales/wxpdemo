@@ -20,4 +20,4 @@ class PubSub {
   }
 };
 
-module.exports = PubSub;
+module.exports = { PubSub: PubSub};
