@@ -1,10 +1,12 @@
-import Redis from "ioredis";
+//import Redis from "ioredis";
+
+const Redis = require('ioredis');
 
 //connect to RedisLabs
 const subscriber = new Redis(process.env.REDIS_CONN,{connectionName:`vaporware-sub`}); //connection to publish events & write data
 const publisher = new Redis(process.env.REDIS_CONN,{connectionName:`vaporware-pub`}); // connection to subcribe to events
 
-export default new class PubSub {
+new class PubSub {
   publish(channel, message) {
     publisher.publish(channel, message);
   }
@@ -17,3 +19,4 @@ export default new class PubSub {
     });
   }
 }();
+
