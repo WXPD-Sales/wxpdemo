@@ -31,27 +31,27 @@
   <body>
     <header>
       <h1>
-        A Dream of the Future
+        Webex Vaporware
       </h1>
     </header>
 
     <main>
-      <p class="bold">Oh hi,</p>
-      
-      <p>Tell me your hopes and dreams:</p>
-      
-      <form>
-        <input name="dream" type="text" maxlength="100" placeholder="Dreams!" aria-labelledby="submit-dream">
-        <button type="submit" id="submit-dream">Submit Dream</button>
-      </form>
       
       <section class="dreams">
-        <ul id="dreams"></ul>
+      <p class="bold">When should this link expire?</p>
+      <input type="text" id="datepicker">
+      <input type="radio" id="datepickerq">  
       </section>
+      
+      <section class="dreams">
+      <p lass="bold">Where should we connect the user to (SIP URI)?</p>
+      <input type="text" id="sipuri">
+      </section>
+
     </main>
 
     <footer>
-      Made with <a href="https://glitch.com">Glitch</a>!
+      Made by <a href="https://cisco.com">Cisco</a>! Made with <a href="https://glitch.com">Glitch</a>!
     </footer>
 
     <!-- include the Glitch button to show what the webpage is about and
@@ -60,4 +60,10 @@
     <script src="https://button.glitch.me/button.js"></script>
 
   </body>
+  
+  <script src="pikaday.js"></script>
+  <script>
+      var picker = new Pikaday({ field: document.getElementById('datepicker') });
+  </script>
+  
 </html>
