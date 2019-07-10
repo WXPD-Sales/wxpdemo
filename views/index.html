@@ -127,8 +127,14 @@
       */
     
     let send_button = document.getElementById('send_button');
-    send_button.onClick = function (){
-      console.log(` button clicked`)
+    send_button.onclick = function (event){
+      event.preventDefault();
+      let message = {};
+      
+      let expiry_date = document.getElementById('flatpckr').value;
+      let sip_target = document.getElementById('sip_uri').value;
+      let email = document.getElementById('email').value;
+      console.log(`${this.id} button clicked, expiry ${expiry_date}`);
     }
     
   </script>
