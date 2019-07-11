@@ -183,6 +183,10 @@
         //messages.textContent += `\n${message}`;
         messages.textContent = `\n${message}`;
         messages.scrollTop = messages.scrollHeight;
+        console.log(JSON.parse(message));
+        if((JSON.parse(message)).url!=""){
+          console.log(`URL found - ${(JSON.parse(message)).url}`)
+        };
       }
 
       function handleResponse(response) {
