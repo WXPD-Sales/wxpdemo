@@ -47,7 +47,9 @@ app.post('/create_url', function(request, response) {
   console.log(`full url - ${guestUrl}`);
   response.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expires: `in ${Urlexpiry} secs` });
   
-  EmailValidator.validate("test@email.com");
+  if (email_validator.validate(request.body.sip_target)){
+    
+  };
 
 });
 

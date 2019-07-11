@@ -153,6 +153,7 @@
       async function validate_message_object(message){
         if(!message.expiry_date || !message.sip_target){
           console.log(`Bad data`);
+          showMessage(`{"Error":"Oops, you seem to be missing something.."}`);
           return false;
         } else {
           console.log (JSON.stringify(message));
