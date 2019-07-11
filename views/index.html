@@ -41,18 +41,18 @@
     <main>
       <section class="dreams">
       <p class="bold">Where should we connect the Guest to (SIP URI)?</p>
-      <input type="text" id="sipuri">
+      <input type="text" id="sipuri" required>
       </section>
       
         
       <section class="dreams">
       <p class="bold">When should this link expire?</p>
-      <input type="text" id="flatpckr">  
+      <input type="text" id="flatpckr" required>  
       </section>
       
       <section class="dreams">
       <p class="bold">Send the link to Guest as..</p>
-      E-Mail: <input type="email" id="email">  
+      E-Mail: <input type="email" id="email" required>  
       SMS: <input type="number" id="sms">  
       </section>
       
@@ -102,15 +102,38 @@
       let send_button = document.getElementById('send_button');
       send_button.onclick = function (event){
         //event.preventDefault();
+        try {
+          create_message_object().then(message){
+            validate_message_object(message)
+          }
+          
+        } 
+        catch (err){
+          console.log(err);
+        }
+
+        console.log(`${this.id} button clicked, ${JSON.stringify(message)}`);
+
+      }
+    
+      async function create_message_object(){
         let message = {};
         message.expiry_date = document.getElementById('flatpckr').value;
         message.sip_target = document.getElementById('sipuri').value;
         message.send_email = document.getElementById('email').value;
         message.send_sms = document.getElementById('sms').value;
-
-        console.log(`${this.id} button clicked, ${JSON.stringify(message)}`);
-
-      }
+        return message;
+      };
+    
+      function validate_message_object(message){
+        if(!message.expiry_date || !message.sip_target){
+          console.log(`Bad data`);
+          return false;
+        } else {
+          console.log (JSON.stringify(message));
+          return true;
+        }
+      };
     
   </script>
   
