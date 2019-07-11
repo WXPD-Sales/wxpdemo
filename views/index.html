@@ -130,11 +130,13 @@
     send_button.onclick = function (event){
       event.preventDefault();
       let message = {};
+      message.expiry_date = document.getElementById('flatpckr').value;
+      message.sip_target = document.getElementById('sipuri').value;
+      message.send_email = document.getElementById('email').value;
+      message.send_sms = document.getElementById('sms').value;
       
-      let expiry_date = document.getElementById('flatpckr').value;
-      let sip_target = document.getElementById('sip_uri').value;
-      let email = document.getElementById('email').value;
-      console.log(`${this.id} button clicked, expiry ${expiry_date}`);
+      console.log(`${this.id} button clicked, ${JSON.stringify(message)}`);
+      
     }
     
   </script>
