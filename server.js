@@ -14,8 +14,7 @@ const randomize = require('randomatic');
 const RedisRepo = require('./redis-repo');
 const rr = new RedisRepo;
 
-// we've started you off with Express, 
-// but feel free to use whatever libs or frameworks you'd like through `package.json`.
+const email_validator = require("email-validator");
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
@@ -47,6 +46,9 @@ app.post('/create_url', function(request, response) {
   let guestUrl = `${request.protocol}://${request.get('host')}/guest/${guestSessionID}`;
   console.log(`full url - ${guestUrl}`);
   response.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expires: `in ${Urlexpiry} secs` });
+  
+  EmailValidator.validate("test@email.com");
+
 });
 
 // listen for requests :)
@@ -60,3 +62,12 @@ RedisExpiredEvents();
 //console.log(expiry.calculateSeconds(thismoment(),'20200714'));
 
 rr.setURL('98r34982r', '325325', 500);
+
+function validate_guest_data(target_url){
+  
+  
+}
+
+function create_guest_record(){
+  
+}
