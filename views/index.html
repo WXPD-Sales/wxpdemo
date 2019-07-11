@@ -58,6 +58,11 @@
       
       <section class="dreams">
       <p class="bold">Generated Link: </p>
+      <p id="messages">Data</p> 
+      
+      <button id="create_button">
+        Create Link  
+      </button> 
       </section>
       
       <section class="dreams">
@@ -66,10 +71,7 @@
       </button> 
       </section>
       
-      <section class="dreams">
-      <p id="messages"> Logs
-      </p> 
-      </section>
+      
       
 
     </main>
@@ -101,8 +103,8 @@
       });
     
     
-      let send_button = document.getElementById('send_button');
-      send_button.onclick = function (event){
+      let create_button = document.getElementById('create_button');
+      create_button.onclick = function (event){
         //event.preventDefault();
         try {
           create_message_object()
@@ -110,7 +112,7 @@
           .then((result) => {
             console.log (result)
             if (result){
-              send_message_object();
+              send();
             } else {
               
             }

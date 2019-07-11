@@ -35,11 +35,12 @@ app.get('/', function(request, response) {
 app.post('/create_url', function(request, response) {
   //response.sendFile(__dirname + '/views/index.html');
   console.log(request.body);
-  console.log(expiry.calculateDays(thismoment(),request.body.expiry_date));
-  let Urlexpiry = expiry.calculateSeconds(thismoment(),request.body.expiry_date)
-  let guestUrl = `${request.protocol}://${request.get('host')}/${randomize('Aa0', 16)}`;
+  //console.log(expiry.calculateDays(thismoment(),request.body.expiry_date));
+  let Urlexpiry = Math.round(expiry.calculateSeconds(thismoment(),request.body.expiry_date));
+  let guestSessionID = randomize('Aa0', 16);
+  let guestUrl = `${request.protocol}://${request.get('host')}/${guestSessionID}`;
   console.log(`full url - ${guestUrl}`);
-  response.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expries:  });
+  response.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expries: `${Urlexpiry}` });
 });
 
 // listen for requests :)
