@@ -57,7 +57,10 @@
         
       <section class="dreams">
         <p class="bold"><h4>When should this link expire?</h4>
-        <div type="text" id="expiry_value" style="display:none">Time</div>
+        <h5 id="selected_expiry">
+          Time/Date?
+        </h5>
+        <!--input type="text" id="flatpckr" required="true" autocomplete="off" --> 
         
         <i id="flatpckr" style="color:#000000" class="cui-icon icon icon-calendar-month_36"></i>
         </p>  
@@ -66,8 +69,12 @@
       <section class="dreams">
       <button id="create_button" class="cui-button">
         Create Link  
-      </button>   
-      <p id="messages"></p> 
+      </button>  
+      <div><br><br>
+        <p id="messages"></p>
+      </div> 
+        
+        
       </section>
       <br>
       <section class="dreams">
@@ -100,6 +107,7 @@
   </body>
   
   <script>
+      let picked_date;
     
       flatpickr("#flatpckr", {
         enableTime: true,
@@ -107,6 +115,8 @@
         minDate: "today",
         onChange: function(selectedDates, dateStr, instance) {
           console.log(`selection changed ${dateStr} `);
+          picked_date = dateStr;
+          document.getElementById('selected_expiry').innerHTML = dateStr;
         },
         allowInput: true,
         //time_24hr: true
@@ -136,10 +146,11 @@
       let message = {};
       async function create_message_object(){
         //let message = {};
-        message.expiry_date = document.getElementById('flatpckr').value;
+        //message.expiry_date = document.getElementById('flatpckr').value;
+        message.expiry_date = picked_date;
         message.sip_target = document.getElementById('sipuri').value;
         message.send_email = document.getElementById('email').value;
-        message.send_sms = document.getElementById('sms').value;
+        //message.send_sms = document.getElementById('sms').value;
         return message;
       };
     
@@ -149,6 +160,7 @@
           return false;
         } else {
           console.log (JSON.stringify(message));
+          document.getElementById('selected_expiry').innerHTML = message.expiry_date;
           return true;
         }
       };

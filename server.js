@@ -40,7 +40,7 @@ app.post('/create_url', function(request, response) {
   let guestSessionID = randomize('Aa0', 16);
   let guestUrl = `${request.protocol}://${request.get('host')}/${guestSessionID}`;
   console.log(`full url - ${guestUrl}`);
-  response.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expries: `${Urlexpiry}` });
+  response.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expires: `in ${Urlexpiry} secs` });
 });
 
 // listen for requests :)
