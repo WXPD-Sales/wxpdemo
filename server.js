@@ -36,11 +36,10 @@ app.post('/create_url', function(request, response) {
   //response.sendFile(__dirname + '/views/index.html');
   console.log(request.body);
   console.log(expiry.calculateDays(thismoment(),request.body.expiry_date));
-  let guest_url = `https://${location.host}`;
-  //let guest_url = url.parse(request.url);
-  //console.log(guest_url);
-  //console.log(guest_url.pathname);
-  response.send({ result: 'OK', message: 'Session updated', url: `${guest_url}/${randomize('Aa0', 16)}` });
+  let Urlexpiry = expiry.calculateSeconds(thismoment(),request.body.expiry_date)
+  let guestUrl = `${request.protocol}://${request.get('host')}/${randomize('Aa0', 16)}`;
+  console.log(`full url - ${guestUrl}`);
+  response.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expries:  });
 });
 
 // listen for requests :)
