@@ -49,30 +49,32 @@
     <main>
       <br>
       <section class="dreams">
-      <p class="bold"><h3>Where should we connect the Guest to (SIP URI)?</h3>
-      <input type="text" id="sipuri" required>
+      <p class="bold"><h3>Where should we connect the Guest to?</h3>
+      <input class="cui-input" type="email" placeholder="SIP URI " id="sipuri" required>
       </p>
       </section>
       <br>
         
       <section class="dreams">
-        <p class="bold"><h3>When should this link expire?</h3>
+        <p class="bold"><h4>When should this link expire?</h4>
         <!--input type="text" id="flatpckr" required="true" autocomplete="off" --> 
-        <i id="flatpckr" style="color:#000000" class="cui-icon icon icon-calendar-month_20"></i>
+        <i id="flatpckr" style="color:#000000" class="cui-icon icon icon-calendar-week_24"></i>
         </p>  
       </section>
       <br>
       <section class="dreams">
-      <button id="create_button">
+      <button id="create_button" class="cui-button">
         Create Link  
       </button>   
       <p id="messages"></p> 
       </section>
       <br>
       <section class="dreams">
-      <p class="bold">Send the link as..<br> E-Mail:</p>
+      <p class="bold">Send the link as..<br></p>
       
-      <input type="email" id="email" required><br>   
+        
+        
+      <input id="email" class="cui-input" name="email" type="email" placeholder="Email Address"><br>   
       SMS: 
       <input type="number" id="sms">  
       </section>
