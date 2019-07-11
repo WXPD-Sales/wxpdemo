@@ -13,9 +13,12 @@ const app = express();
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get('/', function(request, response) {
