@@ -48,14 +48,10 @@
 
     <main>
       <br>
-      <section class="dreams">
+      <section class="dreams" id="guest_info_section">
       <p class="bold"><h4>Where should we connect the Guest to?</h4>
       <input class="cui-input" type="email" placeholder="SIP URI " id="sipuri" required>
-      </p>
-      </section>
-      <br>
-        
-      <section class="dreams">
+      </p><br>
         <p class="bold"><h4>When should this link expire?</h4>
         <h5 id="selected_expiry">
           Time/Date?
@@ -70,21 +66,22 @@
       <button id="create_button" class="cui-button">
         Create Link  
       </button>  
-      <div><br><br>
-        <p id="messages"></p>
-      </div> 
-        
-        
       </section>
+    
+      <section>
+        <div>
+          <br>
+          <p id="messages"></p>
+        </div>
+      </section>  
+      
       <br>
-      <section class="dreams">
+      <section class="dreams" id="send_as_email_section">
       <br><br>  
       <input id="email" class="cui-input" name="email" type="email" placeholder="Email Address"><br>   
-      </section>
-      
-      <section class="dreams">
+    
       <button id="send_button" class="cui-button">
-        Send  
+        Send Link
       </button> 
       </section>
       

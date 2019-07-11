@@ -34,7 +34,7 @@ app.get('/', function(request, response) {
 app.get('/guest/:guest_session_id', function(request, response) {
   //response.sendFile(__dirname + '/views/index.html');
   console.log("got a hit")
-  response.send({ message: `this is where the widget will load for session ${request.params}`});
+  response.send({ message: `if not expired, this is where the widget will load for session ${request.params.guest_session_id}`});
 });
 
 // http://expressjs.com/en/starter/basic-routing.html
