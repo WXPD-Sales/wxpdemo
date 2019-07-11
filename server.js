@@ -8,7 +8,7 @@ const RedisExpiredEvents = require('./redis-expired-events');
 const expiry = require('./expiry');
 const app = express();
 const thismoment = require('moment');
-
+var url  = require('url');
 const randomize = require('randomatic');
 
 const RedisRepo = require('./redis-repo');
@@ -36,7 +36,11 @@ app.post('/create_url', function(request, response) {
   //response.sendFile(__dirname + '/views/index.html');
   console.log(request.body);
   console.log(expiry.calculateDays(thismoment(),request.body.expiry_date));
-  response.send({ result: 'OK', message: 'Session updated' });
+  let guest_url = `https://${location.host}`;
+  //let guest_url = url.parse(request.url);
+  //console.log(guest_url);
+  //console.log(guest_url.pathname);
+  response.send({ result: 'OK', message: 'Session updated', url: `${guest_url}/${randomize('Aa0', 16)}` });
 });
 
 // listen for requests :)
