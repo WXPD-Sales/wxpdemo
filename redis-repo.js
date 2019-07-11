@@ -21,6 +21,15 @@ class RedisRepo {
       .exec();
   }
   
+  setURL(key, value, expire) {
+    this.redis
+      .multi()
+      .set(key, value)
+      .set(`URL:${key}`, 1)
+      .expire(`URL:${key}`, expire)
+      .exec();
+  }
+  
 }
 
 module.exports = RedisRepo;

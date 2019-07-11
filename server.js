@@ -9,6 +9,11 @@ const expiry = require('./expiry');
 const app = express();
 const thismoment = require('moment');
 
+const randomize = require('randomatic');
+
+const RedisRepo = require('./redis-repo');
+const rr = new RedisRepo;
+
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
 
@@ -43,3 +48,5 @@ RedisExpiredEvents();
 //YYYYMMDD
 //console.log(expiry.calculateDays(thismoment(),'20190714'));
 //console.log(expiry.calculateSeconds(thismoment(),'20200714'));
+
+rr.setURL('98r34982r', '325325', 500);
