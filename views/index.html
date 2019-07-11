@@ -110,7 +110,7 @@
           .then((result) => {
             console.log (result)
             if (result){
-              send_message_object(message);
+              send_message_object();
             } else {
               
             }
@@ -121,9 +121,9 @@
         }
 
       }
-    
+      let message = {};
       async function create_message_object(){
-        let message = {};
+        //let message = {};
         message.expiry_date = document.getElementById('flatpckr').value;
         message.sip_target = document.getElementById('sipuri').value;
         message.send_email = document.getElementById('email').value;
@@ -142,7 +142,12 @@
       };
     
       async function send_message_object(){
-        
+        fetch('/create_url', { method: 'POST', credentials: 'same-origin', body: `${message}` })
+        .then(handleResponse)
+        .then(showMessage)
+        .catch(function(err) {
+          showMessage(err.message);
+        });
       };
     
       function showMessage(message) {

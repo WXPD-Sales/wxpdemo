@@ -19,6 +19,12 @@ app.get('/', function(request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
+// http://expressjs.com/en/starter/basic-routing.html
+app.post('/create_url', function(request, response) {
+  //response.sendFile(__dirname + '/views/index.html');
+  response.
+});
+
 // listen for requests :)
 const listener = app.listen(process.env.PORT, function() {
   console.log('Your app is listening on port ' + listener.address().port);
