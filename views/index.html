@@ -22,11 +22,7 @@
     
     <!-- import the webpage's client-side javascript file -->
     <script src="/client.js" defer></script>
-    
-    <!-- import datepicker -->
-    <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
-    
+
     <!-- import flatpickr -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -48,12 +44,6 @@
       <input type="text" id="sipuri">
       </section>
       
-      <!--
-      <section class="dreams">
-      <p class="bold">When should this link expire?</p>
-        <input type="radio" id="datepickerq">test
-      <input type="text" id="datepicker">
-      -->
         
       <section class="dreams">
       <p class="bold">When should this link expire?</p>
@@ -61,13 +51,13 @@
       </section>
       
       <section class="dreams">
-      <p class="bold">Generated Link: </p>
-      </section>
-      
-      <section class="dreams">
       <p class="bold">Send the link to Guest as..</p>
       E-Mail: <input type="email" id="email">  
       SMS: <input type="number" id="sms">  
+      </section>
+      
+      <section class="dreams">
+      <p class="bold">Generated Link: </p>
       </section>
       
       <section class="dreams">
@@ -108,36 +98,19 @@
         //time_24hr: true
       });
     
-      var picker = new Pikaday({ 
-        field: document.getElementById('datepicker'),
-        format: 'YYYYMMDD',
-        onSelect: boom(),
-        onDraw: boom()
-      });
     
-      function boom(){
-        //console.log(document.getElementById('datepicker').value);
-      };    
-    
-      /*
-      //let instance = document.getElementById('faltpckr');
-      document.getElementById('flatpckr').config.onChange.push(function() { 
-        console.log(`expriy selected`);
-      } );
-      */
-    
-    let send_button = document.getElementById('send_button');
-    send_button.onclick = function (event){
-      event.preventDefault();
-      let message = {};
-      message.expiry_date = document.getElementById('flatpckr').value;
-      message.sip_target = document.getElementById('sipuri').value;
-      message.send_email = document.getElementById('email').value;
-      message.send_sms = document.getElementById('sms').value;
-      
-      console.log(`${this.id} button clicked, ${JSON.stringify(message)}`);
-      
-    }
+      let send_button = document.getElementById('send_button');
+      send_button.onclick = function (event){
+        //event.preventDefault();
+        let message = {};
+        message.expiry_date = document.getElementById('flatpckr').value;
+        message.sip_target = document.getElementById('sipuri').value;
+        message.send_email = document.getElementById('email').value;
+        message.send_sms = document.getElementById('sms').value;
+
+        console.log(`${this.id} button clicked, ${JSON.stringify(message)}`);
+
+      }
     
   </script>
   
