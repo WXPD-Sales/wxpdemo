@@ -51,18 +51,16 @@
       </section>
       
       <section class="dreams">
-      <p class="bold">Send the link to Guest as..</p>
-      E-Mail: <input type="email" id="email" required>  
-      SMS: <input type="number" id="sms">  
+      <button id="create_button">
+        Create Link  
+      </button>   
+      <p id="messages"></p> 
       </section>
       
       <section class="dreams">
-      <p class="bold">Generated Link: </p>
-      <p id="messages">Data</p> 
-      
-      <button id="create_button">
-        Create Link  
-      </button> 
+      <p class="bold">Send the link as..</p>
+      E-Mail: <input type="email" id="email" required>  
+      SMS: <input type="number" id="sms">  
       </section>
       
       <section class="dreams">
@@ -112,7 +110,7 @@
           .then((result) => {
             console.log (result)
             if (result){
-              send();
+              post_data();
             } else {
               
             }
@@ -143,7 +141,7 @@
         }
       };
     
-      async function send_message_object(){
+      async function post_data(){
         fetch('/create_url', { 
           method: 'POST', 
           credentials: 'same-origin',
