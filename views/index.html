@@ -66,6 +66,11 @@
       </button> 
       </section>
       
+      <section class="dreams">
+      <p id="messages"> Logs
+      </p> 
+      </section>
+      
 
     </main>
 
@@ -102,7 +107,14 @@
         try {
           create_message_object()
           .then((message) => validate_message_object(message))
-          .then((result) => console.log (result));
+          .then((result) => {
+            console.log (result)
+            if (result){
+              send_message_object(message);
+            } else {
+              
+            }
+          });
         } 
         catch (err){
           console.log(err);
@@ -128,6 +140,22 @@
           return true;
         }
       };
+    
+      async function send_message_object(){
+        
+      };
+    
+      function showMessage(message) {
+        //messages.textContent += `\n${message}`;
+        messages.textContent = `\n${message}`;
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      function handleResponse(response) {
+        return response.ok
+          ? response.json().then((data) => JSON.stringify(data, null, 2))
+          : Promise.reject(new Error('Unexpected response'));
+      }
     
   </script>
   
