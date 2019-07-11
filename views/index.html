@@ -124,7 +124,7 @@
         //event.preventDefault();
         try {
           create_message_object()
-          .then((message) => validate_message_object(message))
+          //.then((message) => validate_message_object(message))
           .then((result) => {
             console.log (result)
             if (result){
@@ -145,15 +145,15 @@
         //message.expiry_date = document.getElementById('flatpckr').value;
         message.expiry_date = picked_date;
         message.sip_target = document.getElementById('sipuri').value;
-        message.send_email = document.getElementById('email').value;
+        //message.send_email = document.getElementById('email').value;
         //message.send_sms = document.getElementById('sms').value;
         return message;
       };
     
       async function validate_message_object(message){
         if(!message.expiry_date || !message.sip_target){
-          console.log(`Bad data`);
-          showMessage(`{"Error":"Oops, you seem to be missing something.."}`);
+          //console.log(`Bad data`);
+          showMessage(`{"error":"Oops, you seem to be missing something.."}`);
           return false;
         } else {
           console.log (JSON.stringify(message));
@@ -181,7 +181,7 @@
         messages.textContent = `\n${message}`;
         messages.scrollTop = messages.scrollHeight;
         console.log(JSON.parse(message));
-        if((JSON.parse(message)).url!=""){
+        if((JSON.parse(message)).url){
           console.log(`URL found - ${(JSON.parse(message)).url}`)
         };
       }
