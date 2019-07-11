@@ -142,7 +142,7 @@
       };
     
       async function send_message_object(){
-        fetch('/create_url', { method: 'POST', credentials: 'same-origin', body: `${message}` })
+        fetch('/create_url', { method: 'POST', credentials: 'same-origin', body: message })
         .then(handleResponse)
         .then(showMessage)
         .catch(function(err) {

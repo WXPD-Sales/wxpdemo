@@ -3,7 +3,7 @@
 
 // init project
 const express = require('express');
-
+const bodyParser = require('body-parser');
 const RedisExpiredEvents = require('./redis-expired-events');
 const expiry = require('./expiry');
 const app = express();
@@ -13,6 +13,9 @@ const app = express();
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get('/', function(request, response) {
@@ -22,7 +25,8 @@ app.get('/', function(request, response) {
 // http://expressjs.com/en/starter/basic-routing.html
 app.post('/create_url', function(request, response) {
   //response.sendFile(__dirname + '/views/index.html');
-  response.
+  console.log(request.body);
+  response.send({ result: 'OK', message: 'Session updated' });
 });
 
 // listen for requests :)
