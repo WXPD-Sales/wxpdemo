@@ -103,16 +103,21 @@
       send_button.onclick = function (event){
         //event.preventDefault();
         try {
-          create_message_object().then(message){
+          //then((data) => JSON.stringify(data, null, 2))
+          create_message_object()
+            .then((message) => {
             validate_message_object(message)
-          }
+            })
+          .then((message) => {
+            console.log (message);
+          });
           
         } 
         catch (err){
           console.log(err);
         }
 
-        console.log(`${this.id} button clicked, ${JSON.stringify(message)}`);
+        //console.log(`${this.id} button clicked, ${JSON.stringify(message)}`);
 
       }
     
@@ -125,9 +130,9 @@
         return message;
       };
     
-      function validate_message_object(message){
+      async function validate_message_object(message){
         if(!message.expiry_date || !message.sip_target){
-          console.log(`Bad data`);
+          //console.log(`Bad data`);
           return false;
         } else {
           console.log (JSON.stringify(message));
