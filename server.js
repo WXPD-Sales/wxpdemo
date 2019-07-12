@@ -41,16 +41,23 @@ app.get('/guest/:guest_session_id', function(request, response) {
     if (result == 1){
       rr.get(request.params.guest_session_id)
       .then((result)=>{
-        response.send({message: `${}`});});
+        //response.send({message: `${result}`});
+        //response.json(JSON.parse(result));
+        response.cookie("token",tokgen(result.display_name).token);
+        response.cookie("target",result.sip_target);
+        response.cookie("label",result.display_name);
+        //response.send(JSON.stringify(request.body));
+        response.sendFile(__dirname + '/views/widget.html');
+      });
       
       //----
       /*
-        response.cookie("token",jwt.token);
-        response.cookie("target",request.params.email);
-        response.cookie("label",jwt.label);
+        response.cookie("token",tokgen(result.display_name).token);
+        response.cookie("target",result.sip_target);
+        response.cookie("label",result.display_name);
         //response.send(JSON.stringify(request.body));
         response.sendFile(__dirname + '/views/widget.html');
-       */ 
+       */
       //----
     } else {
       response.send({message: `this link has expired`});
@@ -66,7 +73,8 @@ app.post('/create_url', function(request, response) {
   if (email_validator.validate(request.body.sip_target) && request.body.expiry_date){
     let Urlexpiry = Math.round(expiry.calculateSeconds(thismoment(),request.body.expiry_date));
     let guestSessionID = randomize('Aa0', 16);
-    let guestUrl = `${request.protocol}://${request.get('host')}/guest/${guestSessionID}`;
+    //let guestUrl = `${request.protocol}://${request.get('host')}/guest/${guestSessionID}`;
+    let guestUrl = `https://${request.get('host')}/guest/${guestSessionID}`;
     request.body.url = guestUrl;
     //console.log(`full url - ${guestUrl}`);
     rr.setURL(guestSessionID, JSON.stringify(request.body), Urlexpiry)
