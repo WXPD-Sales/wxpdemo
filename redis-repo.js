@@ -8,7 +8,7 @@ class RedisRepo {
     });
   }
   
-  get(key) {
+  async get(key) {
     return this.redis.get(key);
   }
   
