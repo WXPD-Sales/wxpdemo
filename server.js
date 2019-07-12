@@ -113,6 +113,6 @@ RedisExpiredEvents();
 //console.log(thismoment());
 //console.log(thismoment('2019-07-16 00:54').utcOffset(240));
 
-//send_email(`"zoneix@gmail.com"`, `"admin@bigbrainpan.com"`, `"this is a test"`, `"here's the body"`);
+send_email(`"zoneix@gmail.com"`, `"admin@bigbrainpan.com"`, `"this is a test"`, `"here's the body"`);
 
 //console.log((send_email).toString());
