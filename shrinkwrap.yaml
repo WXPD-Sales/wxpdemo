@@ -1,6 +1,8 @@
 dependencies:
   '@collab-ui/core': 10.43.3
   '@collab-ui/icons': 3.45.1
+  '@momentum-ui/core': 16.2.0
+  '@momentum-ui/icons': 6.12.0
   '@sendgrid/mail': 6.4.0
   body-parser: 1.19.0
   btoa: 1.2.1
@@ -23,6 +25,16 @@ packages:
     dev: false
     resolution:
       integrity: sha512-6oglMNB8QdA+YZ0Fgkt0MH9C9UdFmeeWqtqsapREED62FKljN/BgMb6FiIpNIKXP4H75i1THY4nOsGNjrY0MpQ==
+  /@momentum-ui/core/16.2.0:
+    dependencies:
+      '@momentum-ui/icons': 6.12.0
+    dev: false
+    resolution:
+      integrity: sha512-XK71ZnmyWZUL6qaytg6x2J9iVlE/bq1K37h0Deyqgjt85VHYhqZsRdPJgRCyTOsRLJrFsujpP+zM/6/GR0lIXw==
+  /@momentum-ui/icons/6.12.0:
+    dev: false
+    resolution:
+      integrity: sha512-wa0W2p+z2YFtlcLI7Y/uG49KVE6gck+UbUCVcYsgP1CG8e6p2cMEx5xVs+MRM5yh0jpv8pm4tdqReHons64fMQ==
   /@sendgrid/client/6.4.0:
     dependencies:
       '@sendgrid/helpers': 6.4.0
@@ -1522,6 +1534,8 @@ shrinkwrapVersion: 3
 specifiers:
   '@collab-ui/core': ^10.22.0
   '@collab-ui/icons': ^3.15.1
+  '@momentum-ui/core': ^16.2.0
+  '@momentum-ui/icons': ^6.12.0
   '@sendgrid/mail': ^6.4.0
   body-parser: ^1.19.0
   btoa: ^1.2.1
