@@ -13,6 +13,7 @@ module.exports = function createJWT(display_name){
     // consider using this for testing with the same space
     //var genSub = "HC02132019";
     console.log ("Generated subject ID - " + genSub);
+    console.log (`got display name as - ${display_name}`);
 
     //create JWT paylod
     var payload = {
