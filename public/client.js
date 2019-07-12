@@ -1,11 +1,15 @@
 const offset = new Date().getTimezoneOffset();
-const 
+var today = new Date();
+var time = today.getHours() + ":" + today.getMinutes();
 let picked_date;
+console.log(`time is ${time}`);
 
 flatpickr("#flatpckr", {
   enableTime: true,
   dateFormat: "Y-m-d H:i",
   minDate: "today",
+  minTime: time,
+  defaultTime: time,
   onChange: function(selectedDates, dateStr, instance) {
     console.log(`selection changed ${dateStr} `);
     picked_date = dateStr;
