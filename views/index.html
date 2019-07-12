@@ -21,6 +21,8 @@
     <!--link rel="stylesheet" href="/style.css"-->
     <link rel="stylesheet" href="https://maxcdn.icons8.com/fonts/line-awesome/1.1/css/line-awesome-font-awesome.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/collab-ui.min.css">
+    <link rel="stylesheet" href="/momentum-ui.min.css">
     
     <!-- import the webpage's client-side javascript file -->
     <script src="/client.js" defer></script>
@@ -81,15 +83,12 @@
       <br><br>  
       <input id="email" class="cui-input" name="email" type="email" placeholder="Email Address">      
       <button id="send_as_email_button" class="cui-button">
-        Send
+      <i class="cui-icon icon icon-email-invite_16"></i>
       </button> 
-        <i class="la la-mail-forward"></i>
-        <i class="cui-icon icon icon-email-invite_24"></i>
        <br><br> 
-      
       <input id="text" class="cui-input" name="phone" type="number" placeholder="Mobile number">      
       <button id="send_as_sms_button" class="cui-button">
-        <i class="material-icons md-36">text_sms</i>
+      <i class="cui-icon icon icon-broadcast-message_16"></i>
       </button> 
        <br><br>   
       <button id="reload_button" class="cui-button" onclick="window.location.reload();">
