@@ -99,7 +99,7 @@ function handleResponse(response) {
 
 console.log(`timezone offset = ${offset}`);
 
-
+/*
 //EMail Modal stuff --
 
 // Get the modal
@@ -127,3 +127,5 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+
+*/
