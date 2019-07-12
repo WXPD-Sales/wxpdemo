@@ -50,16 +50,6 @@ app.get('/guest/:guest_session_id', function(request, response) {
         //response.send(JSON.stringify(request.body));
         response.sendFile(__dirname + '/views/widget.html');
       });
-      
-      //----
-      /*
-        response.cookie("token",tokgen(result.display_name).token);
-        response.cookie("target",result.sip_target);
-        response.cookie("label",result.display_name);
-        //response.send(JSON.stringify(request.body));
-        response.sendFile(__dirname + '/views/widget.html');
-       */
-      //----
     } else {
       response.send({message: `this link has expired`});
     }
