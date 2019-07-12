@@ -7,10 +7,13 @@ module.exports = function (to, from, subject, body){
   console.log ("got this - " + to, from, subject, body);
   console.log ("got data - "+ JSON.stringify(data));
   
-  let payload = };
+  let payload = {};
   payload.from = from;
+  payload.to = to;
+  payload.subject = subject;
+  payload.body = body;
   
-  console.log ("payload - "+)
+  console.log ("payload - " + payload);
   var data = {
     from: from,
     to: to,
@@ -18,8 +21,8 @@ module.exports = function (to, from, subject, body){
     text: body
   };
 
-  mg.messages().send(data, function (error, result) {
-    console.log("got result -"+result);
+  mg.messages().send(payload, function (error, result) {
+    console.log("got result -" + result);
   });
   
 };
