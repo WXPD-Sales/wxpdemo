@@ -1,24 +1,14 @@
-const sendemail = require('mailgun-js');
 
-const mg = sendemail({apiKey: process.env.MG_API_KEY, domain: process.env.DOMAIN});
+const mg = require('mailgun-js')({apiKey: process.env.MG_API_KEY, domain: process.env.DOMAIN});
 
 
-module.exports = function (to, from, subject, body){
-  console.log ("got this - " + to, from, subject, body);
-  console.log ("got data - "+ JSON.stringify(data));
-  
-  let payload = {};
-  payload.from = from;
-  payload.to = to;
-  payload.subject = subject;
-  payload.body = body;
-  
-  console.log ("payload - " + JSON.stringify(payload));
-  var data = {
-    from: from,
-    to: to,
-    subject: subject,
-    text: body
+module.exports = function (to, from, subject, text){
+
+  const data = {
+    from: process.env.MG_FROM,
+    to: 'zoneix@gmail.com',
+    subject: 'Hello',
+    text: 'Some message'
   };
 
   mg.messages().send(data, function (error, body) {
@@ -28,17 +18,19 @@ module.exports = function (to, from, subject, body){
 };
 
 /*
-const mailgun = require("mailgun-js");
-const DOMAIN = 'YOUR_DOMAIN_NAME';
-const mg = mailgun({apiKey: api_key, domain: DOMAIN});
+var API_KEY = 'YOUR_API_KEY';
+var DOMAIN = 'YOUR_DOMAIN_NAME';
+var mailgun = require('mailgun-js')({apiKey: API_KEY, domain: DOMAIN});
+
 const data = {
-	from: 'Excited User <me@samples.mailgun.org>',
-	to: 'bar@example.com, YOU@YOUR_DOMAIN_NAME',
-	subject: 'Hello',
-	text: 'Testing some Mailgun awesomness!'
+  from: 'Excited User <me@samples.mailgun.org>',
+  to: 'foo@example.com, bar@example.com',
+  subject: 'Hello',
+  text: 'Testing some Mailgun awesomeness!'
 };
-mg.messages().send(data, function (error, body) {
-	console.log(body);
+
+mailgun.messages().send(data, (error, body) => {
+  console.log(body);
 });
 
 */
