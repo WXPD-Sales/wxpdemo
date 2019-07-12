@@ -89,7 +89,9 @@ app.post('/create_url', function(request, response) {
 
 app.post('/email_invite', function(request, response) {
   console.log(request.body);
-  response.send({message: `donezo`});
+  //send_email('harishchawla@hotmail.com','this is some body');
+  send_email(request.body.send_to_email, `Use this link to join the show ${request.body.url}. Remember, it expires ${request.body.expires}`)
+  .then(()=>{response.send({message: `Email sent!`})});
 });
 
 app.post('/sms_invite', function(request, resposne) {
