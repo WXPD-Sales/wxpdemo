@@ -7,9 +7,9 @@ module.exports = function (to, body){
     //to: 'harishchawla@hotmail.com',
     to: to,
     from: process.env.SG_FROM,
-    subject: 'Sending with Twilio SendGrid is Fun',
-    text: 'and easy to do anywhere, even with Node.js',
-    html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+    subject: 'Welcome to the show!',
+    text: `${body}`,
+    html: `<h4>${process.env.SG_DISCLAIMER}</h4>`,
   };
   
 sgMail.send(msg);
