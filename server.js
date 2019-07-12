@@ -32,10 +32,17 @@ app.get('/', function(request, response) {
 
 app.get('/guest/:guest_session_id', function(request, response) {
   //response.sendFile(__dirname + '/views/index.html');
-  console.log("got a hit")
-  response.send({ message: `if not expired, this is where the widget will load for session ${request.params.guest_session_id}`});
+  //console.log("got a hit")
+  //response.send({ message: `if not expired, this is where the widget will load for session ${request.params.guest_session_id}`});
   rr.get(`URL:${request.params.guest_session_id}`)
-  .then((result)=>{console.log(result)});
+  .then((result)=>{
+    console.log(result);
+    if (result == 1){
+      response.send({message: `link not expired`});
+    } else {
+      response.send({message: `this link has expired`});
+    }
+  });
 
 });
 
