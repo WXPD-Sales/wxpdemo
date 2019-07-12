@@ -10,9 +10,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Welcome to Glitch!</title>
-    <meta name="description" content="A cool thing made with Glitch">
-    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <title>Welcome to a Webex Platform demo on Glitch!</title>
+    <meta name="description" content="A cool Webex Programmable Platform demo made with Glitch">
+    <link id="favicon" rel="icon" href="https://raw.githubusercontent.com/cisco/cisco.github.io/master/favicon.ico" type="image/x-icon">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -37,12 +37,12 @@
     
     <header>
       <h1>
-        Webex Vaporware
+        Webex Moment
       </h1>
       <image style="height:50%;width:50%" src="https://cdn.glitch.com/e627e173-ddba-434f-ad34-e11549d64430%2FIllustration_cat.png?v=1562876301263"></image>
       <br><br>
       <h2>
-        Volatile hyperlinks for Guest video calls!
+        Time bound hyperlinks for Guest video calls!
       </h2>
     </header>
 
@@ -52,10 +52,13 @@
       <p class="bold"><h4>Where should we connect the Guest to?</h4>
       <input class="cui-input" type="email" placeholder="SIP URI " id="sipuri" required>
       </p><br>
-        <p class="bold"><h4>When should this link expire?</h4>
-        <h5 id="selected_expiry">
-          Time/Date?
-        </h5>
+      <p class="bold"><h4>Who should they connect as?</h4>
+      <input class="cui-input" type="text" placeholder="Display Name" id="displayname" required>
+      </p><br>
+      <p class="bold"><h4>When should this link expire?</h4>
+      <h5 id="selected_expiry">
+        Time/Date?
+      </h5>
         <!--input type="text" id="flatpckr" required="true" autocomplete="off" --> 
         
         <i id="flatpckr" style="color:#000000" class="cui-icon icon icon-calendar-month_36"></i>

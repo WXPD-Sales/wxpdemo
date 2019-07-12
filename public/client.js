@@ -38,7 +38,7 @@ create_button.onclick = function (event){
 let message = {};
 async function create_message_object(){
   //let message = {};
-  //message.expiry_date = document.getElementById('flatpckr').value;
+  message.display_name = document.getElementById('displayname').value;
   message.expiry_date = picked_date;
   message.sip_target = document.getElementById('sipuri').value;
   //message.send_email = document.getElementById('email').value;
