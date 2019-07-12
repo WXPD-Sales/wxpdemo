@@ -74,7 +74,7 @@ app.post('/create_url', function(request, response) {
     console.log(thismoment(request.body.expiry_date).utcOffset(request.body.offset));
     let endmoment = thismoment(request.body.expiry_date).utcOffset(request.body.offset);
     //console.log("teh end "+thismoment(endmoment));
-    let Urlexpiry = Math.round(expiry.calculateSeconds(thismoment(),thismoment(request.body.expiry_date).utcOffset(request.body.offset, true)));
+    let Urlexpiry = Math.round(expiry.calculateSeconds(thismoment().utcOffset(request.body.offset, true),request.body.expiry_date));
     //let Urlexpiry = Math.round(expiry.calculateSeconds(thismoment(),request.body.expiry_date));
     let guestSessionID = randomize('Aa0', 16);
     //let guestUrl = `${request.protocol}://${request.get('host')}/guest/${guestSessionID}`;

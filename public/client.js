@@ -1,5 +1,5 @@
 const offset = new Date().getTimezoneOffset();
-
+const 
 let picked_date;
 
 flatpickr("#flatpckr", {
