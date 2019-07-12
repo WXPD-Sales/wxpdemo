@@ -103,13 +103,13 @@ console.log(`timezone offset = ${offset}`);
 //EMail Modal stuff --
 
 // Get the modal
-var modal = document.getElementById("myModal");
+var modal = document.getElementById("myEmailModal");
 
 // Get the button that opens the modal
-var btn = document.getElementById("myBtn");
+var btn = document.getElementById("send_as_email_button");
 
 // Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+var span = document.getElementsByClassName("closeEmailModal")[0];
 
 // When the user clicks the button, open the modal 
 btn.onclick = function() {
@@ -127,4 +127,3 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
-</script>

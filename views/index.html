@@ -77,75 +77,25 @@
         </div>
       </section>  
       
-      <section class="dreams" id="send_as_email_section" style="display:none;">
+      <section class="dreams" id="send_as_email_section" style="display:block;">
       <br><br>  
-      <input id="email" class="cui-input" name="email" type="email" placeholder="Email Address"><br>   
-    
-      <button id="send_button" class="cui-button">
-        Email this Moment
+      <input id="email" class="cui-input" name="email" type="email" placeholder="Email Address">      
+      <button id="send_as_email_button" class="cui-button">
+        Send this Moment
+        <i class="cui-icon icon icon-email_20"></i>
+      
       </button> 
        <br><br> 
+      <input id="text" class="cui-input" name="phone" type="number" placeholder="Mobile number">      
+      <button id="send_as_sms_button" class="cui-button">
+        SMS this Moment
+      </button> 
+       <br><br>   
       <button id="reload_button" class="cui-button" onclick="window.location.reload();">
         Create another Moment
       </button>   
       </section>
   
-  
-      
-
-<!-- Show more modal 
-<div class="cui-modal__backdrop fade in">
-  <div
-    role="dialog"
-    id="react-aria-modal-dialog"
-    class="cui-modal cui-modal--small in"
-    aria-labelledby="modal3"
-  >
-    <div class="cui-modal__content" id="testmodal">
-      <div class="cui-modal__flex-container">
-        <div class="cui-modal__header">
-          <span class="cui-modal__title">Small Modal</span>
-          <button class="cui-close cui-modal__close"></button>
-        </div>
-        <div class="cui-modal__body"><form></form></div>
-        <div class="cui-modal__footer">
-          <button
-            class="cui-button cui-button--36 cui-button--default"
-            alt="Close Modal"
-            type="button"
-            aria-label="Close Modal"
-          >
-            <span class="cui-button__children" style="opacity: 1;">Cancel</span>
-          </button>
-          <button
-            class="cui-button cui-button--36 cui-button--blue"
-            alt="Submit Form"
-            type="submit"
-            aria-label="Submit Form"
-            onclick="console.log(this.modal3)"
-          >
-            <span class="cui-button__children" style="opacity: 1;">OK</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-      
--->      
-  
-    <!-- The Modal -->
-    <div id="email_modal" class="modal">
-
-      <!-- Modal content -->
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <p>Some text in the Modal..</p>
-      </div>
-
-    </div>
-      
-
     </main>
     <br><br> 
     <footer>
