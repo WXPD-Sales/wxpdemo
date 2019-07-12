@@ -16,6 +16,7 @@ const rr = new RedisRepo;
 
 const tokgen = require('./token-generator');
 const email_validator = require("email-validator");
+const send_email = require('./sendemail');
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
@@ -111,3 +112,7 @@ RedisExpiredEvents();
 
 //console.log(thismoment());
 //console.log(thismoment('2019-07-16 00:54').utcOffset(240));
+
+//send_email('zoneix@gmail.com', 'admin@bigbrainpan.com', 'this is test', 'here is a body');
+
+console.log(JSON.stringify(send_email));
