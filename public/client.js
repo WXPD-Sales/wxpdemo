@@ -1,3 +1,4 @@
+const offset = new Date().getTimezoneOffset();
 
 let picked_date;
 
@@ -41,6 +42,7 @@ async function create_message_object(){
   message.display_name = document.getElementById('displayname').value;
   message.expiry_date = picked_date;
   message.sip_target = document.getElementById('sipuri').value;
+  message.offset = offset;
   //message.send_email = document.getElementById('email').value;
   //message.send_sms = document.getElementById('sms').value;
   return message;
@@ -89,3 +91,6 @@ function handleResponse(response) {
     ? response.json().then((data) => JSON.stringify(data, null, 2))
     : Promise.reject(new Error('Unexpected response'));
 }
+
+
+console.log(`timezone offset = ${offset}`);
