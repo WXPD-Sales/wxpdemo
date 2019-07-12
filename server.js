@@ -43,9 +43,9 @@ app.get('/guest/:guest_session_id', function(request, response) {
       .then((result)=>{
         //response.send({message: `${result}`});
         //response.json(JSON.parse(result));
-        response.cookie("token",tokgen(result.display_name).token);
-        response.cookie("target",result.sip_target);
-        response.cookie("label",result.display_name);
+        response.cookie("token",tokgen(JSON.parse(result).display_name).token);
+        response.cookie("target",JSON.parse(result).sip_target);
+        response.cookie("label",JSON.parse(result).display_name);
         //response.send(JSON.stringify(request.body));
         response.sendFile(__dirname + '/views/widget.html');
       });
