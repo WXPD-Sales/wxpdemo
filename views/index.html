@@ -100,7 +100,7 @@
     class="cui-modal cui-modal--small in"
     aria-labelledby="modal3"
   >
-    <div class="cui-modal__content">
+    <div class="cui-modal__content" id="testmodal">
       <div class="cui-modal__flex-container">
         <div class="cui-modal__header">
           <span class="cui-modal__title">Small Modal</span>
@@ -121,7 +121,7 @@
             alt="Submit Form"
             type="submit"
             aria-label="Submit Form"
-            onclick="closeModal()"
+            onclick="document.getElementById('testmodal').closeModal()"
           >
             <span class="cui-button__children" style="opacity: 1;">OK</span>
           </button>
