@@ -104,3 +104,5 @@ RedisExpiredEvents();
 
 //rr.setURL('98r34982r', '325325', 500);
 //console.log(tokgen("Harish Chawla").token);
+
+console.log(thismoment());
