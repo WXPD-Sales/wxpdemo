@@ -101,10 +101,40 @@ function handleResponse(response) {
 
 console.log(`timezone offset = ${offset}`);
 
-function send_to_email(){
+async function send_to_email(){
+  
+  console.log(message);
+  /*
+    fetch('/send_url', { 
+    method: 'POST', 
+    credentials: 'same-origin',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(message),
+  })
+  .then(handleResponse)
+  .then(showMessage)
+  .catch(function(err) {
+    showMessage(err.message);
+  });
+  */
   
 }
 
-function send_to_email(){
+async function send_to_sms(){
   
+  console.log(message);
+  /*
+    fetch('/sms_url', { 
+    method: 'POST', 
+    credentials: 'same-origin',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(message),
+  })
+  .then(handleResponse)
+  .then(showMessage)
+  .catch(function(err) {
+    showMessage(err.message);
+  });
+  */
 }
+
