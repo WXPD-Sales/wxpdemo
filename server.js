@@ -16,8 +16,8 @@ const rr = new RedisRepo;
 
 const tokgen = require('./token-generator');
 const email_validator = require("email-validator");
-const send_email = require('./sendemail');
-
+//const send_email = require('./sendemail');
+const send_email = require('./sg-email');
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
 
