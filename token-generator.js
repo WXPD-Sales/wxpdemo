@@ -4,10 +4,11 @@ const jwt = require('jsonwebtoken');
 
 // Since we will be creating tokens for multiple people visitng the site,
 // lets create a function which returns the JWT for each client request
-function createJWT(){
+module.exports = function createJWT(display_name){
     // Generate random 8 digit number for 'sub' (whom the token refers to)
     // this creates a new identity everytime a JWT is created
-    var genSub = "Impact2019-Attendee-" + (Math.floor(Math.random()*7362592) + 10000000);
+    var genSub = "Moment-Guest-" + (Math.floor(Math.random()*7362592) + 10000000);
+    //var genSub = display_name;
     //warning: static "subject" can send the guest to same space!
     // consider using this for testing with the same space
     //var genSub = "HC02132019";
@@ -16,7 +17,8 @@ function createJWT(){
     //create JWT paylod
     var payload = {
       "sub": genSub,
-      "name": "Glitch Widget - "+genSub,
+      //"name": "Glitch Widget - "+genSub,
+      "name" : display_name,
       "iss": process.env.ISS
     };
     //sign above payload
@@ -27,8 +29,8 @@ function createJWT(){
     );
   
   // sanity output to the console 
-  console.log ("Payload - "+ JSON.stringify(payload));
-  console.log ("Token - "+ JSON.stringify(token));
+  //console.log ("Payload - "+ JSON.stringify(payload));
+  //console.log ("Token - "+ JSON.stringify(token));
   
   var dataobj = {
     token : token,

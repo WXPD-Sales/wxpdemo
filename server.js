@@ -14,6 +14,7 @@ const randomize = require('randomatic');
 const RedisRepo = require('./redis-repo');
 const rr = new RedisRepo;
 
+const tokgen = require('./token-generator');
 const email_validator = require("email-validator");
 
 // http://expressjs.com/en/starter/static-files.html
@@ -82,12 +83,4 @@ RedisExpiredEvents();
 //console.log(expiry.calculateSeconds(thismoment(),'20200714'));
 
 //rr.setURL('98r34982r', '325325', 500);
-
-function validate_guest_data(target_url){
-  
-  
-}
-
-function create_guest_record(){
-  
-}
+console.log(tokgen());
