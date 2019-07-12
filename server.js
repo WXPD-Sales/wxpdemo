@@ -71,7 +71,8 @@ app.post('/create_url', function(request, response) {
   //response.sendFile(__dirname + '/views/index.html');
   
   if (email_validator.validate(request.body.sip_target) && request.body.expiry_date){
-    let Urlexpiry = Math.round(expiry.calculateSeconds(thismoment().utcOffset(),request.body.expiry_date));
+    let endmoment = thismoment().utcOffset();
+    let Urlexpiry = Math.round(expiry.calculateSeconds(thismoment(),request.body.expiry_date));
     let guestSessionID = randomize('Aa0', 16);
     //let guestUrl = `${request.protocol}://${request.get('host')}/guest/${guestSessionID}`;
     let guestUrl = `https://${request.get('host')}/guest/${guestSessionID}`;
@@ -106,4 +107,4 @@ RedisExpiredEvents();
 //console.log(tokgen("Harish Chawla").token);
 
 console.log(thismoment());
-console.log(thismoment().utcOffset());
+console.log(thismoment('2019-07-16 00:54').utcOffset(240));
