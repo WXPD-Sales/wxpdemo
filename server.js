@@ -46,7 +46,15 @@ app.post('/create_url', function(request, response) {
     let guestSessionID = randomize('Aa0', 16);
     let guestUrl = `${request.protocol}://${request.get('host')}/guest/${guestSessionID}`;
     console.log(`full url - ${guestUrl}`);
-    response.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}` });
+    rr.setURL(guestSessionID, request.body, Urlexpiry)
+    .then((result) => console.log(result))
+    .then(() => response.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}` }))
+    .catch(function(err) {
+      console.log(err.message);
+    });
+    
+    //.then((message) => validate_message_object(message))
+    //response.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}` });
   }else{
     response.send({ result: 'Error', message: 'Invalid SIP URI or Expiry provided!'});
   };

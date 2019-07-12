@@ -12,7 +12,7 @@ class RedisRepo {
     return this.redis.get(key);
   }
   
-  setReminder(key, value, expire) {
+  async setReminder(key, value, expire) {
     this.redis
       .multi()
       .set(key, value)
@@ -21,7 +21,7 @@ class RedisRepo {
       .exec();
   }
   
-  setURL(key, value, expire) {
+  async setURL(key, value, expire) {
     this.redis
       .multi()
       .set(key, value)
