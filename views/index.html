@@ -21,14 +21,15 @@
     <!--link rel="stylesheet" href="/style.css"-->
     <link rel="stylesheet" href="/collab-ui.min.css">
     <link rel="stylesheet" href="/momentum-ui.min.css">
+    <!-- modal css -->
+    <link rel="stylesheet" href="/modal.css">
     
-    <!-- small modal stuff -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    
     
     <!-- import the webpage's client-side javascript file -->
     <script src="/client.js" defer></script>
+    <!-- import the webpage's modal javascript file -->
+    <script src="/modal.js" defer></script>
 
     <!-- import flatpickr -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -107,29 +108,34 @@
     </footer>
 
 <!-- -->
-    <div class="container">
-  <h2>Small Modal</h2>
-  <!-- Trigger the modal with a button -->
-  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Small Modal</button>
 
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" role="dialog">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Modal Header</h4>
-          </div>
-          <div class="modal-body">
-            <p>This is a small modal.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="container mx-auto py-10">
+
+  <div class="flex justify-center">
+
+    <a href="#modal" class="modal-trigger bg-teal hover:bg-teal-dark shadow text-white font-bold py-4 px-6 rounded no-underline">Trigger Modal</a>
+
   </div>
+
+<div id="modal" class="modal fixed pin p-30 w-100 h-100 m-0 z-20 mt-4" role="dialog">
+  <div class="modal-overlay fixed pin z-10 bg-teal-dark"></div>
+  <div class="modal-container relative bg-white rounded-lg shadow max-w-lg mx-auto p-16 z-30" role="document">
+
+    <h3 class="font-sans text-2xl mb-2 text-teal-dark">Welcome to a super modal</h3>
+
+    <p class="font-serif leading-normal mb-4">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse hic quam velit fugiat ipsam, quos atque ex aperiam repellendus sequi qui perspiciatis deserunt officia fugit adipisci, consectetur veritatis, explicabo sit!</p>
+
+    <button class="bg-white hover:bg-grey-lightest text-grey-darkest font-semibold py-2 px-4 border border-grey-light rounded pin-b pin-r absolute mb-6 mr-6">Do something</button>
+
+    <button class="modal-close absolute pin-t pin-r w-16 h-16" aria-label="Close">
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+</svg>
+    </button>
+  </div>
+</div>
+
+</div>
 
 <!-- -->
     
