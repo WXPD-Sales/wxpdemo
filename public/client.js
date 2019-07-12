@@ -43,7 +43,7 @@ create_button.onclick = function (event){
 
 }
 let guest_data = {};
-let invite_data = {};
+//let invite_data = {};
 async function create_guest_data_object(){
   //let message = {};
   guest_data.display_name = document.getElementById('displayname').value;
@@ -87,8 +87,8 @@ function showMessage(response_message) {
   messages.scrollTop = messages.scrollHeight;
   console.log(JSON.parse(response_message));
   if((JSON.parse(response_message)).url){
-    invite_data.url = (JSON.parse(response_message)).url;
-    invite_data.expiry = (JSON.parse(response_message)).expires;
+    guest_data.url = (JSON.parse(response_message)).url;
+    guest_data.expires = (JSON.parse(response_message)).expires;
     console.log(`URL found - ${(JSON.parse(response_message)).url}`)
     document.getElementById('send_as_email_section').style.display = 'block';
     document.getElementById('guest_info_section').style.display = 'none';
@@ -106,7 +106,8 @@ console.log(`timezone offset = ${offset}`);
 
 async function send_to_email(){
   
-  console.log(invite_data, guest_data);
+  guest_data.send_to_email = document.getElementById('send_to_email').value;
+  console.log(guest_data);
   /*
     fetch('/send_url', { 
     method: 'POST', 
@@ -125,7 +126,8 @@ async function send_to_email(){
 
 async function send_to_sms(){
   
-  console.log(invite_data);
+  guest_data.send_to_mobile = document.getElementById('send_to_mobile').value;
+  console.log(guest_data);
   /*
     fetch('/sms_url', { 
     method: 'POST', 
