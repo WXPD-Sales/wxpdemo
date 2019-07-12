@@ -1,18 +1,19 @@
 
 const mg = require('mailgun-js')({apiKey: process.env.MG_API_KEY, domain: process.env.DOMAIN});
 
-
 module.exports = function (to, from, subject, text){
 
   const data = {
     from: process.env.MG_FROM,
-    to: 'zoneix@gmail.com',
+    to: 'hachawla@cisco.com',
     subject: 'Hello',
     text: 'Some message'
   };
-
-  mg.messages().send(data, function (error, body) {
+  console.log(data);
+  
+  mg.messages().send(data, (error, body) => {
     console.log("got result -" + body);
+    console.log("got err -"+ error);
   });
   
 };
