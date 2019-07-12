@@ -26,7 +26,7 @@ let create_button = document.getElementById('create_button');
 create_button.onclick = function (event){
   //event.preventDefault();
   try {
-    create_message_object()
+    create_guest_data_object()
     //.then((message) => validate_message_object(message))
     .then((result) => {
       console.log (result)
@@ -42,16 +42,16 @@ create_button.onclick = function (event){
   }
 
 }
-let message = {};
-async function create_message_object(){
+let guest_data = {};
+async function create_guest_data_object(){
   //let message = {};
-  message.display_name = document.getElementById('displayname').value;
-  message.expiry_date = picked_date;
-  message.sip_target = document.getElementById('sipuri').value;
-  message.offset = offset;
+  guest_data.display_name = document.getElementById('displayname').value;
+  guest_data.expiry_date = picked_date;
+  guest_data.sip_target = document.getElementById('sipuri').value;
+  guest_data.offset = offset;
   //message.send_email = document.getElementById('email').value;
   //message.send_sms = document.getElementById('sms').value;
-  return message;
+  return guest_data;
 };
 
 async function validate_message_object(message){
@@ -71,7 +71,7 @@ async function post_data(){
     method: 'POST', 
     credentials: 'same-origin',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(message),
+    body: JSON.stringify(guest_data),
   })
   .then(handleResponse)
   .then(showMessage)
@@ -80,13 +80,13 @@ async function post_data(){
   });
 };
 
-function showMessage(message) {
+function showMessage(response_message) {
   //messages.textContent += `\n${message}`;
-  messages.textContent = `\n${message}`;
+  messages.textContent = `\n${response_message}`;
   messages.scrollTop = messages.scrollHeight;
-  console.log(JSON.parse(message));
-  if((JSON.parse(message)).url){
-    console.log(`URL found - ${(JSON.parse(message)).url}`)
+  console.log(JSON.parse(response_message));
+  if((JSON.parse(response_message)).url){
+    console.log(`URL found - ${(JSON.parse(response_message)).url}`)
     document.getElementById('send_as_email_section').style.display = 'block';
     document.getElementById('guest_info_section').style.display = 'none';
   };
