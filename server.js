@@ -39,15 +39,15 @@ app.get('/guest/:guest_session_id', function(request, response) {
 // http://expressjs.com/en/starter/basic-routing.html
 app.post('/create_url', function(request, response) {
   //response.sendFile(__dirname + '/views/index.html');
-  console.log(request.body);
-
+  
   if (email_validator.validate(request.body.sip_target) && request.body.expiry_date){
     let Urlexpiry = Math.round(expiry.calculateSeconds(thismoment(),request.body.expiry_date));
     let guestSessionID = randomize('Aa0', 16);
     let guestUrl = `${request.protocol}://${request.get('host')}/guest/${guestSessionID}`;
-    console.log(`full url - ${guestUrl}`);
+    request.body.url = guestUrl;
+    //console.log(`full url - ${guestUrl}`);
     rr.setURL(guestSessionID, JSON.stringify(request.body), Urlexpiry)
-    .then((result) => console.log(result))
+    .then(() => console.log(request.body))
     .then(() => response.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}` }))
     .catch(function(err) {
       console.log(err.message);
