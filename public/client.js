@@ -1,5 +1,5 @@
-//var MicroModal = require('micromodal');
-import MicroModal from 'micromodal';
+
+
 const offset = new Date().getTimezoneOffset();
 var today = new Date();
 var time = today.getHours() + ":" + today.getMinutes();
@@ -101,33 +101,10 @@ function handleResponse(response) {
 
 console.log(`timezone offset = ${offset}`);
 
-/*
-//EMail Modal stuff --
-
-// Get the modal
-var modal = document.getElementById("myEmailModal");
-
-// Get the button that opens the modal
-var btn = document.getElementById("send_as_email_button");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("closeEmailModal")[0];
-
-// When the user clicks the button, open the modal 
-btn.onclick = function() {
-  modal.style.display = "block";
+function send_to_email(){
+  
 }
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
+function send_to_email(){
+  
 }
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-*/
