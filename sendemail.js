@@ -4,9 +4,10 @@ const mailgun = require('mailgun-js')({apiKey: process.env.MG_API_KEY, domain: p
 
 
 module.exports = function (to, from, subject, body){
+  console.log ("got this - " + to, from, subject, body);
+  console.log ("got data - "+data);
   
-  console.log (data);
-  
+  //let payload
   var data = {
     from: from,
     to: to,
@@ -15,7 +16,7 @@ module.exports = function (to, from, subject, body){
   };
 
   mailgun.messages().send(data, function (error, result) {
-    console.log(result);
+    console.log("got result -"+result);
   });
   
 };
