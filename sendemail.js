@@ -17,7 +17,7 @@ module.exports = function (to, from, subject, text){
   mg.messages().send(data, (error, body) => {
   console.log(body);
     
-  mg.get('/samples.mailgun.org/stats', { event: ['sent', 'delivered'] }, function (error, body) {
+  mg.get('https://api.mailgun.net/v3/bigbrainpan.com/stats', { event: ['sent', 'delivered'] }, function (error, body) {
     console.log(body);
   }); 
     

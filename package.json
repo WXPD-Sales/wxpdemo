@@ -20,7 +20,8 @@
     "@collab-ui/core": "^10.22.0",
     "email-validator": "^2.0.4",
     "jsonwebtoken": "^8.5.1",
-    "mailgun-js": "^0.22.0"
+    "mailgun-js": "^0.22.0",
+    "@sendgrid/mail": "^6.4.0"
   },
   "engines": {
     "node": "8.x"
