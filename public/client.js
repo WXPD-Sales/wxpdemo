@@ -1,44 +1,90 @@
-// client-side js
-// run by the browser each time your view template is loaded
 
-console.log('hello world :o');
+      let picked_date;
+    
+      flatpickr("#flatpckr", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        minDate: "today",
+        onChange: function(selectedDates, dateStr, instance) {
+          console.log(`selection changed ${dateStr} `);
+          picked_date = dateStr;
+          document.getElementById('selected_expiry').innerHTML = picked_date;
+        },
+        allowInput: true,
+        //time_24hr: true
+      });
+    
+    
+      let create_button = document.getElementById('create_button');
+      create_button.onclick = function (event){
+        //event.preventDefault();
+        try {
+          create_message_object()
+          //.then((message) => validate_message_object(message))
+          .then((result) => {
+            console.log (result)
+            if (result){
+              post_data();
+            } else {
+              
+            }
+          });
+        } 
+        catch (err){
+          console.log(err);
+        }
 
-// our default array of dreams
-const dreams = [
-  'Find and count some sheep',
-  'Climb a really tall mountain',
-  'Wash the dishes'
-];
+      }
+      let message = {};
+      async function create_message_object(){
+        //let message = {};
+        //message.expiry_date = document.getElementById('flatpckr').value;
+        message.expiry_date = picked_date;
+        message.sip_target = document.getElementById('sipuri').value;
+        //message.send_email = document.getElementById('email').value;
+        //message.send_sms = document.getElementById('sms').value;
+        return message;
+      };
+    
+      async function validate_message_object(message){
+        if(!message.expiry_date || !message.sip_target){
+          //console.log(`Bad data`);
+          showMessage(`{"error":"Oops, you seem to be missing something.."}`);
+          return false;
+        } else {
+          console.log (JSON.stringify(message));
+          document.getElementById('selected_expiry').innerHTML = message.expiry_date;
+          return true;
+        }
+      };
+    
+      async function post_data(){
+        fetch('/create_url', { 
+          method: 'POST', 
+          credentials: 'same-origin',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(message),
+        })
+        .then(handleResponse)
+        .then(showMessage)
+        .catch(function(err) {
+          showMessage(err.message);
+        });
+      };
+    
+      function showMessage(message) {
+        //messages.textContent += `\n${message}`;
+        messages.textContent = `\n${message}`;
+        messages.scrollTop = messages.scrollHeight;
+        console.log(JSON.parse(message));
+        if((JSON.parse(message)).url){
+          console.log(`URL found - ${(JSON.parse(message)).url}`)
+        };
+      }
 
-// define variables that reference elements on our page
-const dreamsList = document.getElementById('dreams');
-const dreamsForm = document.forms[0];
-//const dreamInput = dreamsForm.elements['dream'];
-
-// a helper function that creates a list item for a given dream
-const appendNewDream = function(dream) {
-  const newListItem = document.createElement('li');
-  newListItem.innerHTML = dream;
- // dreamsList.appendChild(newListItem);
-}
-
-// iterate through every dream and add it to our page
-dreams.forEach( function(dream) {
-  appendNewDream(dream);
-});
-
-// listen for the form to be submitted and add a new dream when it is
-/*
-dreamsForm.onsubmit = function(event) {
-  // stop our form submission from refreshing the page
-  event.preventDefault();
-
-  // get dream value and add it to the list
-  dreams.push(dreamInput.value);
-  appendNewDream(dreamInput.value);
-
-  // reset form 
-  dreamInput.value = '';
-  dreamInput.focus();
-};
-*/
+      function handleResponse(response) {
+        return response.ok
+          ? response.json().then((data) => JSON.stringify(data, null, 2))
+          : Promise.reject(new Error('Unexpected response'));
+      }
+ 
