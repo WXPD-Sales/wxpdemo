@@ -1,7 +1,7 @@
 
-const API_KEY = process.env.MG_API_KEY;
-const DOMAIN = process.env.DOMAIN;
-const mg = require('mailgun-js')({apiKey: API_KEY, domain: DOMAIN, host: 'api.eu.mailgun.net'});
+var API_KEY = process.env.MG_API_KEY;
+var DOMAIN = process.env.DOMAIN;
+var mg = require('mailgun-js')({apiKey: API_KEY, domain: DOMAIN, host: 'api.mailgun.net'});
 
 module.exports = function (to, from, subject, text){
 
@@ -16,6 +16,11 @@ module.exports = function (to, from, subject, text){
   
   mg.messages().send(data, (error, body) => {
   console.log(body);
+    
+  mg.get('/samples.mailgun.org/stats', { event: ['sent', 'delivered'] }, function (error, body) {
+    console.log(body);
+  }); 
+    
 });
   
 };
