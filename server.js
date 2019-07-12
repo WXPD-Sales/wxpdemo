@@ -87,6 +87,15 @@ app.post('/create_url', function(request, response) {
 
 });
 
+app.post('/email_invite', function(request, response) {
+  console.log(request.body);
+  response.send({message: `donezo`});
+});
+
+app.post('/sms_invite', function(request, resposne) {
+  
+});
+
 // listen for requests :)
 const listener = app.listen(process.env.PORT, function() {
   console.log('Your app is listening on port ' + listener.address().port);

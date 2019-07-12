@@ -108,19 +108,19 @@ async function send_to_email(){
   
   guest_data.send_to_email = document.getElementById('send_to_email').value;
   console.log(guest_data);
-  /*
-    fetch('/send_url', { 
+  
+  fetch('/email_invite', { 
     method: 'POST', 
     credentials: 'same-origin',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(message),
+    body: JSON.stringify(guest_data),
   })
   .then(handleResponse)
   .then(showMessage)
   .catch(function(err) {
     showMessage(err.message);
   });
-  */
+  
   
 }
 
@@ -129,7 +129,7 @@ async function send_to_sms(){
   guest_data.send_to_mobile = document.getElementById('send_to_mobile').value;
   console.log(guest_data);
   /*
-    fetch('/sms_url', { 
+    fetch('/sms_ivite', { 
     method: 'POST', 
     credentials: 'same-origin',
     headers: {'Content-Type': 'application/json'},
