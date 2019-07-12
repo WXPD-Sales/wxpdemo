@@ -46,7 +46,7 @@ app.post('/create_url', function(request, response) {
     let guestSessionID = randomize('Aa0', 16);
     let guestUrl = `${request.protocol}://${request.get('host')}/guest/${guestSessionID}`;
     console.log(`full url - ${guestUrl}`);
-    rr.setURL(guestSessionID, request.body, Urlexpiry)
+    rr.setURL(guestSessionID, JSON.stringify(request.body), Urlexpiry)
     .then((result) => console.log(result))
     .then(() => response.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}` }))
     .catch(function(err) {
@@ -71,7 +71,7 @@ RedisExpiredEvents();
 //console.log(expiry.calculateDays(thismoment(),'20190714'));
 //console.log(expiry.calculateSeconds(thismoment(),'20200714'));
 
-rr.setURL('98r34982r', '325325', 500);
+//rr.setURL('98r34982r', '325325', 500);
 
 function validate_guest_data(target_url){
   
