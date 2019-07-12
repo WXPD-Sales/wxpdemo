@@ -1,11 +1,13 @@
 
-const mg = require('mailgun-js')({apiKey: process.env.MG_API_KEY, domain: process.env.DOMAIN});
+const API_KEY = process.env.MG_API_KEY;
+const DOMAIN = process.env.DOMAIN;
+const mg = require('mailgun-js')({apiKey: API_KEY, domain: DOMAIN, host: 'api.eu.mailgun.net'});
 
 module.exports = function (to, from, subject, text){
 
   const data = {
     //from: process.env.MG_FROM,
-    from: 'admin@bigbrainpan.com',
+    from: 'BBP Admin <admin@bigbrainpan.com>',
     to: 'harishchawla@hotmail.com',
     subject: 'Hello',
     text: 'Some message'
