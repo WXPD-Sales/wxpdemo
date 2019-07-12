@@ -12,6 +12,7 @@ dependencies:
   ioredis: 4.11.1
   jsonwebtoken: 8.5.1
   mailgun-js: 0.22.0
+  micromodal: 0.4.0
   moment: 2.24.0
   randomatic: 3.1.1
 packages:
@@ -956,6 +957,10 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha1-VSmk1nZUE07cxSZmVoNbD4Ua/O4=
+  /micromodal/0.4.0:
+    dev: false
+    resolution:
+      integrity: sha512-YDku9Fi57S4Sm6oitSy3sr786qSp5L6NbatuH2kEeXf0jStvZgZk4bLBKaoSONBaq3BEvFz3hAaoUa7/pV1Kgg==
   /mime-db/1.37.0:
     dev: false
     engines:
@@ -1545,5 +1550,6 @@ specifiers:
   ioredis: ^4.11.1
   jsonwebtoken: ^8.5.1
   mailgun-js: ^0.22.0
+  micromodal: ^0.4.0
   moment: ^2.24.0
   randomatic: ^3.1.1

@@ -24,7 +24,8 @@
     <!-- modal css -->
     <link rel="stylesheet" href="/modal.css">
     
-    
+    <!-- micromodal -->
+    <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
     
     <!-- import the webpage's client-side javascript file -->
     <script src="/client.js" defer></script>
@@ -109,136 +110,37 @@
 
 <!-- -->
 
-<div class="container mx-auto py-10">
+<!-- [1] -->
+<div id="modal-1" aria-hidden="true">
 
-  <div class="flex justify-center">
+  <!-- [2] -->
+  <div tabindex="-1" data-micromodal-close>
 
-    <a href="#modal" class="modal-trigger bg-teal hover:bg-teal-dark shadow text-white font-bold py-4 px-6 rounded no-underline">Trigger Modal</a>
+    <!-- [3] -->
+    <div role="dialog" aria-modal="true" aria-labelledby="modal-1-title" >
 
+
+      <header>
+        <h2 id="modal-1-title">
+          Modal Title
+        </h2>
+
+        <!-- [4] -->
+        <button aria-label="Close modal" data-micromodal-close></button>
+      </header>
+
+      <div id="modal-1-content">
+        Modal Content
+      </div>
+
+    </div>
   </div>
-
-<div id="modal" class="modal fixed pin p-30 w-100 h-100 m-0 z-20 mt-4" role="dialog">
-  <div class="modal-overlay fixed pin z-10 bg-teal-dark"></div>
-  <div class="modal-container relative bg-white rounded-lg shadow max-w-lg mx-auto p-16 z-30" role="document">
-
-    <h3 class="font-sans text-2xl mb-2 text-teal-dark">Welcome to a super modal</h3>
-
-    <p class="font-serif leading-normal mb-4">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse hic quam velit fugiat ipsam, quos atque ex aperiam repellendus sequi qui perspiciatis deserunt officia fugit adipisci, consectetur veritatis, explicabo sit!</p>
-
-    <button class="bg-white hover:bg-grey-lightest text-grey-darkest font-semibold py-2 px-4 border border-grey-light rounded pin-b pin-r absolute mb-6 mr-6">Do something</button>
-
-    <button class="modal-close absolute pin-t pin-r w-16 h-16" aria-label="Close">
-      <svg width="24" height="24" viewBox="0 0 24 24">
-        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
-</svg>
-    </button>
-  </div>
-</div>
-
 </div>
 
 <!-- -->
     
-    <!-- script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script -->
-
-    <!-- include the Glitch button to show what the webpage is about and
-          to make it easier for folks to view source and remix -->
-    <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
-    <script src="https://button.glitch.me/button.js"></script>
   </div>
   </body>
   
-<!--
-  <script>
-      let picked_date;
-    
-      flatpickr("#flatpckr", {
-        enableTime: true,
-        dateFormat: "Y-m-d H:i",
-        minDate: "today",
-        onChange: function(selectedDates, dateStr, instance) {
-          console.log(`selection changed ${dateStr} `);
-          picked_date = dateStr;
-          document.getElementById('selected_expiry').innerHTML = picked_date;
-        },
-        allowInput: true,
-        //time_24hr: true
-      });
-    
-    
-      let create_button = document.getElementById('create_button');
-      create_button.onclick = function (event){
-        //event.preventDefault();
-        try {
-          create_message_object()
-          //.then((message) => validate_message_object(message))
-          .then((result) => {
-            console.log (result)
-            if (result){
-              post_data();
-            } else {
-              
-            }
-          });
-        } 
-        catch (err){
-          console.log(err);
-        }
 
-      }
-      let message = {};
-      async function create_message_object(){
-        //let message = {};
-        //message.expiry_date = document.getElementById('flatpckr').value;
-        message.expiry_date = picked_date;
-        message.sip_target = document.getElementById('sipuri').value;
-        //message.send_email = document.getElementById('email').value;
-        //message.send_sms = document.getElementById('sms').value;
-        return message;
-      };
-    
-      async function validate_message_object(message){
-        if(!message.expiry_date || !message.sip_target){
-          //console.log(`Bad data`);
-          showMessage(`{"error":"Oops, you seem to be missing something.."}`);
-          return false;
-        } else {
-          console.log (JSON.stringify(message));
-          document.getElementById('selected_expiry').innerHTML = message.expiry_date;
-          return true;
-        }
-      };
-    
-      async function post_data(){
-        fetch('/create_url', { 
-          method: 'POST', 
-          credentials: 'same-origin',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(message),
-        })
-        .then(handleResponse)
-        .then(showMessage)
-        .catch(function(err) {
-          showMessage(err.message);
-        });
-      };
-    
-      function showMessage(message) {
-        //messages.textContent += `\n${message}`;
-        messages.textContent = `\n${message}`;
-        messages.scrollTop = messages.scrollHeight;
-        console.log(JSON.parse(message));
-        if((JSON.parse(message)).url){
-          console.log(`URL found - ${(JSON.parse(message)).url}`)
-        };
-      }
-
-      function handleResponse(response) {
-        return response.ok
-          ? response.json().then((data) => JSON.stringify(data, null, 2))
-          : Promise.reject(new Error('Unexpected response'));
-      }
-    
-  </script>
--->  
 </html>
