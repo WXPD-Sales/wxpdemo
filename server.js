@@ -8,7 +8,7 @@ const RedisExpiredEvents = require('./redis-expired-events');
 const expiry = require('./expiry');
 const app = express();
 const thismoment = require('moment');
-var url  = require('url');
+const url = require('url');
 const randomize = require('randomatic');
 
 const RedisRepo = require('./redis-repo');
@@ -46,7 +46,7 @@ app.post('/create_url', function(request, response) {
     let guestSessionID = randomize('Aa0', 16);
     let guestUrl = `${request.protocol}://${request.get('host')}/guest/${guestSessionID}`;
     console.log(`full url - ${guestUrl}`);
-    response.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expires: `in ${Urlexpiry} secs` });
+    response.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}` });
   }else{
     response.send({ result: 'Error', message: 'Invalid SIP URI or Expiry provided!'});
   };
