@@ -39,7 +39,19 @@ app.get('/guest/:guest_session_id', function(request, response) {
   .then((result)=>{
     console.log(result);
     if (result == 1){
-      response.send({message: `link not expired`});
+      rr.get(request.params.guest_session_id)
+      .then((result)=>{
+        response.send({message: `${}`});});
+      
+      //----
+      /*
+        response.cookie("token",jwt.token);
+        response.cookie("target",request.params.email);
+        response.cookie("label",jwt.label);
+        //response.send(JSON.stringify(request.body));
+        response.sendFile(__dirname + '/views/widget.html');
+       */ 
+      //----
     } else {
       response.send({message: `this link has expired`});
     }

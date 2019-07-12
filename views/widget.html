@@ -1,0 +1,65 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+
+<!-- You might want to try something fancier: -->
+<!-- html/nunjucks docs: https://mozilla.github.io/nunjucks/ -->
+<!-- pug: https://pugjs.org/ -->
+<!-- haml: http://haml.info/ -->
+<!-- hbs(handlebars): http://handlebarsjs.com/ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Webex Teams Glitch!</title>
+    <meta name="description" content="A cool thing made with Webex Teams and Glitch">
+    <link id="favicon" rel="icon" href="https://developer.webex.com/favicon.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- import JQuery for "dialog" widget  -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+      $( function() {
+        $( "#dialog" ).dialog({
+          width: 700,
+          height: 500
+        });
+      } );
+    </script>
+    
+    <!-- import Cisco Webex Teams Widget library -->
+    <script src="https://code.s4d.io/widget-space/production/bundle.js"></script>
+    <link rel="stylesheet" href="https://code.s4d.io/widget-space/production/main.css">
+    
+    <!-- cookie parser for JS-->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+  </head>
+  <body style="background-image:url('https://cdn.glitch.com/e8c2cec0-da34-46dc-bede-0e3e44f3b149%2Fnorway-fjord.jpg?1550086469566');background-size: cover;">
+    <header>
+    </header>
+      <div id="dialog" title=".">
+        <div id="my-ciscospark-widget"></div>
+      </div>
+    
+    <script>
+      var widgetEl = document.getElementById('my-ciscospark-widget');
+      // Init a new widget
+      ciscospark.widget(widgetEl).spaceWidget({
+        guestToken: Cookies.get('token'),
+        //accessToken: 'NzJmN2VhN2MtYjQzOS00Y2U3LWJjYmEtNWJiMWIzN2JjMzYxNzg1M2U2MTQtYjAx_PF84_1eb65fdf-9643-417f-9974-ad72cae0e10f',
+        destinationId: Cookies.get('target'),
+        //destinationId: 'Y2lzY29zcGFyazovL3VzL1JPT00vNmNmNzJlMDAtNjZkMC0xMWU5LWIxN2YtMjE5NGQyYTI1ODAx',
+        destinationType: 'email',
+        spaceActivities: {"files":false,"meet":true,"message":false,"people":false},
+        initialActivity: 'meet',
+        secondaryActivitiesFullWidth: false
+      });
+      document.getElementById('dialog').title = "Welcome to the Tamron Hall Show! " + Cookies.get('label'); 
+    </script>
+
+  </body>
+</html>
