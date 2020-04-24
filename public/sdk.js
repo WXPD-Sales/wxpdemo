@@ -1,18 +1,34 @@
 const myAccessToken = "OTQ3NjJjMWEtNjRmOS00ZjM3LTllZWItYWM3MGZjMzM3MmE1YmYxYjc2NGEtZTY0_PF84_35a15b0a-0ef1-4029-9f63-a7c54df5df59";
 
-//console.log(process.env.DEV_TOKEN);
+const jwt = Cookies.get('token');
+console.log(`Found JWT - ${jwt}`);
 /*
-if (myAccessToken === "YOUR_ACCESS_TOKEN") {
-  alert("Make sure to update your access token in the index.js file!");
-  return;
-}
-*/
+
 const webex = window.Webex.init({
   credentials: {
     access_token: myAccessToken
   }
 });
 
+*/
+
+const webex = window.Webex.init();
+
+webex.once('ready', () => {
+  
+      webex.authorization.requestAccessTokenFromJwt({jwt}).then(() => {
+      if (webex.canAuthorize) {
+        // Authorization is successful
+        // your app logic goes here
+        // Change Authentication status to `Authenticated`
+        console.log('Guest Authenticated');
+      }
+    })
+      .catch((e) => {
+        // Do something with the auth error here
+        console.error(e);
+      });
+});
 
 
 
