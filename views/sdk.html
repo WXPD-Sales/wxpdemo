@@ -3,8 +3,8 @@
   <head>
     <!-- import the webpage's stylesheet -->
     <!--link rel="stylesheet" href="/style.css"-->
-    <link rel="stylesheet" href="/collab-ui.min.css">
-    <link rel="stylesheet" href="/momentum-ui.min.css">
+    <link rel="stylesheet" href="./collab-ui.min.css">
+    <link rel="stylesheet" href="./momentum-ui.min.css">
   </head>
   <title>Webex Teams Meetings Quick Start</title>
   <body>
@@ -22,8 +22,11 @@
     </form>
 
     <div style="display: flex">
-      <video style="width:360px" id="self-view" muted autoplay></video>
-      <div style="width:50%">
+      <div id="self" style="background-color: yellow;">
+        <video style="width:360px" id="self-view" muted autoplay></video>
+      </div>
+      
+      <div id="remote" style="background-color: green; height:75%; width:75%">
         <audio id="remote-view-audio" autoplay></audio>
         <video id="remote-view-video" autoplay></video>
       </div>
