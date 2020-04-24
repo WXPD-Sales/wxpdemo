@@ -14,7 +14,7 @@ const webex = window.Webex.init({
 */
 
 //const webex = window.Webex.init();
-const webex = (window.webex = Webex.init({
+let webex = (window.webex = Webex.init({
   logger: {
     level: "info"
   }
