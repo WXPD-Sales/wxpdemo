@@ -13,6 +13,9 @@ const webex = window.Webex.init({
   }
 });
 
+
+
+
 webex.meetings.register().catch(err => {
   console.error(err);
   alert(err);
