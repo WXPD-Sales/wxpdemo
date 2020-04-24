@@ -1,6 +1,7 @@
-const myAccessToken = "OTQ3NjJjMWEtNjRmOS00ZjM3LTllZWItYWM3MGZjMzM3MmE1YmYxYjc2NGEtZTY0_PF84_35a15b0a-0ef1-4029-9f63-a7c54df5df59";
+const myAccessToken =
+  "OTQ3NjJjMWEtNjRmOS00ZjM3LTllZWItYWM3MGZjMzM3MmE1YmYxYjc2NGEtZTY0_PF84_35a15b0a-0ef1-4029-9f63-a7c54df5df59";
 
-const jwt = Cookies.get('token');
+const jwt = Cookies.get("token");
 console.log(`Found JWT - ${jwt}`);
 /*
 
@@ -12,25 +13,29 @@ const webex = window.Webex.init({
 
 */
 
-const webex = window.Webex.init();
+//const webex = window.Webex.init();
+const webex = (window.webex = Webex.init({
+  logger: {
+    level: "info"
+  }
+}));
 
-webex.once('ready', () => {
-  
-      webex.authorization.requestAccessTokenFromJwt({jwt}).then(() => {
+webex.once("ready", () => {
+  webex.authorization
+    .requestAccessTokenFromJwt({ jwt })
+    .then(() => {
       if (webex.canAuthorize) {
         // Authorization is successful
         // your app logic goes here
         // Change Authentication status to `Authenticated`
-        console.log('Guest Authenticated');
+        console.log("Guest Authenticated");
       }
     })
-      .catch((e) => {
-        // Do something with the auth error here
-        console.error(e);
-      });
+    .catch(e => {
+      // Do something with the auth error here
+      console.error(e);
+    });
 });
-
-
 
 webex.meetings.register().catch(err => {
   console.error(err);
@@ -109,7 +114,8 @@ document.getElementById("destination").addEventListener("submit", event => {
   event.preventDefault();
 
   //const destination = document.getElementById("invitee").value;
-  const destination = Cookies.get('target');
+  const destination = Cookies.get("target");
+  console.log(`got destination - ${destination}`);
 
   return webex.meetings
     .create(destination)
