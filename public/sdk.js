@@ -1,4 +1,5 @@
-const myAccessToken = "MjMxN2U0N2MtNmY3Mi00ZDI5LWI0OGQtZDcwMjEzNGQ5ZDJjZjQ0NjE3NjUtOGZm_PF84_35a15b0a-0ef1-4029-9f63-a7c54df5df59";
+const myAccessToken =
+  "MjMxN2U0N2MtNmY3Mi00ZDI5LWI0OGQtZDcwMjEzNGQ5ZDJjZjQ0NjE3NjUtOGZm_PF84_35a15b0a-0ef1-4029-9f63-a7c54df5df59";
 //console.log(process.env.DEV_TOKEN);
 /*
 if (myAccessToken === "YOUR_ACCESS_TOKEN") {
@@ -9,6 +10,9 @@ if (myAccessToken === "YOUR_ACCESS_TOKEN") {
 const webex = window.Webex.init({
   credentials: {
     access_token: myAccessToken
+  },
+  logger: {
+    level: "debug"
   }
 });
 
