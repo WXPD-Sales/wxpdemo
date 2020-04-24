@@ -98,6 +98,10 @@ app.post('/sms_invite', function(request, resposne) {
   
 });
 
+app.get('/sdk', function(req, res) {
+  res.sendFile(__dirname + '/views/sdk.html');
+});
+
 // listen for requests :)
 const listener = app.listen(process.env.PORT, function() {
   console.log('Your app is listening on port ' + listener.address().port);
