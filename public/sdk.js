@@ -27,12 +27,21 @@ webex.once("ready", () => {
   console.log("webex obj ready");
   webex.authorization
     .requestAccessTokenFromJwt({jwt})
-    .then(() => {
+    .then((data) => {
       if (webex.canAuthorize) {
         // Authorization is successful
         // your app logic goes here
         // Change Authentication status to `Authenticated`
         console.log("Guest Authenticated");
+        console.log(`Data - ${JSON.stringify(webex)}`);
+        
+        webex.meetings.register().catch(err => {
+          console.error(err);
+          alert(err);
+          throw err;
+        });
+        
+        
       }
     })
     .catch(e => {
@@ -41,11 +50,13 @@ webex.once("ready", () => {
     });
 });
 
+/*
 webex.meetings.register().catch(err => {
   console.error(err);
   alert(err);
   throw err;
 });
+*/
 
 function bindMeetingEvents(meeting) {
   meeting.on("error", err => {
