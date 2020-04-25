@@ -54,15 +54,34 @@
     </p>
 
     <form id="destination">
-      <input title="join" type="submit" value="join" />
-      <button id="hangup" title="hangup" type="button">cancel/hangup</button>
+      <!--input class="md-button md-button--circle md-button--52 md-button--green" title="call" type="submit" value="Call" /-->
+      <!--button class="md-button md-button--circle md-button--52 md-button--red" id="hangup" title="hangup" type="button">X</button-->
+    <button
+      id="hangup"
+      class="md-button md-button--circle md-button--44 md-button--green"
+      alt="answer call with voice only"
+      type="submit"
+      aria-label="answer call with voice only">
+      <span class="md-button__children">
+        <i class="icon icon-handset_24"></i>
+      </span>
+    </button>
+    <button
+      class="md-button md-button--circle md-button--44 md-button--red"
+      alt="reject call"
+      type="button"
+      aria-label="reject call">
+      <span class="md-button__children">
+        <i class="icon icon-cancel_24"></i>
+      </span>
+    </button>  
     </form>
     
     
 
     <div style="display: flex">
       <div id="self" class="self">
-        <video style="width:10%" id="self-view" muted autoplay></video>
+        <video style="width:auto" id="self-view" muted autoplay></video>
       </div>
 
       <div id="remote" class="remote">
