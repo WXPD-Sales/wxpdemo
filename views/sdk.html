@@ -23,13 +23,16 @@
       .remote_video {
         width: 100%;
       }
+      .padit {
+        padding: 10px;
+      }
     </style>
     
     <!-- cookie parser for JS-->
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     
   </head>
-  <title>Webex Teams Meetings Quick Start</title>
+  <title>Webex Teams Family Connect</title>
   <body>
     <header class="md-top-bar md-top-bar--dark" role="navigation">
       <div class="md-top-bar__container row">
@@ -48,16 +51,14 @@
           </nav>
       </div>
     </header>
-    <h1>Meetings Quick Start</h1>
-    <p>
-      This sample demonstrates how remote participants can join video conferences through the Webex JS-SDK embedded in the browser.
-    </p>
 
-    <form id="destination">
+    <form id="destination" class="padit">
+      <p>
+        Click here to get started
+      </p>
       <!--input class="md-button md-button--circle md-button--52 md-button--green" title="call" type="submit" value="Call" /-->
       <!--button class="md-button md-button--circle md-button--52 md-button--red" id="hangup" title="hangup" type="button">X</button-->
     <button
-      id="hangup"
       class="md-button md-button--circle md-button--44 md-button--green"
       alt="answer call with voice only"
       type="submit"
@@ -67,6 +68,7 @@
       </span>
     </button>
     <button
+      id="hangup"
       class="md-button md-button--circle md-button--44 md-button--red"
       alt="reject call"
       type="button"
@@ -81,7 +83,7 @@
 
     <div style="display: flex">
       <div id="self" class="self">
-        <video style="width:auto" id="self-view" muted autoplay></video>
+        <video style="width:300px" id="self-view" muted autoplay></video>
       </div>
 
       <div id="remote" class="remote">
