@@ -7,16 +7,16 @@
     <link rel="stylesheet" href="/momentum-ui.min.css" />
     <style>
       .self {
-        background-color: yellow;
+        /*background-color: yellow;*/
         position: absolute;
         width: 200px;
         /*padding-top: 56.25%; /* 16:9 Aspect Ratio */
         z-index: 100;
       }
       .remote {
-        background-color: green;
+        /*background-color: green;
         /*position: absolute;*/
-        width: 100%;
+        width: 90%;
         /*padding-top: 56.25%; /* 16:9 Aspect Ratio */
         z-index: 10;
       }
@@ -25,6 +25,9 @@
       }
       .padit {
         padding: 10px;
+      }
+      #call_container {
+        
       }
     </style>
     
@@ -53,11 +56,7 @@
     </header>
 
     <form id="destination" class="padit">
-      <p>
-        Click here to get started
-      </p>
-      <!--input class="md-button md-button--circle md-button--52 md-button--green" title="call" type="submit" value="Call" /-->
-      <!--button class="md-button md-button--circle md-button--52 md-button--red" id="hangup" title="hangup" type="button">X</button-->
+    Click here
     <button
       class="md-button md-button--circle md-button--44 md-button--green"
       alt="answer call with voice only"
@@ -67,6 +66,7 @@
         <i class="icon icon-handset_24"></i>
       </span>
     </button>
+    to start your call, and click here  
     <button
       id="hangup"
       class="md-button md-button--circle md-button--44 md-button--red"
@@ -77,11 +77,12 @@
         <i class="icon icon-cancel_24"></i>
       </span>
     </button>  
+    to end your call  
     </form>
     
     
 
-    <div style="display: flex">
+    <div id="call_container" style="display: flex">
       <div id="self" class="self">
         <video style="width:300px" id="self-view" muted autoplay></video>
       </div>
