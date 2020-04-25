@@ -9,9 +9,10 @@
       .self {
         /*background-color: yellow;*/
         position: absolute;
-        width: 200px;
+        /*width: 200px;
         /*padding-top: 56.25%; /* 16:9 Aspect Ratio */
         z-index: 100;
+        display: inline-block;
       }
       .remote {
         /*background-color: green;
@@ -19,15 +20,22 @@
         width: 90%;
         /*padding-top: 56.25%; /* 16:9 Aspect Ratio */
         z-index: 10;
+        
       }
       .remote_video {
         width: 100%;
+        display: inline-block;
+      }
+      .self_video {
+        width: 100px;
+        display: inline-block;
       }
       .padit {
         padding: 10px;
       }
       #call_container {
-        
+        text-align: center;
+        display: flex
       }
     </style>
     
@@ -95,9 +103,9 @@
     </div>
     
 
-    <div id="call_container" style="display: flex">
+    <div id="call_container" class="padit">
       <div id="self" class="self">
-        <video style="width:300px" id="self-view" muted autoplay></video>
+        <video class="self_video" id="self-view" muted autoplay></video>
       </div>
 
       <div id="remote" class="remote">
