@@ -60,9 +60,27 @@ function bindMeetingEvents(meeting) {
     console.error("Meeting error -", err);
   });
   
-  meeting.on("locked", err => {
-    console.error("Meeting Locked -", err);
+  meeting.on('meeting:locked', () => {
+    //document.getElementById('meeting-lock').innerHTML = 'Meeting is Locked';
+    console.error("Meeting locked");
   });
+  
+  meeting.on('meeting:unlocked', () => {
+    //document.getElementById('meeting-lock').innerHTML = 'Meeting is Locked';
+    console.error("Meeting unlocked -");
+  });
+  
+  meeting.on('meeting:self:lobbyWaiting', () => {
+    //document.getElementById('lobby-space').innerHTML = 'User is guest to space, waiting to be admitted, wait to use addMedia';
+    console.log('User is guest to space, waiting to be admitted, wait to use addMedia');
+  });
+
+  meeting.on('meeting:self:guestAdmitted', () => {
+    //document.getElementById('lobby-space').innerHTML = 'Admitted to meeting as guest to call.';
+    console.log('Admitted to meeting as guest to call');
+  });
+
+//meeting:self:lobbyWaiting
 
   // Handle media streams changes to ready state
   meeting.on("media:ready", media => {
