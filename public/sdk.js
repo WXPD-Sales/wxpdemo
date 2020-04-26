@@ -78,6 +78,7 @@ function bindMeetingEvents(meeting) {
   meeting.on('meeting:self:guestAdmitted', () => {
     //document.getElementById('lobby-space').innerHTML = 'Admitted to meeting as guest to call.';
     console.log('Admitted to meeting as guest to call');
+    return joinMeeting(meeting);
   });
 
 //meeting:self:lobbyWaiting
