@@ -18,7 +18,7 @@ const webex = window.Webex.init({
 
 */
 
-
+let m;
 
 webex.once("ready", () => {
   console.log(`Webex OBJ ready ${webex.version}`);
@@ -136,6 +136,7 @@ document.getElementById("destination").addEventListener("submit", event => {
   return webex.meetings
     .create(destination)
     .then(meeting => {
+      m = meeting;
       //console.log(`meeting object ${JSON.stringify(meeting)}`);
       // Call our helper function for binding events to meetings
       bindMeetingEvents(meeting);
