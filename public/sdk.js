@@ -1,12 +1,9 @@
 //const webex = window.Webex.init();
 const webex = (window.webex = Webex.init({
   logger: {
-    level: "degug"
+    level: "debug"
   }
 }));
-
-const myAccessToken =
-  "OTQ3NjJjMWEtNjRmOS00ZjM3LTllZWItYWM3MGZjMzM3MmE1YmYxYjc2NGEtZTY0_PF84_35a15b0a-0ef1-4029-9f63-a7c54df5df59";
 
 const destination = Cookies.get("target");
 const jwt = Cookies.get("token");
