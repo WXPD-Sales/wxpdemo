@@ -82,6 +82,31 @@ app.get('/guestsdk/:guest_session_id', function(request, response) {
 
 });
 
+app.get('/soundcheck/:guest_session_id', function(request, response) {
+  //response.sendFile(__dirname + '/views/index.html');
+  //console.log("got a hit")
+  //response.send({ message: `if not expired, this is where the widget will load for session ${request.params.guest_session_id}`});
+  rr.get(`URL:${request.params.guest_session_id}`)
+  .then((result)=>{
+    console.log(result);
+    if (result == 1){
+      rr.get(request.params.guest_session_id)
+      .then((result)=>{
+        //response.send({message: `${result}`});
+        //response.json(JSON.parse(result));
+        response.cookie("token",tokgen(JSON.parse(result).display_name).token);
+        response.cookie("target",JSON.parse(result).sip_target);
+        response.cookie("label",JSON.parse(result).display_name);
+        //response.send(JSON.stringify(request.body));
+        response.sendFile(__dirname + '/views/sdksoundcheck.html');
+      });
+    } else {
+      response.send({message: `this link has expired`});
+    }
+  });
+
+});
+
 // http://expressjs.com/en/starter/basic-routing.html
 app.post('/create_url', function(request, response) {
   //response.sendFile(__dirname + '/views/index.html');

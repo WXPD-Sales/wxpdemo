@@ -132,7 +132,7 @@ document.getElementById("destination").addEventListener("submit", event => {
   return webex.meetings
     .create(destination)
     .then(meeting => {
-      console.log(`meeting object => ${meeting}`);
+      console.log(`meeting object => ${JSON.stringify(meeting}`);
       // Call our helper function for binding events to meetings
       bindMeetingEvents(meeting);
 
