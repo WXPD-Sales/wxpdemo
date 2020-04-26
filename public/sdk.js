@@ -57,7 +57,11 @@ webex.meetings.register().catch(err => {
 
 function bindMeetingEvents(meeting) {
   meeting.on("error", err => {
-    console.error(err);
+    console.error("Meeting error -", err);
+  });
+  
+  meeting.on("locked", err => {
+    console.error("Meeting Locked -", err);
   });
 
   // Handle media streams changes to ready state
@@ -132,7 +136,7 @@ document.getElementById("destination").addEventListener("submit", event => {
   return webex.meetings
     .create(destination)
     .then(meeting => {
-      console.log(`meeting object => ${JSON.stringify(meeting}`);
+      //console.log(`meeting object ${JSON.stringify(meeting)}`);
       // Call our helper function for binding events to meetings
       bindMeetingEvents(meeting);
 
