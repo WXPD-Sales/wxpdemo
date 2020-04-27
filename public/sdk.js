@@ -56,6 +56,9 @@ webex.meetings.register().catch(err => {
 */
 
 function bindMeetingEvents(meeting) {
+  
+  console.log('This meeting', meeting);
+  
   meeting.on("error", err => {
     console.error("Meeting error -", err);
   });
@@ -155,7 +158,7 @@ function bindMeetingEvents(meeting) {
 
   // Of course, we'd also like to be able to leave the meeting:
   document.getElementById("hangup").addEventListener("click", () => {
-    meeting.leave();
+    meeting.leave(meeting.id);
   });
 }
 
@@ -173,6 +176,7 @@ function joinMeeting(meeting) {
 
     // Get our local media stream and add it to the meeting
     return meeting.getMediaStreams(mediaSettings).then(mediaStreams => {
+      console.log('Here are the mediaStreams',mediaStreams);
       const [localStream, localShare] = mediaStreams;
 
       meeting.addMedia({
