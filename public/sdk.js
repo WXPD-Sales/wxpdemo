@@ -60,9 +60,16 @@ function bindMeetingEvents(meeting) {
     console.error("Meeting error -", err);
   });
   
-  meeting.on('meeting:ringing', () => {
+  meeting.on('meeting:ringing', (payload) => {
     document.getElementById('log').innerHTML = 'Ringing';
-    console.log("Meeting Ringing");
+    //setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
+    console.log("Meeting Ringing", payload);
+  });
+  
+  meeting.on('meeting:ringingStop', () => {
+    document.getElementById('log').innerHTML = 'Ringing Stop';
+    //setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
+    //console.log("Meeting Ringing");
   });
   
   meeting.on('meeting:locked', () => {
@@ -72,7 +79,7 @@ function bindMeetingEvents(meeting) {
   
   meeting.on('meeting:unlocked', () => {
     document.getElementById('log').innerHTML = 'Meeting is UnLocked';
-    console.error("Meeting unlocked -");
+    console.error("Meeting unlocked");
   });
   
   meeting.on('meeting:self:lobbyWaiting', () => {
@@ -86,12 +93,12 @@ function bindMeetingEvents(meeting) {
   });
   
   meeting.on('meeting:reconnectionStarting', () => {
-    document.getElementById('log').innerHTML = 'reconnecting in progress';
+    document.getElementById('log').innerHTML = 'Reconnecting...';
   });
 
   meeting.on('meeting:reconnectionSuccess', () => {
-    document.getElementById('log').innerHTML = 'reconnection success';
-    setTimeout(() => { document.getElementById('reconnection-status').innerHTML = ''; }, 5000);
+    document.getElementById('log').innerHTML = 'Reconnected';
+    setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
   });
 
   meeting.on('meeting:reconnectionFailure', () => {
