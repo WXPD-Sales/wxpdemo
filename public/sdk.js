@@ -75,6 +75,13 @@ function bindMeetingEvents(meeting) {
     console.log('User is guest to space, waiting to be admitted, wait to use addMedia');
   });
 
+  meeting.on('meeting:actionsUpdate', (payload) => {
+    console.log(`meeting:actionsUpdate - ${payload}`);
+    //document.getElementById('userCanLock').innerHTML = `User can lock: ${payload.canLock}`;
+    //document.getElementById('userCanUnlock').innerHTML = `User can unlock: ${payload.canUnlock}`;
+    //document.getElementById('userCanTransfer').innerHTML = `User can transfer: ${payload.canAssignHost}`;
+  });
+  
   meeting.on('meeting:self:guestAdmitted', () => {
     //document.getElementById('lobby-space').innerHTML = 'Admitted to meeting as guest to call.';
     console.log('Admitted to meeting as guest to call');
