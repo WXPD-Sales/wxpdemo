@@ -175,6 +175,9 @@ function bindMeetingEvents(meeting) {
 
   // Of course, we'd also like to be able to leave the meeting:
   document.getElementById("hangup").addEventListener("click", () => {
+    document.getElementById("self-view").srcObject = null;
+    document.getElementById("remote-view-video").srcObject = null;
+    document.getElementById("remote-view-audio").srcObject = null;
     meeting.leave(meeting.id);
   });
 }
