@@ -62,7 +62,7 @@ function bindMeetingEvents(meeting) {
   
   meeting.on('meeting:ringing', () => {
     document.getElementById('log').innerHTML = 'Ringing';
-    console.error("Meeting Ringing");
+    console.log("Meeting Ringing");
   });
   
   meeting.on('meeting:locked', () => {
@@ -108,6 +108,7 @@ function bindMeetingEvents(meeting) {
 
   // Handle media streams changes to ready state
   meeting.on("media:ready", media => {
+    console.log('media:ready', media);
     if (!media) {
       return;
     }
@@ -124,6 +125,7 @@ function bindMeetingEvents(meeting) {
 
   // Handle media streams stopping
   meeting.on("media:stopped", media => {
+    console.log('media:stopped', media);
     // Remove media streams
     if (media.type === "local") {
       document.getElementById("self-view").srcObject = null;
