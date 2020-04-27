@@ -60,16 +60,24 @@ function bindMeetingEvents(meeting) {
     console.error("Meeting error -", err);
   });
   
+  //meeting:stateChange
+  
+  meeting.on('meeting:stateChange', (payload) => {
+    //document.getElementById('log').innerHTML = `${payload}`;
+    //setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
+    console.log("Meeting State Change", payload);
+  });
+  
   meeting.on('meeting:ringing', (payload) => {
     document.getElementById('log').innerHTML = 'Ringing';
-    //setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
+    setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
     console.log("Meeting Ringing", payload);
   });
   
-  meeting.on('meeting:ringingStop', () => {
+  meeting.on('meeting:ringingStop', (payload) => {
     document.getElementById('log').innerHTML = 'Ringing Stop';
     //setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
-    //console.log("Meeting Ringing");
+    console.log("Meeting Ringing Stop", payload);
   });
   
   meeting.on('meeting:locked', () => {
