@@ -83,16 +83,16 @@ function bindMeetingEvents(meeting) {
     console.log("Meeting Ringing Stop", payload);
   });
   
-  meeting.on('meeting:ringingStop', (payload) => {
-    document.getElementById('log').innerHTML = 'Ringing Stop';
+  meeting.on('meeting:added', (payload) => {
+    document.getElementById('log').innerHTML = 'Meeting Added';
     //setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
-    console.log("Meeting Ringing Stop", payload);
+    console.log("meeting:added", payload);
   });
   
-  meeting.on('meeting:ringingStop', (payload) => {
-    document.getElementById('log').innerHTML = 'Ringing Stop';
+  meeting.on('meeting:removed', (payload) => {
+    document.getElementById('log').innerHTML = 'Meeting Removed';
     //setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
-    console.log("Meeting Ringing Stop", payload);
+    console.log("meeting:removed", payload);
   });
   
   meeting.on('meeting:locked', () => {
