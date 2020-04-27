@@ -60,13 +60,18 @@ function bindMeetingEvents(meeting) {
     console.error("Meeting error -", err);
   });
   
+  meeting.on('meeting:ringing', () => {
+    document.getElementById('log').innerHTML = 'Ringing';
+    console.error("Meeting Ringing");
+  });
+  
   meeting.on('meeting:locked', () => {
-    //document.getElementById('meeting-lock').innerHTML = 'Meeting is Locked';
+    document.getElementById('log').innerHTML = 'Meeting is Locked';
     console.error("Meeting locked");
   });
   
   meeting.on('meeting:unlocked', () => {
-    //document.getElementById('meeting-lock').innerHTML = 'Meeting is Locked';
+    document.getElementById('log').innerHTML = 'Meeting is UnLocked';
     console.error("Meeting unlocked -");
   });
   
@@ -78,9 +83,19 @@ function bindMeetingEvents(meeting) {
 
   meeting.on('meeting:actionsUpdate', (payload) => {
     console.log(`meeting:actionsUpdate - ${JSON.stringify(payload)}`);
-    //document.getElementById('userCanLock').innerHTML = `User can lock: ${payload.canLock}`;
-    //document.getElementById('userCanUnlock').innerHTML = `User can unlock: ${payload.canUnlock}`;
-    //document.getElementById('userCanTransfer').innerHTML = `User can transfer: ${payload.canAssignHost}`;
+  });
+  
+  meeting.on('meeting:reconnectionStarting', () => {
+    document.getElementById('log').innerHTML = 'reconnecting in progress';
+  });
+
+  meeting.on('meeting:reconnectionSuccess', () => {
+    document.getElementById('log').innerHTML = 'reconnection success';
+    setTimeout(() => { document.getElementById('reconnection-status').innerHTML = ''; }, 5000);
+  });
+
+  meeting.on('meeting:reconnectionFailure', () => {
+    document.getElementById('log').innerHTML = 'reconnection failure';
   });
   
   meeting.on('meeting:self:guestAdmitted', () => {
