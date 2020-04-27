@@ -71,19 +71,20 @@ function bindMeetingEvents(meeting) {
   });
   
   meeting.on('meeting:self:lobbyWaiting', () => {
+    document.getElementById('log').innerHTML = 'Waiting in lobby';
     //document.getElementById('lobby-space').innerHTML = 'User is guest to space, waiting to be admitted, wait to use addMedia';
     console.log('User is guest to space, waiting to be admitted, wait to use addMedia');
   });
 
   meeting.on('meeting:actionsUpdate', (payload) => {
-    console.log(`meeting:actionsUpdate - ${payload}`);
+    console.log(`meeting:actionsUpdate - ${JSON.stringify(payload)}`);
     //document.getElementById('userCanLock').innerHTML = `User can lock: ${payload.canLock}`;
     //document.getElementById('userCanUnlock').innerHTML = `User can unlock: ${payload.canUnlock}`;
     //document.getElementById('userCanTransfer').innerHTML = `User can transfer: ${payload.canAssignHost}`;
   });
   
   meeting.on('meeting:self:guestAdmitted', () => {
-    //document.getElementById('lobby-space').innerHTML = 'Admitted to meeting as guest to call.';
+    document.getElementById('log').innerHTML = 'Admitted to meeting as guest';
     console.log('Admitted to meeting as guest to call');
     return joinMeeting(meeting);
   });
@@ -156,7 +157,7 @@ document.getElementById("destination").addEventListener("submit", event => {
   event.preventDefault();
 
   //const destination = document.getElementById("invitee").value;
-
+  document.getElementById("welcome_message").style.display="none";
   console.log(`got destination - ${destination}`);
 
   return webex.meetings
