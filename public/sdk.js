@@ -83,6 +83,18 @@ function bindMeetingEvents(meeting) {
     console.log("Meeting Ringing Stop", payload);
   });
   
+  meeting.on('meeting:ringingStop', (payload) => {
+    document.getElementById('log').innerHTML = 'Ringing Stop';
+    //setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
+    console.log("Meeting Ringing Stop", payload);
+  });
+  
+  meeting.on('meeting:ringingStop', (payload) => {
+    document.getElementById('log').innerHTML = 'Ringing Stop';
+    //setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
+    console.log("Meeting Ringing Stop", payload);
+  });
+  
   meeting.on('meeting:locked', () => {
     document.getElementById('log').innerHTML = 'Meeting is Locked';
     console.error("Meeting locked");
@@ -122,7 +134,12 @@ function bindMeetingEvents(meeting) {
     return joinMeeting(meeting);
   });
 
-//meeting:self:lobbyWaiting
+  meeting.on('meeting:self:mutedByOthers', () => {
+    document.getElementById('log').innerHTML = 'Muted by others';
+    setTimeout(() => {
+      document.getElementById('log').innerHTML = '';
+    }, 10000);
+  });
 
   // Handle media streams changes to ready state
   meeting.on("media:ready", media => {
@@ -176,7 +193,7 @@ function joinMeeting(meeting) {
 
     // Get our local media stream and add it to the meeting
     return meeting.getMediaStreams(mediaSettings).then(mediaStreams => {
-      console.log('Here are the mediaStreams',mediaStreams);
+      //console.log('Here are the mediaStreams',mediaStreams);
       const [localStream, localShare] = mediaStreams;
 
       meeting.addMedia({
