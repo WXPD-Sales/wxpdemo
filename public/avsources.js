@@ -5,17 +5,18 @@ const videoSelect = document.querySelector('select#videoSource');
 const audio = {};
 const video = {};
 const media = {
-  receiveVideo: boolean,
-  receiveAudio: boolean,
-  receiveShare: boolean,
-  sendShare: boolean,
-  sendVideo: boolean,
-  sendAudio: boolean
+  receiveVideo: true,
+  receiveAudio: true,
+  receiveShare: false,
+  sendShare: false,
+  sendVideo: true,
+  sendAudio: true
 };
 
 // setting up the devices
 const selectors = [audioInputSelect, audioOutputSelect, videoSelect];
 
+/*
 meeting.getDevices().then((deviceInfos) => {
 const values = selectors.map((select) => select.value);
 
@@ -24,6 +25,7 @@ selectors.forEach((select) => {
     select.removeChild(select.firstChild);
   }
 });
+  
 for (let i = 0; i !== deviceInfos.length; i += 1) {
   const deviceInfo = deviceInfos[i];
   const option = document.createElement('option');
@@ -49,10 +51,10 @@ selectors.forEach((select, selectorIndex) => {
   if (Array.prototype.slice.call(select.childNodes).some((n) => n.value === values[selectorIndex])) {
     select.value = values[selectorIndex];
   }
-});
-
+})
+}).catch(e => console.err(e));
+*/
 // attaching before the request
 
 audio.deviceId = {exact: audioInputSelect.value};
 video.deviceId = {exact: videoSelect.value};
-  
