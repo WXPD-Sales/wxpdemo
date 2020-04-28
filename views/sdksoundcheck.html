@@ -34,7 +34,7 @@
         padding: 10px;
       }
       #call_container {
-        text-align: center;
+        /*text-align: center;*/
         /*display: flex*/
       }
     </style>
@@ -77,7 +77,7 @@
       <i class="icon icon-microphone_24"></i><select id="audioSource" style="width:auto;"></select>
     </div>
     
-    <div id="call_buttons" style="display:inline">
+    <div id="call_buttons" style="display:inline;float:left;width:auto;">
           <div class="padit">
             <button id="call" class="md-button md-button--circle md-button--44 md-button--green" alt="Make video call " type="button">
               <span class="md-button__children"><i class="icon icon-handset_24"></i></span>
@@ -99,8 +99,6 @@
             </button>
           </div>
     </div>
-    
-    <div id="log" class="padit"></div>
 
     <div id="call_container" class="padit">
       <div id="self" class="self">
@@ -113,7 +111,7 @@
       </div>
     </div>
 
-    
+    <div id="log" class="padit"></div>
 
     <script crossorigin src="https://unpkg.com/webex@^1/umd/webex.min.js"></script>
     <script src="/sdk.js" async ></script>
