@@ -16,8 +16,7 @@ const media = {
 // setting up the devices
 const selectors = [audioInputSelect, audioOutputSelect, videoSelect];
 
-
-webex.meeting.getDevices().then((deviceInfos) => {
+navigator.mediaDevices.enumerateDevices().then((deviceInfos) => {
 const values = selectors.map((select) => select.value);
 
 selectors.forEach((select) => {

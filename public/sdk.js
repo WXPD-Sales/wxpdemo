@@ -235,7 +235,7 @@ document.getElementById("destination").addEventListener("submit", event => {
 
 //---- media sources ---
 
-
+/*
 
 const audioInputSelect = document.querySelector('select#audioSource');
 const audioOutputSelect = document.querySelector('select#audioOutput');
@@ -298,3 +298,4 @@ selectors.forEach((select, selectorIndex) => {
 
 audio.deviceId = {exact: audioInputSelect.value};
 video.deviceId = {exact: videoSelect.value};
+*/
