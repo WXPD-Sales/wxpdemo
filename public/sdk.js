@@ -67,11 +67,6 @@ selectors.forEach((select, selectorIndex) => {
 })
 }).catch(e => console.err(e));
 
-// attaching before the request
-
-audio.deviceId = audioInputSelect.value;
-video.deviceId = videoSelect.value;
-
 //-----
 
 let m;
@@ -262,6 +257,11 @@ document.getElementById("destination").addEventListener("submit", event => {
   //const destination = document.getElementById("invitee").value;
   document.getElementById("welcome_message").style.display="none";
   console.log(`got destination - ${destination}`);
+  
+  // attaching before the request
+
+  audio.deviceId = {exact: audioInputSelect.value};
+  video.deviceId = {exact: videoSelect.value};
 
   return webex.meetings
     .create(destination)
