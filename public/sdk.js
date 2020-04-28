@@ -216,10 +216,10 @@ function bindMeetingEvents(meeting) {
     }
   });
   
-  // Toggle audio mute in the meeting:
+ // Toggle audio mute in the meeting:
   document.getElementById("audio_mute").addEventListener("click", () => {
     console.log('TOGGLE MUTE');
-    toggle_a_mute(meeting);
+    meeting.isAudioMuted() ? meeting.unmuteAudio() : meeting.muteAudio();
   });
 
   // Of course, we'd also like to be able to leave the meeting:
@@ -278,6 +278,3 @@ document.getElementById("call").addEventListener("click", event => {
     });
 });
 
-function toggle_a_mute(meeting){
-  return meeting.isAudioMuted()? meeting.unmuteAudio() : meeting.muteAudio();
-}
