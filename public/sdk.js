@@ -195,7 +195,7 @@ function joinMeeting(meeting) {
     };
 
     // Get our local media stream and add it to the meeting
-    return meeting.getMediaStreams(mediaSettings).then(mediaStreams => {
+    return meeting.getMediaStreams(mediaSettings,{audio, video}).then(mediaStreams => {
       //console.log('Here are the mediaStreams',mediaStreams);
       const [localStream, localShare] = mediaStreams;
 
