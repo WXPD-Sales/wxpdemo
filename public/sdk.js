@@ -215,6 +215,12 @@ function bindMeetingEvents(meeting) {
       document.getElementById("remote-view-audio").srcObject = null;
     }
   });
+  
+  // Toggle audio mute in the meeting:
+  document.getElementById("audio_mute").addEventListener("click", () => {
+    console.log('TOGGLE MUTE');
+    toggle_a_mute(meeting);
+  });
 
   // Of course, we'd also like to be able to leave the meeting:
   document.getElementById("hangup").addEventListener("click", () => {
@@ -228,15 +234,6 @@ function bindMeetingEvents(meeting) {
 // Join the meeting and add media
 function joinMeeting(meeting) {
   return meeting.join().then(() => {
-    /*
-    const mediaSettings = {
-      receiveVideo: true,
-      receiveAudio: true,
-      receiveShare: false,
-      sendVideo: true,
-      sendAudio: true,
-      sendShare: false
-    }; */
 
     // Get our local media stream and add it to the meeting
     return meeting.getMediaStreams(mediaSettings,{audio, video}).then(mediaStreams => {
@@ -281,70 +278,6 @@ document.getElementById("call").addEventListener("click", event => {
     });
 });
 
-
-//---- media sources ---
-
-/*
-
-const audioInputSelect = document.querySelector('select#audioSource');
-const audioOutputSelect = document.querySelector('select#audioOutput');
-const videoSelect = document.querySelector('select#videoSource');
-
-const audio = {};
-const video = {};
-const media = {
-  receiveVideo: true,
-  receiveAudio: true,
-  receiveShare: false,
-  sendShare: false,
-  sendVideo: true,
-  sendAudio: true
-};
-
-// setting up the devices
-const selectors = [audioInputSelect, audioOutputSelect, videoSelect];
-
-function setup()
-
-meeting.getDevices().then((deviceInfos) => {
-const values = selectors.map((select) => select.value);
-
-selectors.forEach((select) => {
-  while (select.firstChild) {
-    select.removeChild(select.firstChild);
-  }
-});
-  
-for (let i = 0; i !== deviceInfos.length; i += 1) {
-  const deviceInfo = deviceInfos[i];
-  const option = document.createElement('option');
-
-  option.value = deviceInfo.deviceId;
-  if (deviceInfo.kind === 'audioinput') {
-    option.text = deviceInfo.label || `microphone ${audioInputSelect.length + 1}`;
-    audioInputSelect.appendChild(option);
-  }
-  else if (deviceInfo.kind === 'audiooutput') {
-    option.text = deviceInfo.label || `speaker ${audioOutputSelect.length + 1}`;
-    audioOutputSelect.appendChild(option);
-  }
-  else if (deviceInfo.kind === 'videoinput') {
-    option.text = deviceInfo.label || `camera ${videoSelect.length + 1}`;
-    videoSelect.appendChild(option);
-  }
-  else {
-    console.log('Some other kind of source/device: ', deviceInfo);
-  }
+function toggle_a_mute(meeting){
+  return meeting.isAudioMuted()? meeting.unmuteAudio() : meeting.muteAudio();
 }
-selectors.forEach((select, selectorIndex) => {
-  if (Array.prototype.slice.call(select.childNodes).some((n) => n.value === values[selectorIndex])) {
-    select.value = values[selectorIndex];
-  }
-})
-}).catch(e => console.err(e));
-
-// attaching before the request
-
-audio.deviceId = {exact: audioInputSelect.value};
-video.deviceId = {exact: videoSelect.value};
-*/
