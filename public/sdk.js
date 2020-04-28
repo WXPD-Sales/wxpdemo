@@ -13,12 +13,12 @@ console.log(`Found JWT - ${jwt}`);
 //AV Sources
 
 const audioInputSelect = document.querySelector('select#audioSource');
-const audioOutputSelect = document.querySelector('select#audioOutput');
+//const audioOutputSelect = document.querySelector('select#audioOutput');
 const videoSelect = document.querySelector('select#videoSource');
 
 const audio = {};
 const video = {};
-const media = {
+const mediaSettings = {
   receiveVideo: true,
   receiveAudio: true,
   receiveShare: false,
@@ -28,7 +28,7 @@ const media = {
 };
 
 // setting up the devices
-const selectors = [audioInputSelect, audioOutputSelect, videoSelect];
+const selectors = [audioInputSelect, /*audioOutputSelect,*/ videoSelect];
 
 navigator.mediaDevices.enumerateDevices().then((deviceInfos) => {
 const values = selectors.map((select) => select.value);
@@ -48,10 +48,11 @@ for (let i = 0; i !== deviceInfos.length; i += 1) {
     option.text = deviceInfo.label || `microphone ${audioInputSelect.length + 1}`;
     audioInputSelect.appendChild(option);
   }
+  /*
   else if (deviceInfo.kind === 'audiooutput') {
     option.text = deviceInfo.label || `speaker ${audioOutputSelect.length + 1}`;
     audioOutputSelect.appendChild(option);
-  }
+  }*/
   else if (deviceInfo.kind === 'videoinput') {
     option.text = deviceInfo.label || `camera ${videoSelect.length + 1}`;
     videoSelect.appendChild(option);
@@ -227,6 +228,7 @@ function bindMeetingEvents(meeting) {
 // Join the meeting and add media
 function joinMeeting(meeting) {
   return meeting.join().then(() => {
+    /*
     const mediaSettings = {
       receiveVideo: true,
       receiveAudio: true,
@@ -234,7 +236,7 @@ function joinMeeting(meeting) {
       sendVideo: true,
       sendAudio: true,
       sendShare: false
-    };
+    }; */
 
     // Get our local media stream and add it to the meeting
     return meeting.getMediaStreams(mediaSettings,{audio, video}).then(mediaStreams => {
@@ -250,7 +252,7 @@ function joinMeeting(meeting) {
   });
 }
 
-document.getElementById("destination").addEventListener("submit", event => {
+document.getElementById("call").addEventListener("click", event => {
   // again, we don't want to reload when we try to join
   event.preventDefault();
 

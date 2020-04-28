@@ -72,21 +72,11 @@
       </div>
     </div> 
     
-    <div id="av_select" style="width:300px;">
+    <div id="av_select" class="padit" style="width:300px; display:flex;">
       <td>
-        <tr><i class="icon icon-camera-swap_24"></i><select id="videoSource" class="md-input-container md-select"></select></tr>
-        <tr><i class="icon icon-camera-swap_24"></i></tr>
-      </td>
-      icon-adjust-microphone_12
-      Select Microphone: <select id="audioSource"></select>
-      Select Speakers: <select id="audioOutput"></select>
-    </div>
-    
-    <div id="call_buttons">
-      
-      <form id="destination" class="padit" style="text-align:center;">
-      Click 
-      <button
+        <tr><i class="icon icon-camera-swap_24"></i><select id="videoSource"></select></tr>
+        <tr><i class="icon icon-microphone_24"></i><select id="audioSource"></select></tr>
+        <tr><button
         id="call"
         class="md-button md-button--circle md-button--44 md-button--green"
         alt="answer call with voice only"
@@ -95,7 +85,17 @@
         <span class="md-button__children">
           <i class="icon icon-handset_24"></i>
         </span>
-      </button>
+      </button></tr>
+        <tr>
+        </tr>
+      </td>
+    </div>
+    
+    <div id="call_buttons">
+      
+      <form id="destination" class="padit" style="text-align:center;">
+      Click 
+
       to start your call, and   
       <button
         id="hangup"
