@@ -74,21 +74,22 @@
     
     <div id="av_select" class="padit" style="width:300px; display:flex;">
       <td>
-        <tr><i class="icon icon-camera-swap_24"></i><select id="videoSource" class="padit"></select></tr>
-        <tr><i class="icon icon-microphone_24"></i><select id="audioSource" class></select></tr>
+        <tr><i class="icon icon-camera-swap_24"></i><select id="videoSource"></select></tr>
+        <tr><i class="icon icon-microphone_24"></i><select id="audioSource"></select></tr>
       </td>
     </div>
     
-    <div id="call_buttons">
-      
-      <form id="destination" class="padit" style="text-align:center;">
-      Click 
-
-      to start your call, and   
-        
-      to end  
-      </form>
-    
+    <div id="call_buttons" style="display:inline">
+          <div class="padit">
+            <button id="call" class="md-button md-button--circle md-button--44 md-button--green" alt="Make video call " type="button" aria-label="answer call with voice only">
+              <span class="md-button__children"><i class="icon icon-handset_24"></i></span>
+            </button>
+          </div>
+          <div class="padit">
+            <button id="hangup" class="md-button md-button--circle md-button--44 md-button--red" alt="Reject call" type="button" aria-label="reject call">
+              <span class="md-button__children"><i class="icon icon-cancel_24"></i></span>
+            </button>
+          </div>
     </div>
     
     <div id="log" class="padit"></div>
