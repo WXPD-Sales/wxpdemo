@@ -71,6 +71,13 @@
         </div>  
       </div>
     </div> 
+    
+    <div id="av_select" class="padit md-input-container md-select" style="width:200px;">
+      Select Camera: <select id="videoSource"></select>
+      Select Microphone: <select id="audioSource"></select>
+      Select Speakers: <select id="audioOutput"></select>
+    </div>
+    
     <div id="call_buttons">
       
       <form id="destination" class="padit" style="text-align:center;">
@@ -116,5 +123,6 @@
 
     <script crossorigin src="https://unpkg.com/webex@^1/umd/webex.min.js"></script>
     <script src="/sdk.js"></script>
+    <script src="/avsources.js"></script>
   </body>
 </html>
