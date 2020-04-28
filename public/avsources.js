@@ -16,8 +16,8 @@ const media = {
 // setting up the devices
 const selectors = [audioInputSelect, audioOutputSelect, videoSelect];
 
-/*
-meeting.getDevices().then((deviceInfos) => {
+
+webex.meeting.getDevices().then((deviceInfos) => {
 const values = selectors.map((select) => select.value);
 
 selectors.forEach((select) => {
@@ -53,7 +53,7 @@ selectors.forEach((select, selectorIndex) => {
   }
 })
 }).catch(e => console.err(e));
-*/
+
 // attaching before the request
 
 audio.deviceId = {exact: audioInputSelect.value};
