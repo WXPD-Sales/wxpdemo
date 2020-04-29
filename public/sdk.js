@@ -112,6 +112,7 @@ function bindMeetingEvents(meeting) {
     //document.getElementById('log').innerHTML = `${payload}`;
     //setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
     console.log("Meeting State Change", payload);
+    if(payload.)
   });
   
   meeting.on('meeting:ringing', (payload) => {
@@ -266,6 +267,9 @@ document.getElementById("call").addEventListener("click", event => {
     .create(destination)
     .then(meeting => {
       m = meeting;
+    
+      //meeting.mediaProperties.mediaSettings.audio.echoCancellation=false;
+      //meeting.mediaProperties.mediaSettings.audio.noiseSuppression=false;
       //console.log(`meeting object ${JSON.stringify(meeting)}`);
       // Call our helper function for binding events to meetings
       bindMeetingEvents(meeting);
