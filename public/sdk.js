@@ -112,7 +112,10 @@ function bindMeetingEvents(meeting) {
     //document.getElementById('log').innerHTML = `${payload}`;
     //setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
     console.log("Meeting State Change", payload);
-    if(payload.)
+    if(payload.currentState === "ACTIVE"){
+      meeting.mediaProperties.mediaSettings.audio.echoCancellation=false;
+      meeting.mediaProperties.mediaSettings.audio.noiseSuppression=false;
+    }
   });
   
   meeting.on('meeting:ringing', (payload) => {
