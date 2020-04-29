@@ -101,7 +101,25 @@ webex.once("ready", () => {
 function bindMeetingEvents(meeting) {
   
   console.log('This meeting', meeting);
-    
+  
+  meeting.setMeetingQuality('HIGH');
+  
+  //  MEDIA_READY: 'media:ready',
+  // MEDIA_STOPPED: 'media:stopped',
+  // MEDIA_UPDATE: 'media:update',
+  
+  meeting.on('media:ready', (payload) => {
+    console.log('media:ready', payload);
+  });
+  
+  meeting.on('media:stopped', (payload) => {
+    console.log('media:stopped', payload);
+  });
+  
+  meeting.on('media:update', (payload) => {
+    console.log('media:update', payload);
+  });
+  
   meeting.on("error", err => {
     console.error("Meeting error -", err);
   });
@@ -112,10 +130,11 @@ function bindMeetingEvents(meeting) {
     //document.getElementById('log').innerHTML = `${payload}`;
     //setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
     console.log("Meeting State Change", payload);
+    /*
     if(payload.currentState === "ACTIVE"){
       meeting.mediaProperties.mediaSettings.audio.echoCancellation=false;
       meeting.mediaProperties.mediaSettings.audio.noiseSuppression=false;
-    }
+    }*/
   });
   
   meeting.on('meeting:ringing', (payload) => {
