@@ -119,7 +119,7 @@ app.post('/create_url', function(request, response) {
     //let Urlexpiry = Math.round(expiry.calculateSeconds(thismoment(),request.body.expiry_date));
     let guestSessionID = randomize('Aa0', 16);
     //let guestUrl = `${request.protocol}://${request.get('host')}/guest/${guestSessionID}`;
-    let guestUrl = `https://${request.get('host')}/guest/${guestSessionID}`;
+    let guestUrl = `https://${request.get('host')}/soundcheck/${guestSessionID}`;
     request.body.url = guestUrl;
     //console.log(`full url - ${guestUrl}`);
     rr.setURL(guestSessionID, JSON.stringify(request.body), Urlexpiry)
