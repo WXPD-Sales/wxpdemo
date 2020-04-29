@@ -104,7 +104,7 @@ function bindMeetingEvents(meeting) {
   
   //meeting.setMeetingQuality('HIGH');
   
-  /*
+  
   meeting.on('media:ready', (payload) => {
     console.log('media:ready', payload);
   });
@@ -116,7 +116,7 @@ function bindMeetingEvents(meeting) {
   meeting.on('media:update', (payload) => {
     console.log('media:update', payload);
   });
-  */
+  
   
   meeting.on("error", err => {
     console.error("Meeting error -", err);
@@ -286,10 +286,7 @@ document.getElementById("call").addEventListener("click", event => {
   return webex.meetings
     .create(destination)
     .then(meeting => {
-      m = meeting;
-
-      meeting.setMeetingQuality('HIGH');
-    
+      m = meeting;  
       //meeting.mediaProperties.mediaSettings.audio.echoCancellation=false;
       //meeting.mediaProperties.mediaSettings.audio.noiseSuppression=false;
       //console.log(`meeting object ${JSON.stringify(meeting)}`);
