@@ -282,7 +282,7 @@ document.getElementById("call").addEventListener("click", event => {
 
   audio.deviceId = {exact: audioInputSelect.value};
   audio.noiseSuppression=false;
-  audio.echoCancellation=false;
+  audio.echoCancellation=true;
   video.deviceId = {exact: videoSelect.value};
 
   return webex.meetings
