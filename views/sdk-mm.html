@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- import the webpage's stylesheet -->
+    <!--link rel="stylesheet" href="/style.css"-->
+    <link rel="stylesheet" href="/collab-ui.min.css" />
+    <link rel="stylesheet" href="/momentum-ui.min.css" />
+    <style>
+      .self {
+        /*background-color: yellow;*/
+        position: absolute;
+        /*width: 200px;
+        /*padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        z-index: 100;
+        display: inline-block;
+      }
+      .remote {
+        /*background-color: green;
+        /*position: absolute;*/
+        width: auto;
+        height: auto;
+        /*padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        z-index: 10;
+        display: inline-block;
+        
+      }
+      .remote_video {
+        width: 100%;
+      }
+      .self_video {
+        width: 100px;
+        
+      }
+      .padit {
+        padding: 10px;
+      }
+      #call_container {
+        text-align: center;
+        /*display: flex*/
+      }
+    </style>
+    
+    <!-- cookie parser for JS-->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    
+  </head>
+  <title>Webex Teams Family Connect</title>
+  <body>
+    <header class="md-top-bar md-top-bar--light" role="navigation">
+      <div class="md-top-bar__container row">
+        <div class="md-top-bar__brand">
+          <a class="md-brand" href="#">
+            <div class="md-brand__logo">
+              <img src="https://brewerdirect.com/wp-content/uploads/2016/08/ladodgers-300x247.jpg">
+            </div>
+            <div class="md-brand__title"> Pavilion Connect powered by Webex </div>
+          </a>
+        </div>
+        <nav class="md-top-bar__nav ">
+            <div class="md-list md-list--horizontal" role="list"></div>
+        </nav>
+      </div>
+    </header>
+    <!--
+<div id="welcome_message" class="padit">
+      <div class="md-alert" style="width:100%;">
+        <div class="md-alert__icon"></div>
+        <div class="md-alert__content">
+          <div class="md-alert__title">Welcome</div>
+          <!--div class="md-alert__message" style="max-width:none;">
+          Through this unprecedented time, UMMS is providing virtual visits via video to safely connect you with your loved ones in our care. Once connected, a video operator will assist you in making sure your loved one is ready to speak with you. During this time, you may find yourself waiting in a virtual lobby; this is normal. Please stay connected and do not close or refresh your browser window.
+          </div-->
+        </div>  
+      </div>
+    </div> 
+    
+    <div id="av_select" class="padit" style="display:flex;">
+      <i class="icon icon-camera-swap_24"></i><select id="videoSource" style="width:auto;"></select>
+      <i class="icon icon-microphone_24"></i><select id="audioSource" style="width:auto;"></select>
+    </div>
+    
+    <div id="call_buttons">
+      <form id="destination" class="padit" style="text-align:center;">
+      Click 
+      <button
+        class="md-button md-button--circle md-button--44 md-button--green"
+        alt="answer call with voice only"
+        type="submit"
+        aria-label="answer call with voice only">
+        <span class="md-button__children">
+          <i class="icon icon-handset_24"></i>
+        </span>
+      </button>
+      to start your call, and   
+      <button
+        id="hangup"
+        class="md-button md-button--circle md-button--44 md-button--red"
+        alt="reject call"
+        type="button"
+        aria-label="reject call">
+        <span class="md-button__children">
+          <i class="icon icon-cancel_24"></i>
+        </span>
+      </button>  
+      to end  
+      </form>
+    </div>
+    
+    <div id="log" class="padit"></div>
+
+    <div id="call_container" class="padit">
+      <div id="self" class="self">
+        <video id="self-view" class="self_video" muted autoplay></video>
+      </div>
+
+      <div id="remote" class="remote">
+        <audio id="remote-view-audio" autoplay></audio>
+        <video id="remote-view-video" class="remote_video" autoplay></video>
+      </div>
+    </div>
+
+    
+
+    <script crossorigin src="https://unpkg.com/webex@^1/umd/webex.min.js"></script>
+    <script src="/sdk-mm.js"></script>
+  </body>
+</html>

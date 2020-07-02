@@ -5,7 +5,9 @@ const webex = (window.webex = Webex.init({
   }
 }));
 
-const destination = Cookies.get("target");
+//const destination = Cookies.get("target");
+const destination = 'hachawla@cisco.webex.com';
+const destination2 = 'hachawla@acecloud.webex.com';
 const jwt = Cookies.get("token");
 console.log(`Found JWT - ${jwt}`);
 
