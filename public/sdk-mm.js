@@ -72,7 +72,7 @@ selectors.forEach((select, selectorIndex) => {
 
 //-----
 
-let m;
+let m, m2;
 
 webex.once("ready", () => {
   console.log(`Webex OBJ ready ${webex.version}`);
