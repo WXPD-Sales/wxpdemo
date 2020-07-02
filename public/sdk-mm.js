@@ -1,3 +1,10 @@
+//const destination = Cookies.get("target");
+const destination = 'hachawla@cisco.webex.com';
+const destination2 = 'hachawla@acecloud.webex.com';
+//const jwt = Cookies.get("token");
+//console.log(`Found JWT - ${jwt}`);
+const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJNb21lbnQtR3Vlc3QtMTE2NjQzNTQiLCJuYW1lIjoiU3BlY3RhdG9yMDEiLCJpc3MiOiJZMmx6WTI5emNHRnlhem92TDNWekwwOVNSMEZPU1ZwQlZFbFBUaTgzTkRJMlpEbGlOQzAzT0RVNUxUUXhNelF0T1RNM01TMDRabVV5Wm1FeE0yWTVZek0iLCJpYXQiOjE1OTM2OTE0OTYsImV4cCI6MTU5MzY5NTA5Nn0.c65e7d5riz9NKK6S5IiQVrN3WP3bEfIt2Z3SEzwBkOE';
+
 //const webex = window.Webex.init();
 const webex = (window.webex = Webex.init({
   logger: {
@@ -5,11 +12,6 @@ const webex = (window.webex = Webex.init({
   }
 }));
 
-//const destination = Cookies.get("target");
-const destination = 'hachawla@cisco.webex.com';
-const destination2 = 'hachawla@acecloud.webex.com';
-const jwt = Cookies.get("token");
-console.log(`Found JWT - ${jwt}`);
 
 //-----
 //AV Sources
@@ -21,6 +23,17 @@ const videoSelect = document.querySelector('select#videoSource');
 const audio = {};
 const video = {};
 const mediaSettings = {
+  receiveVideo: true,
+  receiveAudio: true,
+  receiveShare: false,
+  sendShare: false,
+  sendVideo: true,
+  sendAudio: true
+};
+
+const audio2 = {};
+const video2 = {};
+const mediaSettings2 = {
   receiveVideo: true,
   receiveAudio: true,
   receiveShare: false,
