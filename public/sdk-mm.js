@@ -3,8 +3,7 @@ const destination = 'hachawla@cisco.webex.com';
 const destination2 = 'hachawla@acecloud.webex.com';
 //const jwt = Cookies.get("token");
 //console.log(`Found JWT - ${jwt}`);
-const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJNb21lbnQtR3Vlc3QtMTE2NjQzNTQiLCJuYW1lIjoiU3BlY3RhdG9yMDEiLCJpc3MiOiJZMmx6WTI5emNHRnlhem92TDNWekwwOVNSMEZPU1ZwQlZFbFBUaTgzTkRJMlpEbGlOQzAzT0RVNUxUUXhNelF0T1RNM01TMDRabVV5Wm1FeE0yWTVZek0iLCJpYXQiOjE1OTM2OTE0OTYsImV4cCI6MTU5MzY5NTA5Nn0.c65e7d5riz9NKK6S5IiQVrN3WP3bEfIt2Z3SEzwBkOE';
-
+const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJNb21lbnQtR3Vlc3QtMTU1NDY0NzAiLCJuYW1lIjoiU3BlY3RhdG9yMDIiLCJpc3MiOiJZMmx6WTI5emNHRnlhem92TDNWekwwOVNSMEZPU1ZwQlZFbFBUaTgzTkRJMlpEbGlOQzAzT0RVNUxUUXhNelF0T1RNM01TMDRabVV5Wm1FeE0yWTVZek0iLCJpYXQiOjE1OTM2OTU1MTYsImV4cCI6MTU5MzY5OTExNn0.SauPtmbI8sWN4pKtnAdQJlk0oKxTXRQIhdUcnQJe448';
 //const webex = window.Webex.init();
 const webex = (window.webex = Webex.init({
   logger: {
