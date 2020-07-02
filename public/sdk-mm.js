@@ -277,7 +277,7 @@ document.getElementById("call").addEventListener("click", event => {
   event.preventDefault();
 
   //const destination = document.getElementById("invitee").value;
-  document.getElementById("welcome_message").style.display="none";
+  //document.getElementById("welcome_message").style.display="none";
   console.log(`got destination - ${destination}`);
   
   // attaching before the request
