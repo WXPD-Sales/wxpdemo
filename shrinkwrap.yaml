@@ -15,6 +15,7 @@ dependencies:
   micromodal: 0.4.0
   moment: 2.24.0
   randomatic: 3.1.1
+  typescript: 3.9.7
 packages:
   /@collab-ui/core/10.43.3:
     dependencies:
@@ -1472,6 +1473,13 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==
+  /typescript/3.9.7:
+    dev: false
+    engines:
+      node: '>=4.2.0'
+    hasBin: true
+    resolution:
+      integrity: sha512-BLbiRkiBzAwsjut4x/dsibSTB6yWpwT5qWmC2OfuCg3GgVQCSgMs4vEctYPhsaGtd0AeuuHMkjZ2h2WG8MSzRw==
   /unpipe/1.0.0:
     dev: false
     engines:
@@ -1553,3 +1561,4 @@ specifiers:
   micromodal: ^0.4.0
   moment: ^2.24.0
   randomatic: ^3.1.1
+  typescript: '*'

@@ -1,5 +1,5 @@
 
-Info
+Intro
 -------
 
-Project to create time-bound join links for guests
+Time-bound Webex Guest join links.
