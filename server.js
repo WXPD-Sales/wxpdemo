@@ -10,15 +10,38 @@ const app = express();
 const thismoment = require('moment');
 const url = require('url');
 const randomize = require('randomatic');
-
+const session = require('express-session');
 const RedisRepo = require('./redis-repo');
 const rr = new RedisRepo;
-
 const tokgen = require('./token-generator');
 const email_validator = require("email-validator");
 //const send_email = require('./sendemail');
 const send_email = require('./sg-email');
 // http://expressjs.com/en/starter/static-files.html
+
+// config express-session
+var sess = {
+  secret: 'CHANGE THIS TO A RANDOM SECRET',
+  cookie: {},
+  resave: false,
+  saveUninitialized: true
+};
+
+if (app.get('env') === 'production') {
+  // Use secure cookies in production (requires SSL/TLS)
+  sess.cookie.secure = true;
+  // Uncomment the line below if your application is behind a proxy (like on Heroku)
+  // or if you're encountering the error message:
+  // "Unable to verify authorization request state"
+  app.set('trust proxy', 1);
+}
+
+app.use(session(sess));
+
+// Load Passport
+const passport = require('passport');
+const Auth0Strategy = require('passport-auth0');
+
 app.use(express.static('public'));
 
 // parse application/x-www-form-urlencoded
