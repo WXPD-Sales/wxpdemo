@@ -73,6 +73,20 @@ passport.deserializeUser(function (user, done) {
   done(null, user);
 });
 
+app.set('view engine', 'pug');
+
+var userInViews = require('./lib/middleware/userInViews');
+var authRouter = require('./routes/auth');
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
+
+
+// ..
+app.use(userInViews());
+app.use('/', authRouter);
+app.use('/', indexRouter);
+app.use('/', usersRouter);
+// ..
 app.use(express.static('public'));
 
 // parse application/x-www-form-urlencoded
