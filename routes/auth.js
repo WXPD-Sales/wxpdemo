@@ -35,7 +35,9 @@ router.get('/callback', function (req, res, next) {
 router.get('/logout', (req, res) => {
   req.logout();
 
-  var returnTo = req.protocol + '://' + req.hostname;
+  //var returnTo = req.protocol + '://' + req.hostname;
+  var returnTo = 'https://www.cisco.com';
+  /*
   var port = req.connection.localPort;
   if (port !== undefined && port !== 80 && port !== 443) {
     returnTo += ':' + port;
