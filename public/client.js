@@ -1,5 +1,3 @@
-
-
 const offset = new Date().getTimezoneOffset();
 var today = new Date();
 var time = today.getHours() + ":" + today.getMinutes();
