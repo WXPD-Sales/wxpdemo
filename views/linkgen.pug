@@ -17,9 +17,7 @@ head
   script.
     Sentry.init({
       dsn: 'https://f453e51294d34cdb9a2962000f5612e3@o450029.ingest.sentry.io/5434024',
-      integrations: [
-        new Integrations.BrowserTracing(),
-      ],
+      release: 'wlc',
       tracesSampleRate: 1.0,
     });
   // import flatpickr
