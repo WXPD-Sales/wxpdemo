@@ -13,6 +13,17 @@ head
   link(rel='stylesheet' href='/css/mystyle.css')
   // import the webpage's client-side javascript file
   script(src='/client.js' defer='')
+  script(src='https://browser.sentry-cdn.com/5.23.0/bundle.tracing.min.js' crossorigin='anonymous')
+  script
+    import * as Sentry from "@sentry/browser";
+    import { Integrations } from "@sentry/tracing";
+    Sentry.init({
+      dsn: 'https://f453e51294d34cdb9a2962000f5612e3@o450029.ingest.sentry.io/5434024',
+      integrations: [
+        new Integrations.BrowserTracing(),
+      ],
+      tracesSampleRate: 1.0,
+    });
   // import flatpickr
   link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css')
   link(rel='stylesheet' type='text/css' href='https://npmcdn.com/flatpickr/dist/themes/dark.css')
