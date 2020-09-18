@@ -96,7 +96,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get('/', function(request, response) {
+app.get('/link', secured(), function(request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
