@@ -14,9 +14,7 @@ head
   // import the webpage's client-side javascript file
   script(src='/client.js' defer='')
   script(src='https://browser.sentry-cdn.com/5.23.0/bundle.tracing.min.js' crossorigin='anonymous')
-  script
-    import * as Sentry from "@sentry/browser";
-    import { Integrations } from "@sentry/tracing";
+  script.
     Sentry.init({
       dsn: 'https://f453e51294d34cdb9a2962000f5612e3@o450029.ingest.sentry.io/5434024',
       integrations: [
