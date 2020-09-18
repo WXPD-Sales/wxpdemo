@@ -79,6 +79,7 @@ var userInViews = require('./lib/middleware/userInViews');
 var authRouter = require('./routes/auth');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const linkgenRouter = require('./routes/linkgen');
 
 
 // ..
@@ -86,6 +87,7 @@ app.use(userInViews());
 app.use('/', authRouter);
 app.use('/', indexRouter);
 app.use('/', usersRouter);
+app.use('/', linkgenRouter);
 // ..
 app.use(express.static('public'));
 
@@ -95,10 +97,12 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // parse application/json
 app.use(bodyParser.json())
 
+/*
 // http://expressjs.com/en/starter/basic-routing.html
-app.get('/link', secured(), function(request, response) {
+app.get('/link', function(request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
+*/
 
 app.get('/guest/:guest_session_id', function(request, response) {
   //response.sendFile(__dirname + '/views/index.html');
