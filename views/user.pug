@@ -3,6 +3,12 @@
 extends layout
 
 block content
+  script(src='https://browser.sentry-cdn.com/5.23.0/bundle.tracing.min.js' crossorigin='anonymous')
+  script.  
+    Sentry.init({
+      dsn: 'https://f453e51294d34cdb9a2962000f5612e3@o450029.ingest.sentry.io/5434024',
+      tracesSampleRate: 1.0,
+    });
   br
   .w3-container
     .w3-card-4
