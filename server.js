@@ -235,8 +235,8 @@ app.post("/email_invite", function(request, response) {
     `Use this link to join the show ${request.body.url}. Remember, it expires ${request.body.expires}`
   ).then(() => {
     response.send({ message: `Email sent!` });
-  }).catch(e=>{
-    Sentry.capture
+  }).catch((e)=>{
+    Sentry.captureException(e);
   });
 });
 

@@ -12,7 +12,6 @@ module.exports = async function (to, body){
     //html: `<h4>${process.env.SG_DISCLAIMER}</h4>`,
   };
   
-sgMail.send(msg);
-  
+  return sgMail.send(msg);
 };
 
