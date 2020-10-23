@@ -248,6 +248,10 @@ app.get("/sdk", function(req, res) {
   res.sendFile(__dirname + "/views/sdk.html");
 });
 
+app.get("/theo", function(req, res) {
+  res.sendFile(__dirname + "/views/theo.html");
+});
+
 app.get("/sdkmm", function(req, res) {
   res.sendFile(__dirname + "/views/sdk-mm.html");
 });
