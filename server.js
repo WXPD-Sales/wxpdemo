@@ -252,6 +252,10 @@ app.get("/theo", function(req, res) {
   res.sendFile(__dirname + "/views/theo.html");
 });
 
+app.get("/theofs", function(req, res) {
+  res.sendFile(__dirname + "/views/theofs.html");
+});
+
 app.get("/sdkmm", function(req, res) {
   res.sendFile(__dirname + "/views/sdk-mm.html");
 });
