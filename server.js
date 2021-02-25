@@ -1,6 +1,6 @@
 // server.js
 // where your node app starts
-
+require('dotenv').config();
 // init project
 const express = require("express");
 const bodyParser = require("body-parser");
