@@ -6,7 +6,7 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function (req, res, next) {
   //res.render('index', { title: 'Auth0 Webapp sample Nodejs' });
-  res.redirect('https://webex-vaporware.glitch.me/linkgen');
+  res.redirect('https://wxpdemo.glitch.me/linkgen');
 });
 
 module.exports = router;
