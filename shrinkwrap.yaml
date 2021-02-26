@@ -3,15 +3,15 @@ dependencies:
   '@collab-ui/icons': 3.45.1
   '@momentum-ui/core': 19.9.37
   '@momentum-ui/icons': 8.3.0
-  '@sendgrid/mail': 7.4.1
-  '@sentry/node': 5.29.2
+  '@sendgrid/mail': 7.4.2
+  '@sentry/node': 5.30.0
   body-parser: 1.19.0
   btoa: 1.2.1
   dotenv: 8.2.0
   email-validator: 2.0.4
   express: 4.17.1
   express-session: 1.17.1
-  ioredis: 4.19.4
+  ioredis: 4.23.0
   jsonwebtoken: 8.5.1
   mailgun-js: 0.22.0
   micromodal: 0.4.6
@@ -61,71 +61,71 @@ packages:
     dev: false
     resolution:
       integrity: sha512-5CsxkpieAPUQ89jSsq4b+Jq/KT46HpckkayMzJKb2M0klpLgq1VrBrCBKusqsfzSEOlkOthXLUCwr61O4nvQTw==
-  /@sendgrid/client/7.4.1:
+  /@sendgrid/client/7.4.2:
     dependencies:
-      '@sendgrid/helpers': 7.4.0
+      '@sendgrid/helpers': 7.4.2
       axios: 0.21.1
     dev: false
     engines:
       node: 6.* || 8.* || >=10.*
     resolution:
-      integrity: sha512-L7Js+5J3AFwbU27YlzKpLe4gG2avH+sSYTEg1+dW77Yai+UrkVtibvSkSSGfaIDSSKba/NA5DBUrQxr3GNZ4DQ==
-  /@sendgrid/helpers/7.4.0:
+      integrity: sha512-bu8lLbRD+OV7YsYNemEy8DRoxs8/8u325EXNlQ3VaqhcpbM0eSvdL5e5Wa7VZpbczcNCJmf/sr/uqFmwcO5S+A==
+  /@sendgrid/helpers/7.4.2:
     dependencies:
       deepmerge: 4.2.2
     dev: false
     engines:
       node: '>= 6.0.0'
     resolution:
-      integrity: sha512-IQI2vemiJB0+X6bEp4HRG+0/wrzR2RDGnB5rwfq1CsPDrUFdJfxbE2zbGx//1GnlNwAtbHyc93ejU1m0KZr86w==
-  /@sendgrid/mail/7.4.1:
+      integrity: sha512-b/IyBwT4zrOfXA0ISvWZsnhYz+5uAO20n68J8n/6qe5P1E2p0L7kWNTN5LYu0S7snJPUlbEa6FpfrSKzEcP9JA==
+  /@sendgrid/mail/7.4.2:
     dependencies:
-      '@sendgrid/client': 7.4.1
-      '@sendgrid/helpers': 7.4.0
+      '@sendgrid/client': 7.4.2
+      '@sendgrid/helpers': 7.4.2
     dev: false
     engines:
       node: 6.* || 8.* || >=10.*
     resolution:
-      integrity: sha512-3KVzYnbSFx6+6SVxjV1IUq+nx1sbhY7PGRshYOypkGnAHFEXpFWJqWYiM3+Dj75ZS6r0rIRnZ+O4mCRDdpkfFg==
-  /@sentry/core/5.29.2:
+      integrity: sha512-hvIOnm8c3zVyDnJcyBuAeujmpKX56N3D/LpiZrFuLHjAz4iEHrmL2sJ3iU9O6hxcb07gd1CES+z9Fg7FBT26uQ==
+  /@sentry/core/5.30.0:
     dependencies:
-      '@sentry/hub': 5.29.2
-      '@sentry/minimal': 5.29.2
-      '@sentry/types': 5.29.2
-      '@sentry/utils': 5.29.2
+      '@sentry/hub': 5.30.0
+      '@sentry/minimal': 5.30.0
+      '@sentry/types': 5.30.0
+      '@sentry/utils': 5.30.0
       tslib: 1.14.1
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-7WYkoxB5IdlNEbwOwqSU64erUKH4laavPsM0/yQ+jojM76ErxlgEF0u//p5WaLPRzh3iDSt6BH+9TL45oNZeZw==
-  /@sentry/hub/5.29.2:
+      integrity: sha512-TmfrII8w1PQZSZgPpUESqjB+jC6MvZJZdLtE/0hZ+SrnKhW3x5WlYLvTXZpcWePYBku7rl2wn1RZu6uT0qCTeg==
+  /@sentry/hub/5.30.0:
     dependencies:
-      '@sentry/types': 5.29.2
-      '@sentry/utils': 5.29.2
+      '@sentry/types': 5.30.0
+      '@sentry/utils': 5.30.0
       tslib: 1.14.1
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-LaAIo2hwUk9ykeh9RF0cwLy6IRw+DjEee8l1HfEaDFUM6TPGlNNGObMJNXb9/95jzWp7jWwOpQjoIE3jepdQJQ==
-  /@sentry/minimal/5.29.2:
+      integrity: sha512-2tYrGnzb1gKz2EkMDQcfLrDTvmGcQPuWxLnJKXJvYTQDGLlEvi2tWz1VIHjunmOvJrB5aIQLhm+dcMRwFZDCqQ==
+  /@sentry/minimal/5.30.0:
     dependencies:
-      '@sentry/hub': 5.29.2
-      '@sentry/types': 5.29.2
+      '@sentry/hub': 5.30.0
+      '@sentry/types': 5.30.0
       tslib: 1.14.1
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-0aINSm8fGA1KyM7PavOBe1GDZDxrvnKt+oFnU0L+bTcw8Lr+of+v6Kwd97rkLRNOLw621xP076dL/7LSIzMuhw==
-  /@sentry/node/5.29.2:
+      integrity: sha512-BwWb/owZKtkDX+Sc4zCSTNcvZUq7YcH3uAVlmh/gtR9rmUvbzAA3ewLuB3myi4wWRAMEtny6+J/FN/x+2wn9Xw==
+  /@sentry/node/5.30.0:
     dependencies:
-      '@sentry/core': 5.29.2
-      '@sentry/hub': 5.29.2
-      '@sentry/tracing': 5.29.2
-      '@sentry/types': 5.29.2
-      '@sentry/utils': 5.29.2
+      '@sentry/core': 5.30.0
+      '@sentry/hub': 5.30.0
+      '@sentry/tracing': 5.30.0
+      '@sentry/types': 5.30.0
+      '@sentry/utils': 5.30.0
       cookie: 0.4.1
       https-proxy-agent: 5.0.0
       lru_map: 0.3.3
@@ -134,34 +134,34 @@ packages:
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-98m1ZejmJgA+eiz6jEFyYYfp6kJZQnx6d6KrJDMxGfss4YTmmJY57bE4xStnjjk7WINDGzlCiHuk+wJFMBjuoA==
-  /@sentry/tracing/5.29.2:
+      integrity: sha512-Br5oyVBF0fZo6ZS9bxbJZG4ApAjRqAnqFFurMVJJdunNb80brh7a5Qva2kjhm+U6r9NJAB5OmDyPkA1Qnt+QVg==
+  /@sentry/tracing/5.30.0:
     dependencies:
-      '@sentry/hub': 5.29.2
-      '@sentry/minimal': 5.29.2
-      '@sentry/types': 5.29.2
-      '@sentry/utils': 5.29.2
+      '@sentry/hub': 5.30.0
+      '@sentry/minimal': 5.30.0
+      '@sentry/types': 5.30.0
+      '@sentry/utils': 5.30.0
       tslib: 1.14.1
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-iumYbVRpvoU3BUuIooxibydeaOOjl5ysc+mzsqhRs2NGW/C3uKAsFXdvyNfqt3bxtRQwJEhwJByLP2u3pLThpw==
-  /@sentry/types/5.29.2:
+      integrity: sha512-dUFowCr0AIMwiLD7Fs314Mdzcug+gBVo/+NCMyDw8tFxJkwWAKl7Qa2OZxLQ0ZHjakcj1hNKfCQJ9rhyfOl4Aw==
+  /@sentry/types/5.30.0:
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-dM9wgt8wy4WRty75QkqQgrw9FV9F+BOMfmc0iaX13Qos7i6Qs2Q0dxtJ83SoR4YGtW8URaHzlDtWlGs5egBiMA==
-  /@sentry/utils/5.29.2:
+      integrity: sha512-R8xOqlSTZ+htqrfteCWU5Nk0CDN5ApUTvrlvBuiH1DyP6czDZ4ktbZB0hAgBlVcK0U+qpD3ag3Tqqpa5Q67rPw==
+  /@sentry/utils/5.30.0:
     dependencies:
-      '@sentry/types': 5.29.2
+      '@sentry/types': 5.30.0
       tslib: 1.14.1
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-nEwQIDjtFkeE4k6yIk4Ka5XjGRklNLThWLs2xfXlL7uwrYOH2B9UBBOOIRUraBm/g/Xrra3xsam/kRxuiwtXZQ==
+      integrity: sha512-zaYmoH0NWWtvnJjC9/CBseXMtKHm/tm40sz3YfJRxeQjyzRqNQPgivpd9R/oDJCYj999mzdW382p/qi2ypjLww==
   /accepts/1.3.7:
     dependencies:
       mime-types: 2.1.28
@@ -263,7 +263,7 @@ packages:
       integrity: sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
   /axios/0.21.1:
     dependencies:
-      follow-redirects: 1.13.1
+      follow-redirects: 1.13.2
     dev: false
     resolution:
       integrity: sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
@@ -674,12 +674,12 @@ packages:
       node: '>= 0.8'
     resolution:
       integrity: sha512-aAWcW57uxVNrQZqFXjITpW3sIUQmHGG3qSb9mUah9MgMC4NeWhNOlNjXEYq3HjRAvL6arUviZGGJsBg6z0zsWA==
-  /follow-redirects/1.13.1:
+  /follow-redirects/1.13.2:
     dev: false
     engines:
       node: '>=4.0'
     resolution:
-      integrity: sha512-SSG5xmZh1mkPGyKzjZP8zLjltIfpW32Y5QpdNJyjcfGxK3qo3NDDkZOZSFiGn1A6SclQxY9GzEwAHQ3dmYRWpg==
+      integrity: sha512-6mPTgLxYm3r6Bkkg0vNM0HTjfGrOEtsfbhagQvbxDEsEkpNhw582upBaoRZylzen6krEmxXJgt9Ju6HiI4O7BA==
   /forever-agent/0.6.1:
     dev: false
     resolution:
@@ -866,7 +866,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
-  /ioredis/4.19.4:
+  /ioredis/4.23.0:
     dependencies:
       cluster-key-slot: 1.1.0
       debug: 4.3.1
@@ -874,7 +874,7 @@ packages:
       lodash.defaults: 4.2.0
       lodash.flatten: 4.4.0
       p-map: 2.1.0
-      redis-commands: 1.6.0
+      redis-commands: 1.7.0
       redis-errors: 1.2.0
       redis-parser: 3.0.0
       standard-as-callback: 2.0.1
@@ -882,7 +882,7 @@ packages:
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-3haQWw9dpEjcfVcRktXlayVNrrqvvc2io7Q/uiV2UsYw8/HC2YwwJr78Wql7zu5bzwci0x9bZYA69U7KkevAvw==
+      integrity: sha512-R5TDCODwnEH3J3A5TSoB17+6a+SeJTtIOW6vsy5Q1yag/AM8FejHjZC5R2O1QepSXV8hwOnGSm/4buJc/LeXTQ==
   /ip/1.1.5:
     dev: false
     resolution:
@@ -1559,10 +1559,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw==
-  /redis-commands/1.6.0:
+  /redis-commands/1.7.0:
     dev: false
     resolution:
-      integrity: sha512-2jnZ0IkjZxvguITjFTrGiLyzQZcTvaw8DAaCXxZq/dsHXz7KfMQ3OUJy7Tz9vnRtZRVz6VRCPDvruvU8Ts44wQ==
+      integrity: sha512-nJWqw3bTFy21hX/CPKHth6sfhZbdiHP6bTawSgQBlKOVRG7EZkfHbbHwQJnrE4vsQf0CMNE+3gJ4Fmm16vdVlQ==
   /redis-errors/1.2.0:
     dev: false
     engines:
@@ -1915,15 +1915,15 @@ specifiers:
   '@collab-ui/icons': ^3.15.1
   '@momentum-ui/core': ^19.9.37
   '@momentum-ui/icons': ^8.3.0
-  '@sendgrid/mail': ^7.4.0
-  '@sentry/node': ^5.29.2
+  '@sendgrid/mail': ^7.4.2
+  '@sentry/node': ^5.30.0
   body-parser: ^1.19.0
   btoa: ^1.2.1
   dotenv: ^8.2.0
   email-validator: ^2.0.4
   express: ^4.17.1
   express-session: ^1.17.1
-  ioredis: ^4.19.3
+  ioredis: ^4.23.0
   jsonwebtoken: ^8.5.1
   mailgun-js: ^0.22.0
   micromodal: ^0.4.5
