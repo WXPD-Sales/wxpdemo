@@ -7,6 +7,7 @@ console.log(`time is ${time}`);
 flatpickr("#flatpckr", {
   enableTime: true,
   dateFormat: "Y-m-d H:i",
+  //dateFormat: "Z",
   minDate: "today",
   minTime: time,
   defaultTime: time,
