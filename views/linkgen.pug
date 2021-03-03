@@ -6,21 +6,41 @@ head
   meta(charset='utf-8')
   meta(http-equiv='X-UA-Compatible' content='IE=edge')
   meta(name='viewport' content='width=device-width, initial-scale=1')
-  // import the webpage's stylesheet
-  // link rel="stylesheet" href="/style.css"
+  
   link(rel='stylesheet' href='/collab-ui.min.css')
   link(rel='stylesheet' href='/momentum-ui.min.css')
   link(rel='stylesheet' href='/css/mystyle.css')
+<<<<<<< HEAD
   
   //script(src='https://browser.sentry-cdn.com/5.23.0/bundle.tracing.min.js' crossorigin='anonymous')
   // import the webpage's client-side javascript file
+=======
+  <!-- Matomo Code -->
+  script.
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+    _paq.push(["setCookieDomain", "*.webex-vaporware.glitch.me"]);
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+      var u="//matomo.ciscoitevents.com/";
+      _paq.push(['setTrackerUrl', u+'matomo.php']);
+      _paq.push(['setSiteId', '2']);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
+<!-- End Matomo Code -->
+  script(src='https://browser.sentry-cdn.com/5.23.0/bundle.tracing.min.js' crossorigin='anonymous')
+  
+>>>>>>> e3043313d5bbcec96940177179aee0c6eb7e75e5
   script(src='/client.js' defer='')
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
-    // import flatpickr
+
   link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css')
   link(rel='stylesheet' type='text/css' href='https://npmcdn.com/flatpickr/dist/themes/dark.css')
   script(src='https://cdn.jsdelivr.net/npm/flatpickr')
-header.padit.md-top-bar.md-top-bar--dark(role='navigation')
+header.padit.md-top-bar.md-top-bar--dark.myrow(role='navigation')
   .padit.md-top-bar__container
     .md-top-bar__brand
       a.md-brand(href='/')
@@ -28,13 +48,13 @@ header.padit.md-top-bar.md-top-bar--dark(role='navigation')
           // Note: use either image or icon, but not both
           // img src="/assets/spark-logo.svg" alt="Momentum UI"
           i.icon.icon-cisco-logo
-        .md-brand__title     Webex Guest Link Generator
+        .md-brand__title     Webex Demo Link Generator
 #container(align='center' style='margin: 10px; align-content: center;')
   main
     br
     section#guest_info_section.dreams
       p.bold
-      h4 Where should we connect the Guest to?
+      h4 To what endpoint should we connect the user?
       input#sipuri.cui-input(type='email' placeholder='SIP URI ' required='')
       p
       br
@@ -59,7 +79,7 @@ header.padit.md-top-bar.md-top-bar--dark(role='navigation')
       p
       br
       button#create_button.cui-button
-        | Create Guest Link
+        | Create Access Link
     section
       div
         br
@@ -72,7 +92,7 @@ header.padit.md-top-bar.md-top-bar--dark(role='navigation')
       //br
       br
       button#reload_button.cui-button(onclick='window.location.reload();')
-        | Create another Moment
+        | Create another Link
   br
   footer
     | Made with 

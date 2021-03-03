@@ -284,6 +284,8 @@ function joinMeeting(meeting) {
         }
         $("#v_select").show();
         $("#a_select").show();
+        $("#video_mute").show();
+        $("#audio_mute").show();
       }));
     });
   });
