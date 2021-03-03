@@ -40,7 +40,14 @@ header.padit.md-top-bar.md-top-bar--dark(role='navigation')
       br
       p.bold
       h4 Who should they connect as?
-      input#displayname.cui-input(type='text' placeholder='Display Name' required='')
+      //input#displayname.cui-input(type='text' placeholder='Display Name' required='')
+      div#displayname.display-radio
+        div#displayname-guest
+          input.radio-input(type="radio", name="displayname", value="Guest", checked)
+          | Guest
+        div#displayname-employee
+          input.radio-input(type="radio", name="displayname", value="Employee")
+          | Employee
       p
       br
       p.bold

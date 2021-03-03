@@ -45,7 +45,8 @@ let guest_data = {};
 //let invite_data = {};
 async function create_guest_data_object(){
   //let message = {};
-  guest_data.display_name = document.getElementById('displayname').value;
+  //guest_data.display_name = document.getElementById('displayname').value;
+  guest_data.display_name = $('input[name="displayname"]:checked').val();
   guest_data.expiry_date = picked_date;
   guest_data.sip_target = document.getElementById('sipuri').value;
   guest_data.offset = offset;

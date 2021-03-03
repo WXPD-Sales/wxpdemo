@@ -20,6 +20,15 @@
 .self_video {
   width: 100px;
 }
+
+.display-radio {
+  display:table;
+}
+
+.radio-input {
+  margin-right: 5px;
+}
+
 .padit {
   padding: 10px;
 }
