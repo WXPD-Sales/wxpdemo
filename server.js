@@ -86,6 +86,7 @@ var authRouter = require("./routes/auth");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 const linkgenRouter = require("./routes/linkgen");
+const employeeRouter = require("./routes/employee");
 
 // ..
 app.use(userInViews());
@@ -93,6 +94,7 @@ app.use("/", authRouter);
 app.use("/", indexRouter);
 app.use("/", usersRouter);
 app.use("/", linkgenRouter);
+app.use("/", employeeRouter);
 // ..
 app.use(express.static("public"));
 

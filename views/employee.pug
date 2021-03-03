@@ -1,0 +1,80 @@
+doctype html
+head
+  title Welcome to a Webex Platform demo on Glitch!
+  meta(name='description' content='A cool Webex Programmable Platform demo made with Glitch')
+  link#favicon(rel='icon' href='https://raw.githubusercontent.com/cisco/cisco.github.io/master/favicon.ico' type='image/x-icon')
+  meta(charset='utf-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1')
+  // import the webpage's stylesheet
+  // link rel="stylesheet" href="/style.css"
+  link(rel='stylesheet' href='/collab-ui.min.css')
+  link(rel='stylesheet' href='/momentum-ui.min.css')
+  link(rel='stylesheet' href='/css/mystyle.css')
+  
+  //script(src='https://browser.sentry-cdn.com/5.23.0/bundle.tracing.min.js' crossorigin='anonymous')
+  // import the webpage's client-side javascript file
+  script(src='/client.js' defer='')
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
+    // import flatpickr
+  link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css')
+  link(rel='stylesheet' type='text/css' href='https://npmcdn.com/flatpickr/dist/themes/dark.css')
+  script(src='https://cdn.jsdelivr.net/npm/flatpickr')
+header.padit.md-top-bar.md-top-bar--dark(role='navigation')
+  .padit.md-top-bar__container
+    .md-top-bar__brand
+      a.md-brand(href='/')
+        .md-brand__logo.md-brand__logo--pad
+          // Note: use either image or icon, but not both
+          // img src="/assets/spark-logo.svg" alt="Momentum UI"
+          i.icon.icon-cisco-logo
+        .md-brand__title     Webex Employee Link Access
+#container(align='center' style='margin: 10px; align-content: center;')
+  main
+    br
+    section#guest_info_section.dreams
+      p.bold
+      h4 Where should we connect the Guest to?
+      input#sipuri.cui-input(type='email' placeholder='SIP URI ' required='')
+      p
+      br
+      p.bold
+      h4 Who should they connect as?
+      //input#displayname.cui-input(type='text' placeholder='Display Name' required='')
+      div#displayname.display-radio
+        div#displayname-guest
+          input.radio-input(type="radio", name="displayname", value="Guest", checked)
+          | Guest
+        div#displayname-employee
+          input.radio-input(type="radio", name="displayname", value="Employee")
+          | Employee
+      p
+      br
+      p.bold
+      h4 When should this link expire?
+      h5#selected_expiry
+        | Select a Date and Time...
+      // input type="text" id="flatpckr" required="true" autocomplete="off"
+      i#flatpckr.md-button--circle.md-button--48.cui-icon.icon.icon-calendar-month_36(style='color:#000000')
+      p
+      br
+      button#create_button.cui-button
+        | Create Guest Link
+    section
+      div
+        br
+        p#messages
+    section#send_as_email_section.dreams(style='display:none;')
+      //br
+      //input#send_to_email.cui-input(name='email' type='email' placeholder='Email Address')
+      //button#send_as_email_button.md-button.md-button--circle.md-button--48(onclick='send_to_email()')
+      //  i.cui-icon.icon.icon-email-invite_16
+      //br
+      br
+      button#reload_button.cui-button(onclick='window.location.reload();')
+        | Create another Moment
+  br
+  footer
+    | Made with 
+    a(href='https://developer.webex.com') Cisco Webex
+    | !
