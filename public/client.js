@@ -35,7 +35,7 @@ create_button.onclick = function (event){
 
       }
     });
-  } 
+  }
   catch (err){
     console.log(err);
   }
@@ -67,8 +67,8 @@ async function validate_message_object(message){
 };
 
 async function post_data(){
-  fetch('/create_url', { 
-    method: 'POST', 
+  fetch('/create_url', {
+    method: 'POST',
     credentials: 'same-origin',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(guest_data),
@@ -80,9 +80,31 @@ async function post_data(){
   });
 };
 
+function buildTable(response_message){
+  let table = $('<table>', {class:"link-table"})
+    .append($('<tr>', {class:"link-row"})
+      .append($('<td>', {class:"link-cell"}).text('Message'))
+      .append($('<td>', {class:"link-cell"}).text(response_message['message']))
+    ).append($('<tr>', {class:"link-row"})
+      .append($('<td>', {class:"link-cell"}).text('URL'))
+      .append($('<td>', {class:"link-cell"})
+        .append($('<a>').attr("href", response_message['url'])
+                        .attr("target", "_blank")
+                        .text(response_message['url']))
+      )
+    ).append($('<tr>', {class:"link-row"})
+      .append($('<td>', {class:"link-cell"}).text('Expires'))
+      .append($('<td>', {class:"link-cell"}).text(response_message['expires']))
+    )
+  return table;
+}
+
 function showMessage(response_message) {
   //messages.textContent += `\n${message}`;
-  messages.textContent = `\n${response_message}`;
+  //messages.textContent = `\n${response_message}`;
+  $("#messages").empty();
+  $("#messages").append(buildTable(JSON.parse(response_message)));
+  //messages.innerHTML = ;
   messages.scrollTop = messages.scrollHeight;
   console.log(JSON.parse(response_message));
   if((JSON.parse(response_message)).url){
@@ -104,12 +126,12 @@ function handleResponse(response) {
 console.log(`timezone offset = ${offset}`);
 
 async function send_to_email(){
-  
+
   guest_data.send_to_email = document.getElementById('send_to_email').value;
   console.log(guest_data);
-  
-  fetch('/email_invite', { 
-    method: 'POST', 
+
+  fetch('/email_invite', {
+    method: 'POST',
     credentials: 'same-origin',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(guest_data),
@@ -119,17 +141,17 @@ async function send_to_email(){
   .catch(function(err) {
     showMessage(err.message);
   });
-  
-  
+
+
 }
 
 async function send_to_sms(){
-  
+
   guest_data.send_to_mobile = document.getElementById('send_to_mobile').value;
   console.log(guest_data);
   /*
-    fetch('/sms_ivite', { 
-    method: 'POST', 
+    fetch('/sms_ivite', {
+    method: 'POST',
     credentials: 'same-origin',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(message),
@@ -141,4 +163,3 @@ async function send_to_sms(){
   });
   */
 }
-

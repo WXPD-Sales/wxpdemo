@@ -30,7 +30,13 @@ const mediaSettings = {
 // setting up the devices
 const selectors = [audioInputSelect, /*audioOutputSelect,*/ videoSelect];
 
+//This requests the video/audio permissions at the beginning if we want to know them the whole time.
+/*navigator.mediaDevices.getUserMedia({audio:true, video:true}).then((stream) => {
+  console.log(stream);
+})*/
+
 navigator.mediaDevices.enumerateDevices().then((deviceInfos) => {
+console.log(deviceInfos);
 const values = selectors.map((select) => select.value);
 
 selectors.forEach((select) => {
@@ -38,7 +44,7 @@ selectors.forEach((select) => {
     select.removeChild(select.firstChild);
   }
 });
-  
+
 for (let i = 0; i !== deviceInfos.length; i += 1) {
   const deviceInfo = deviceInfos[i];
   const option = document.createElement('option');
@@ -83,7 +89,7 @@ webex.once("ready", () => {
         // Change Authentication status to `Authenticated`
         console.log("Guest Authenticated");
         console.log(`Data - ${JSON.stringify(webex)}`);
-        
+
         webex.meetings.register().catch(err => {
           console.error(err);
           alert(err);
@@ -99,31 +105,31 @@ webex.once("ready", () => {
 
 
 function bindMeetingEvents(meeting) {
-  
+
   console.log('This meeting', meeting);
-  
+
   //meeting.setMeetingQuality('HIGH');
-  
-  
+
+
   meeting.on('media:ready', (payload) => {
     console.log('media:ready', payload);
   });
-  
+
   meeting.on('media:stopped', (payload) => {
     console.log('media:stopped', payload);
   });
-  
+
   meeting.on('media:update', (payload) => {
     console.log('media:update', payload);
   });
-  
-  
+
+
   meeting.on("error", err => {
     console.error("Meeting error -", err);
   });
-  
+
   //meeting:stateChange
-  
+
   meeting.on('meeting:stateChange', (payload) => {
     //document.getElementById('log').innerHTML = `${payload}`;
     //setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
@@ -134,41 +140,41 @@ function bindMeetingEvents(meeting) {
       meeting.mediaProperties.mediaSettings.audio.noiseSuppression=false;
     }*/
   });
-  
+
   meeting.on('meeting:ringing', (payload) => {
     document.getElementById('log').innerHTML = 'Ringing';
     setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
     console.log("Meeting Ringing", payload);
   });
-  
+
   meeting.on('meeting:ringingStop', (payload) => {
     document.getElementById('log').innerHTML = 'Ringing Stop';
     //setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
     console.log("Meeting Ringing Stop", payload);
   });
-  
+
   meeting.on('meeting:added', (payload) => {
     document.getElementById('log').innerHTML = 'Meeting Added';
     //setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
     console.log("meeting:added", payload);
   });
-  
+
   meeting.on('meeting:removed', (payload) => {
     document.getElementById('log').innerHTML = 'Meeting Removed';
     //setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
     console.log("meeting:removed", payload);
   });
-  
+
   meeting.on('meeting:locked', () => {
     document.getElementById('log').innerHTML = 'Meeting is Locked';
     console.error("Meeting locked");
   });
-  
+
   meeting.on('meeting:unlocked', () => {
     document.getElementById('log').innerHTML = 'Meeting is UnLocked';
     console.error("Meeting unlocked");
   });
-  
+
   meeting.on('meeting:self:lobbyWaiting', () => {
     document.getElementById('log').innerHTML = 'Waiting in lobby';
     //document.getElementById('lobby-space').innerHTML = 'User is guest to space, waiting to be admitted, wait to use addMedia';
@@ -178,7 +184,7 @@ function bindMeetingEvents(meeting) {
   meeting.on('meeting:actionsUpdate', (payload) => {
     console.log(`meeting:actionsUpdate - ${JSON.stringify(payload)}`);
   });
-  
+
   meeting.on('meeting:reconnectionStarting', () => {
     document.getElementById('log').innerHTML = 'Reconnecting...';
   });
@@ -191,7 +197,7 @@ function bindMeetingEvents(meeting) {
   meeting.on('meeting:reconnectionFailure', () => {
     document.getElementById('log').innerHTML = 'reconnection failure';
   });
-  
+
   meeting.on('meeting:self:guestAdmitted', () => {
     document.getElementById('log').innerHTML = 'Admitted to meeting as guest';
     console.log('Admitted to meeting as guest to call');
@@ -236,7 +242,7 @@ function bindMeetingEvents(meeting) {
       document.getElementById("remote-view-audio").srcObject = null;
     }
   });
-  
+
  // Toggle audio mute in the meeting:
   document.getElementById("audio_mute").addEventListener("click", () => {
     console.log('TOGGLE MUTE');
@@ -266,6 +272,19 @@ function joinMeeting(meeting) {
         localStream,
         mediaSettings
       });
+      console.log(meeting.getDevices().then(devices => {
+        //console.log(audio);
+        //console.log(video);
+        for(var i in devices){
+          let selector = "audioSource";
+          if(devices[i].kind == "videoinput"){
+            selector = "videoSource";
+          }
+          $(`#${selector} option[value="${devices[i].deviceId}"]`).text(devices[i].label);
+        }
+        $("#v_select").show();
+        $("#a_select").show();
+      }));
     });
   });
 }
@@ -275,9 +294,9 @@ document.getElementById("call").addEventListener("click", event => {
   event.preventDefault();
 
   //const destination = document.getElementById("invitee").value;
-  document.getElementById("welcome_message").style.display="none";
+  // document.getElementById("welcome_message").style.display="none";
   console.log(`got destination - ${destination}`);
-  
+
   // attaching before the request
 
   audio.deviceId = {exact: audioInputSelect.value};
@@ -288,7 +307,7 @@ document.getElementById("call").addEventListener("click", event => {
   return webex.meetings
     .create(destination)
     .then(meeting => {
-      m = meeting;  
+      //m = meeting;
       //meeting.mediaProperties.mediaSettings.audio.echoCancellation=false;
       //meeting.mediaProperties.mediaSettings.audio.noiseSuppression=false;
       //console.log(`meeting object ${JSON.stringify(meeting)}`);
@@ -302,4 +321,3 @@ document.getElementById("call").addEventListener("click", event => {
       console.error(error);
     });
 });
-

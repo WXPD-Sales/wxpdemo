@@ -78,6 +78,7 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
+app.engine('pug', require('pug').__express)
 app.set("view engine", "pug");
 
 var userInViews = require("./lib/middleware/userInViews");

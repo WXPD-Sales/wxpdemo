@@ -23,6 +23,27 @@
 .padit {
   padding: 10px;
 }
+
+.headerrow {
+  font-size: 2.25rem;
+  line-height: 2.25rem;
+  height:90px;
+  padding-top:30px;
+  background-image: linear-gradient(to right, red, white, blue);
+}
+
+.myrow {
+  display: flex;
+  justify-content: center;
+}
+
+.call-button {
+  float:left;
+}
+
+.link-cell {
+  min-width: 100px;
+}
 #call_container {
   text-align: center;
   /*display: flex*/
