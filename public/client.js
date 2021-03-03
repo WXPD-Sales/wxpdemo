@@ -83,20 +83,25 @@ async function post_data(){
 
 function buildTable(response_message){
   let table = $('<table>', {class:"link-table"})
-    .append($('<tr>', {class:"link-row"})
-      .append($('<td>', {class:"link-cell"}).text('Message'))
-      .append($('<td>', {class:"link-cell"}).text(response_message['message']))
-    ).append($('<tr>', {class:"link-row"})
+      .append($('<tr>', {class:"link-row"})
+        .append($('<td>', {class:"link-cell"}).text('Message'))
+        .append($('<td>', {class:"link-cell"}).text(response_message['message'])))
+  if(response_message.hasOwnProperty('url')){
+    table.append($('<tr>', {class:"link-row"})
       .append($('<td>', {class:"link-cell"}).text('URL'))
       .append($('<td>', {class:"link-cell"})
         .append($('<a>').attr("href", response_message['url'])
                         .attr("target", "_blank")
                         .text(response_message['url']))
       )
-    ).append($('<tr>', {class:"link-row"})
+    )
+  }
+  if(response_message.hasOwnProperty('expires'))
+    table.append($('<tr>', {class:"link-row"})
       .append($('<td>', {class:"link-cell"}).text('Expires'))
       .append($('<td>', {class:"link-cell"}).text(response_message['expires']))
     )
+  //table.append(messageRow);
   return table;
 }
 
