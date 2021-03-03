@@ -6,8 +6,7 @@ head
   meta(charset='utf-8')
   meta(http-equiv='X-UA-Compatible' content='IE=edge')
   meta(name='viewport' content='width=device-width, initial-scale=1')
-  // import the webpage's stylesheet
-  // link rel="stylesheet" href="/style.css"
+  
   link(rel='stylesheet' href='/collab-ui.min.css')
   link(rel='stylesheet' href='/momentum-ui.min.css')
   link(rel='stylesheet' href='/css/mystyle.css')
@@ -28,14 +27,14 @@ head
     })();
 <!-- End Matomo Code -->
   script(src='https://browser.sentry-cdn.com/5.23.0/bundle.tracing.min.js' crossorigin='anonymous')
-  // import the webpage's client-side javascript file
+  
   script(src='/client.js' defer='')
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
-    // import flatpickr
+
   link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css')
   link(rel='stylesheet' type='text/css' href='https://npmcdn.com/flatpickr/dist/themes/dark.css')
   script(src='https://cdn.jsdelivr.net/npm/flatpickr')
-header.padit.md-top-bar.md-top-bar--dark(role='navigation')
+header.padit.md-top-bar.md-top-bar--dark.myrow(role='navigation')
   .padit.md-top-bar__container
     .md-top-bar__brand
       a.md-brand(href='/')
@@ -43,13 +42,13 @@ header.padit.md-top-bar.md-top-bar--dark(role='navigation')
           // Note: use either image or icon, but not both
           // img src="/assets/spark-logo.svg" alt="Momentum UI"
           i.icon.icon-cisco-logo
-        .md-brand__title     Webex Guest Link Generator
+        .md-brand__title     Webex Demo Link Generator
 #container(align='center' style='margin: 10px; align-content: center;')
   main
     br
     section#guest_info_section.dreams
       p.bold
-      h4 Where should we connect the Guest to?
+      h4 To what endpoint should we connect the user?
       input#sipuri.cui-input(type='email' placeholder='SIP URI ' required='')
       p
       br
@@ -74,7 +73,7 @@ header.padit.md-top-bar.md-top-bar--dark(role='navigation')
       p
       br
       button#create_button.cui-button
-        | Create Guest Link
+        | Create Access Link
     section
       div
         br
@@ -87,7 +86,7 @@ header.padit.md-top-bar.md-top-bar--dark(role='navigation')
       //br
       br
       button#reload_button.cui-button(onclick='window.location.reload();')
-        | Create another Moment
+        | Create another Link
   br
   footer
     | Made with 

@@ -80,6 +80,18 @@ async function post_data(){
   });
 };
 
+function copyFunction(){
+  let copyText = document.getElementById('generated-link-url').textContent;
+  const el = document.createElement('textarea');
+  el.value = copyText;
+  document.body.appendChild(el);
+  el.select();
+  el.setSelectionRange(0,99999); /*for mobile devices*/
+  document.execCommand("copy");
+  document.body.removeChild(el);
+  console.log('copied!');
+}
+
 function buildTable(response_message){
   let table = $('<table>', {class:"link-table"})
       .append($('<tr>', {class:"link-row"})
@@ -89,9 +101,13 @@ function buildTable(response_message){
     table.append($('<tr>', {class:"link-row"})
       .append($('<td>', {class:"link-cell"}).text('URL'))
       .append($('<td>', {class:"link-cell"})
-        .append($('<a>').attr("href", response_message['url'])
+        .append($('<a>').attr("id", "generated-link-url")
+                        .attr("href", response_message['url'])
                         .attr("target", "_blank")
                         .text(response_message['url']))
+        .append($('<button>', {class:'md-button md-button--circle md-button--32 copy-button', onclick:"copyFunction()"})
+          .append($('<i>', {class:'cui-icon icon icon-copy_16'}))
+        )
       )
     )
   }

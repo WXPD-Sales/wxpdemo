@@ -109,7 +109,7 @@ app.get('/link', function(request, response) {
 });
 */
 
-app.get("/guest/:guest_session_id", function(request, response) {
+app.get("/widget/:guest_session_id", function(request, response) {
   //response.sendFile(__dirname + '/views/index.html');
   //console.log("got a hit")
   //response.send({ message: `if not expired, this is where the widget will load for session ${request.params.guest_session_id}`});
@@ -153,7 +153,7 @@ app.get("/guestsdk/:guest_session_id", function(request, response) {
   });
 });
 
-app.get("/soundcheck/:guest_session_id", function(request, response) {
+app.get("/guest/:guest_session_id", function(request, response) {
   //response.sendFile(__dirname + '/views/index.html');
   //console.log("got a hit")
   //response.send({ message: `if not expired, this is where the widget will load for session ${request.params.guest_session_id}`});
@@ -167,7 +167,29 @@ app.get("/soundcheck/:guest_session_id", function(request, response) {
         response.cookie("target", JSON.parse(result).sip_target);
         response.cookie("label", JSON.parse(result).display_name);
         //response.send(JSON.stringify(request.body));
-        response.sendFile(__dirname + "/views/sdksoundcheck.html");
+        response.sendFile(__dirname + "/views/guest.html");
+      });
+    } else {
+      response.send({ message: `this link has expired` });
+    }
+  });
+});
+
+app.get("/employee/:guest_session_id", function(request, response) {
+  //response.sendFile(__dirname + '/views/index.html');
+  //console.log("got a hit")
+  //response.send({ message: `if not expired, this is where the widget will load for session ${request.params.guest_session_id}`});
+  rr.get(`URL:${request.params.guest_session_id}`).then(result => {
+    console.log(result);
+    if (result == 1) {
+      rr.get(request.params.guest_session_id).then(result => {
+        //response.send({message: `${result}`});
+        //response.json(JSON.parse(result));
+        response.cookie("token", tokgen(JSON.parse(result).display_name).token);
+        response.cookie("target", JSON.parse(result).sip_target);
+        response.cookie("label", JSON.parse(result).display_name);
+        //response.send(JSON.stringify(request.body));
+        response.sendFile(__dirname + "/views/employee.html");
       });
     } else {
       response.send({ message: `this link has expired` });
@@ -177,8 +199,6 @@ app.get("/soundcheck/:guest_session_id", function(request, response) {
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.post("/create_url", function(request, response) {
-  //response.sendFile(__dirname + '/views/index.html');
-
   if (
     email_validator.validate(request.body.sip_target) &&
     request.body.expiry_date
@@ -189,7 +209,7 @@ app.post("/create_url", function(request, response) {
     let endmoment = thismoment(request.body.expiry_date).utcOffset(
       request.body.offset
     );
-    //console.log("teh end "+thismoment(endmoment));
+
     let Urlexpiry = Math.round(
       expiry.calculateSeconds(
         thismoment().utcOffset(request.body.offset, true),
@@ -198,10 +218,12 @@ app.post("/create_url", function(request, response) {
     );
     //let Urlexpiry = Math.round(expiry.calculateSeconds(thismoment(),request.body.expiry_date));
     let guestSessionID = randomize("Aa0", 16);
-    //let guestUrl = `${request.protocol}://${request.get('host')}/guest/${guestSessionID}`;
+    //let guestUrl = `${request.protocol}://${request.get('host')}/widget/${guestSessionID}`;
+    let urlPath = "guest";
+    if(request.body.display_name == "Employee") urlPath = "employee";
     let guestUrl = `https://${request.get(
       "host"
-    )}/soundcheck/${guestSessionID}`;
+    )}/${urlPath}/${guestSessionID}`;
     request.body.url = guestUrl;
     //console.log(`full url - ${guestUrl}`);
     rr.setURL(guestSessionID, JSON.stringify(request.body), Urlexpiry)
