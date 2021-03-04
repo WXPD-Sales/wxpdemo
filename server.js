@@ -2,6 +2,7 @@
 // where your node app starts
 require('dotenv').config();
 // init project
+const base64url = require('base64url');
 const express = require("express");
 const bodyParser = require("body-parser");
 const RedisExpiredEvents = require("./redis-expired-events");
@@ -15,6 +16,7 @@ const RedisRepo = require("./redis-repo");
 const rr = new RedisRepo();
 const tokgen = require("./token-generator");
 const email_validator = require("email-validator");
+const request = require("request");
 //sentry.io
 const Sentry = require("@sentry/node");
 Sentry.init({
@@ -104,168 +106,201 @@ app.use(bodyParser.json());
 
 /*
 // http://expressjs.com/en/starter/basic-routing.html
-app.get('/link', function(request, response) {
-  response.sendFile(__dirname + '/views/index.html');
+app.get('/link', function(req, res) {
+  res.sendFile(__dirname + '/views/index.html');
 });
 */
 
-app.get("/widget/:guest_session_id", function(request, response) {
-  //response.sendFile(__dirname + '/views/index.html');
-  //console.log("got a hit")
-  //response.send({ message: `if not expired, this is where the widget will load for session ${request.params.guest_session_id}`});
-  rr.get(`URL:${request.params.guest_session_id}`).then(result => {
+app.get("/widget/:guest_session_id", function(req, res) {
+  rr.get(`URL:${req.params.guest_session_id}`).then(result => {
     console.log(result);
     if (result == 1) {
-      rr.get(request.params.guest_session_id).then(result => {
-        //response.send({message: `${result}`});
-        //response.json(JSON.parse(result));
-        response.cookie("token", tokgen(JSON.parse(result).display_name).token);
-        response.cookie("target", JSON.parse(result).sip_target);
-        response.cookie("label", JSON.parse(result).display_name);
-        //response.send(JSON.stringify(request.body));
-        response.sendFile(__dirname + "/views/widget.html");
+      rr.get(req.params.guest_session_id).then(result => {
+        res.cookie("token", tokgen(JSON.parse(result).display_name).token);
+        res.cookie("target", JSON.parse(result).sip_target);
+        res.cookie("label", JSON.parse(result).display_name);
+        res.sendFile(__dirname + "/views/widget.html");
       });
     } else {
-      response.send({ message: `this link has expired` });
+      res.send({ message: `this link has expired` });
     }
   });
 });
 
-app.get("/guestsdk/:guest_session_id", function(request, response) {
-  //response.sendFile(__dirname + '/views/index.html');
+app.get("/guestsdk/:guest_session_id", function(req, res) {
+  //res.sendFile(__dirname + '/views/index.html');
   //console.log("got a hit")
-  //response.send({ message: `if not expired, this is where the widget will load for session ${request.params.guest_session_id}`});
-  rr.get(`URL:${request.params.guest_session_id}`).then(result => {
+  //res.send({ message: `if not expired, this is where the widget will load for session ${req.params.guest_session_id}`});
+  rr.get(`URL:${req.params.guest_session_id}`).then(result => {
     console.log(result);
     if (result == 1) {
-      rr.get(request.params.guest_session_id).then(result => {
-        //response.send({message: `${result}`});
-        //response.json(JSON.parse(result));
-        response.cookie("token", tokgen(JSON.parse(result).display_name).token);
-        response.cookie("target", JSON.parse(result).sip_target);
-        response.cookie("label", JSON.parse(result).display_name);
-        //response.send(JSON.stringify(request.body));
-        response.sendFile(__dirname + "/views/sdk.html");
+      rr.get(req.params.guest_session_id).then(result => {
+        //res.send({message: `${result}`});
+        //res.json(JSON.parse(result));
+        res.cookie("token", tokgen(JSON.parse(result).display_name).token);
+        res.cookie("target", JSON.parse(result).sip_target);
+        res.cookie("label", JSON.parse(result).display_name);
+        //res.send(JSON.stringify(req.body));
+        res.sendFile(__dirname + "/views/sdk.html");
       });
     } else {
-      response.send({ message: `this link has expired` });
+      res.send({ message: `this link has expired` });
     }
   });
 });
 
-app.get("/guest/:guest_session_id", function(request, response) {
-  //response.sendFile(__dirname + '/views/index.html');
-  //console.log("got a hit")
-  //response.send({ message: `if not expired, this is where the widget will load for session ${request.params.guest_session_id}`});
-  rr.get(`URL:${request.params.guest_session_id}`).then(result => {
+app.get("/guest/:guest_session_id", function(req, res) {
+  rr.get(`URL:${req.params.guest_session_id}`).then(result => {
     console.log(result);
     if (result == 1) {
-      rr.get(request.params.guest_session_id).then(result => {
-        //response.send({message: `${result}`});
-        //response.json(JSON.parse(result));
-        response.cookie("token", tokgen(JSON.parse(result).display_name).token);
-        response.cookie("target", JSON.parse(result).sip_target);
-        response.cookie("label", JSON.parse(result).display_name);
-        //response.send(JSON.stringify(request.body));
-        response.sendFile(__dirname + "/views/guest.html");
+      rr.get(req.params.guest_session_id).then(result => {
+        res.cookie("type", "guest");
+        res.cookie("token", tokgen(JSON.parse(result).display_name).token);
+        res.cookie("target", JSON.parse(result).sip_target);
+        res.cookie("label", JSON.parse(result).display_name);
+        res.sendFile(__dirname + "/views/guest.html");
       });
     } else {
-      response.send({ message: `this link has expired` });
+      res.send({ message: `this link has expired` });
     }
   });
 });
 
-app.get("/employee/:guest_session_id", function(request, response) {
-  //response.sendFile(__dirname + '/views/index.html');
-  //console.log("got a hit")
-  //response.send({ message: `if not expired, this is where the widget will load for session ${request.params.guest_session_id}`});
-  rr.get(`URL:${request.params.guest_session_id}`).then(result => {
+
+app.get("/create_token", function(req, res) {
+  request.post({
+      url: 'https://webexapis.com/access_token',
+      form: {
+        grant_type: 'authorization_code',
+        client_id: process.env.WEBEX_AUTH_CLIENT,
+        client_secret: process.env.WEBEX_AUTH_SECRET,
+        code: req.query.code,
+        redirect_uri: `https://${req.get("host")}${req.route.path}`
+      }
+    },function(error, resp, body) {
+        if (!error && resp.statusCode === 200) {
+          jbody = JSON.parse(body);
+          console.log(req.query.state);
+          console.log(jbody.access_token);
+          //res.json(body);
+          req.session.userToken = jbody.access_token;
+          res.redirect(`/employee/${req.query.state}`);
+        } else {
+          res.json(error);
+        }
+      }
+    );
+});
+
+
+app.get("/employee/:guest_session_id", function(req, res) {
+  rr.get(`URL:${req.params.guest_session_id}`).then(result => {
     console.log(result);
     if (result == 1) {
-      rr.get(request.params.guest_session_id).then(result => {
-        //response.send({message: `${result}`});
-        //response.json(JSON.parse(result));
-        response.cookie("token", tokgen(JSON.parse(result).display_name).token);
-        response.cookie("target", JSON.parse(result).sip_target);
-        response.cookie("label", JSON.parse(result).display_name);
-        //response.send(JSON.stringify(request.body));
-        response.sendFile(__dirname + "/views/employee.html");
+      rr.get(req.params.guest_session_id).then(result => {
+        if(req.session.userToken){
+          request.get({
+              url: 'https://webexapis.com/people/me',
+              headers: { 'Authorization': `Bearer ${req.session.userToken}` }
+            },function(error, resp, body) {
+              console.log(body);
+                if (!error && resp.statusCode === 200) {
+                  jbody = JSON.parse(body);
+                  res.cookie("type", "employee");
+                  res.cookie("token", req.session.userToken);
+                  res.cookie("target", JSON.parse(result).sip_target);
+                  res.cookie("label", jbody.displayName);
+                  res.sendFile(__dirname + "/views/guest.html");
+                } else {
+                  res.json(error);
+                }
+              }
+            );
+        } else {
+          res.redirect(`${process.env.WEBEX_AUTH_URL}&state=${req.params.guest_session_id}`);
+        }
       });
     } else {
-      response.send({ message: `this link has expired` });
+      res.send({ message: `this link has expired` });
     }
   });
 });
+
+function isRoomId(myTarget){
+  let result = base64url.decode(myTarget);
+  return result.indexOf('ciscospark://us/ROOM/') >= 0;
+}
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.post("/create_url", function(request, response) {
-  if (
-    email_validator.validate(request.body.sip_target) &&
-    request.body.expiry_date
-  ) {
-    console.log(
-      thismoment(request.body.expiry_date).utcOffset(request.body.offset)
-    );
-    let endmoment = thismoment(request.body.expiry_date).utcOffset(
-      request.body.offset
-    );
+app.post("/create_url", function(req, res) {
+  if (req.body.expiry_date) {
+    if(email_validator.validate(req.body.sip_target) || isRoomId(req.body.sip_target)){
+      console.log(thismoment(req.body.expiry_date).utcOffset(req.body.offset));
+      let endmoment = thismoment(req.body.expiry_date).utcOffset(
+        req.body.offset
+      );
 
-    let Urlexpiry = Math.round(
-      expiry.calculateSeconds(
-        thismoment().utcOffset(request.body.offset, true),
-        request.body.expiry_date
-      )
-    );
-    //let Urlexpiry = Math.round(expiry.calculateSeconds(thismoment(),request.body.expiry_date));
-    let guestSessionID = randomize("Aa0", 16);
-    //let guestUrl = `${request.protocol}://${request.get('host')}/widget/${guestSessionID}`;
-    let urlPath = "guest";
-    if(request.body.display_name == "Employee") urlPath = "employee";
-    let guestUrl = `https://${request.get(
-      "host"
-    )}/${urlPath}/${guestSessionID}`;
-    request.body.url = guestUrl;
-    //console.log(`full url - ${guestUrl}`);
-    rr.setURL(guestSessionID, JSON.stringify(request.body), Urlexpiry)
-      .then(() => console.log(request.body))
-      .then(() =>
-        response.send({
-          result: "OK",
-          message: "Session Created",
-          url: `${guestUrl}`,
-          expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}`
-        })
-      )
-      .catch(function(err) {
-        console.log(err.message);
+      let Urlexpiry = Math.round(
+        expiry.calculateSeconds(
+          thismoment().utcOffset(req.body.offset, true),
+          req.body.expiry_date
+        )
+      );
+      //let Urlexpiry = Math.round(expiry.calculateSeconds(thismoment(),req.body.expiry_date));
+      let guestSessionID = randomize("Aa0", 16);
+      //let guestUrl = `${req.protocol}://${req.get('host')}/widget/${guestSessionID}`;
+      let urlPath = "guest";
+      if(req.body.display_name == "Employee") urlPath = "employee";
+      let guestUrl = `https://${req.get(
+        "host"
+      )}/${urlPath}/${guestSessionID}`;
+      req.body.url = guestUrl;
+      //console.log(`full url - ${guestUrl}`);
+      rr.setURL(guestSessionID, JSON.stringify(req.body), Urlexpiry)
+        .then(() => console.log(req.body))
+        .then(() =>
+          res.send({
+            result: "OK",
+            message: "Session Created",
+            url: `${guestUrl}`,
+            expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}`
+          })
+        )
+        .catch(function(err) {
+          console.log(err.message);
+        });
+      //.then((message) => validate_message_object(message))
+      //res.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}` });
+    } else {
+      res.send({
+        result: "Error",
+        message: "Invalid SIP URI or RoomId!"
       });
-
-    //.then((message) => validate_message_object(message))
-    //response.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}` });
+    }
   } else {
-    response.send({
+    res.send({
       result: "Error",
-      message: "Invalid SIP URI or Expiry provided!"
+      message: "Invalid Expiry Date provided!"
     });
   }
 });
 
-app.post("/email_invite", function(request, response) {
-  console.log(request.body);
+app.post("/email_invite", function(req, res) {
+  console.log(req.body);
   //send_email('harishchawla@hotmail.com','this is some body');
   send_email(
-    request.body.send_to_email,
-    `Use this link to join the show ${request.body.url}. Remember, it expires ${request.body.expires}`
+    req.body.send_to_email,
+    `Use this link to join the show ${req.body.url}. Remember, it expires ${req.body.expires}`
   )
     .then(() => {
-      response.send({ message: `Email sent!` });
+      res.send({ message: `Email sent!` });
     })
     .catch(e => {
       Sentry.captureException(e);
     });
 });
 
-app.post("/sms_invite", function(request, resposne) {});
+app.post("/sms_invite", function(req, resposne) {});
 
 app.get("/sdk", function(req, res) {
   res.sendFile(__dirname + "/views/sdk.html");

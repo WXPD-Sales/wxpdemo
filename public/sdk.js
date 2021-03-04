@@ -1,13 +1,26 @@
-//const webex = window.Webex.init();
-const webex = (window.webex = Webex.init({
+
+let credentials = {
   logger: {
     level: "debug"
   }
-}));
+};
 
+const userType = Cookies.get("type");
 const destination = Cookies.get("target");
-const jwt = Cookies.get("token");
-console.log(`Found JWT - ${jwt}`);
+let jwt;
+let userToken;
+console.log(userType);
+if(userType == "employee"){
+  $('#main-title').text("Webex Employee Access");
+  userToken = Cookies.get("token");
+  console.log(`Found userToken - ${userToken}`);
+  credentials.credentials = { access_token: userToken };
+} else {
+  jwt = Cookies.get("token");
+  console.log(`Found JWT - ${jwt}`);
+}
+
+const webex = (window.webex = Webex.init(credentials));
 
 //-----
 //AV Sources
@@ -76,33 +89,41 @@ selectors.forEach((select, selectorIndex) => {
 
 //-----
 
+
+
 let m;
 
 webex.once("ready", () => {
   console.log(`Webex OBJ ready ${webex.version}`);
-  webex.authorization
-    .requestAccessTokenFromJwt({jwt})
-    .then((data) => {
-      if (webex.canAuthorize) {
-        // Authorization is successful
-        // your app logic goes here
-        // Change Authentication status to `Authenticated`
-        console.log("Guest Authenticated");
-        console.log(`Data - ${JSON.stringify(webex)}`);
+  if(jwt != null){
+    webex.authorization
+      .requestAccessTokenFromJwt({jwt})
+      .then(finalizeWebexAuth)
+      .catch(e => {
+        // Do something with the auth error here
+        console.error(e);
+      });
+  } else {
+    finalizeWebexAuth(null);
+  }
 
-        webex.meetings.register().catch(err => {
-          console.error(err);
-          alert(err);
-          throw err;
-        });
-      }
-    })
-    .catch(e => {
-      // Do something with the auth error here
-      console.error(e);
-    });
 });
 
+function finalizeWebexAuth(data){
+  if (webex.canAuthorize) {
+    // Authorization is successful
+    // your app logic goes here
+    // Change Authentication status to `Authenticated`
+    console.log("User Authenticated");
+    console.log(`Data - ${JSON.stringify(webex)}`);
+
+    webex.meetings.register().catch(err => {
+      console.error(err);
+      alert(err);
+      throw err;
+    });
+  }
+}
 
 function bindMeetingEvents(meeting) {
 
