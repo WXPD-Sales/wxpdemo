@@ -284,7 +284,7 @@ function joinMeeting(meeting) {
   return meeting.join().then(() => {
 
     // Get our local media stream and add it to the meeting
-    return meeting.getMediaStreams(mediaSettings,{audio, video}).then(mediaStreams => {
+    return meeting.getMediaStreams(mediaSettings,{audio:true, video:true}).then(mediaStreams => {
       //console.log('Here are the mediaStreams',mediaStreams);
       const [localStream, localShare] = mediaStreams;
 
@@ -294,8 +294,6 @@ function joinMeeting(meeting) {
         mediaSettings
       });
       console.log(meeting.getDevices().then(devices => {
-        //console.log(audio);
-        //console.log(video);
         for(var i in devices){
           let selector = "audioSource";
           if(devices[i].kind == "videoinput"){
