@@ -111,60 +111,30 @@ app.get('/link', function(req, res) {
 });
 */
 
-app.get("/widget/:guest_session_id", function(req, res) {
+let paths = {"guest":"guest", "widget":"widget", "guestsdk":"sdk"}
+function renderFunc(req, res) {
   rr.get(`URL:${req.params.guest_session_id}`).then(result => {
     console.log(result);
+    //console.log(req);
     if (result == 1) {
       rr.get(req.params.guest_session_id).then(result => {
+        parts = req.originalUrl.split("/");
+        console.log(parts);
+        res.cookie("type", parts[1]);
         res.cookie("token", tokgen(JSON.parse(result).display_name).token);
         res.cookie("target", JSON.parse(result).sip_target);
         res.cookie("label", JSON.parse(result).display_name);
-        res.sendFile(__dirname + "/views/widget.html");
+        res.sendFile(__dirname + `/views/${paths[parts[1]]}.html`);
       });
     } else {
       res.send({ message: `this link has expired` });
     }
   });
-});
+}
 
-app.get("/guestsdk/:guest_session_id", function(req, res) {
-  //res.sendFile(__dirname + '/views/index.html');
-  //console.log("got a hit")
-  //res.send({ message: `if not expired, this is where the widget will load for session ${req.params.guest_session_id}`});
-  rr.get(`URL:${req.params.guest_session_id}`).then(result => {
-    console.log(result);
-    if (result == 1) {
-      rr.get(req.params.guest_session_id).then(result => {
-        //res.send({message: `${result}`});
-        //res.json(JSON.parse(result));
-        res.cookie("token", tokgen(JSON.parse(result).display_name).token);
-        res.cookie("target", JSON.parse(result).sip_target);
-        res.cookie("label", JSON.parse(result).display_name);
-        //res.send(JSON.stringify(req.body));
-        res.sendFile(__dirname + "/views/sdk.html");
-      });
-    } else {
-      res.send({ message: `this link has expired` });
-    }
-  });
-});
-
-app.get("/guest/:guest_session_id", function(req, res) {
-  rr.get(`URL:${req.params.guest_session_id}`).then(result => {
-    console.log(result);
-    if (result == 1) {
-      rr.get(req.params.guest_session_id).then(result => {
-        res.cookie("type", "guest");
-        res.cookie("token", tokgen(JSON.parse(result).display_name).token);
-        res.cookie("target", JSON.parse(result).sip_target);
-        res.cookie("label", JSON.parse(result).display_name);
-        res.sendFile(__dirname + "/views/guest.html");
-      });
-    } else {
-      res.send({ message: `this link has expired` });
-    }
-  });
-});
+app.get("/widget/:guest_session_id", renderFunc);
+app.get("/guestsdk/:guest_session_id", renderFunc);
+app.get("/guest/:guest_session_id", renderFunc);
 
 
 app.get("/create_token", function(req, res) {
@@ -246,14 +216,10 @@ app.post("/create_url", function(req, res) {
           req.body.expiry_date
         )
       );
-      //let Urlexpiry = Math.round(expiry.calculateSeconds(thismoment(),req.body.expiry_date));
       let guestSessionID = randomize("Aa0", 16);
-      //let guestUrl = `${req.protocol}://${req.get('host')}/widget/${guestSessionID}`;
       let urlPath = "guest";
       if(req.body.display_name == "Employee") urlPath = "employee";
-      let guestUrl = `https://${req.get(
-        "host"
-      )}/${urlPath}/${guestSessionID}`;
+      let guestUrl = `https://${req.get("host")}/${urlPath}/${guestSessionID}`;
       req.body.url = guestUrl;
       //console.log(`full url - ${guestUrl}`);
       rr.setURL(guestSessionID, JSON.stringify(req.body), Urlexpiry)
@@ -269,7 +235,6 @@ app.post("/create_url", function(req, res) {
         .catch(function(err) {
           console.log(err.message);
         });
-      //.then((message) => validate_message_object(message))
       //res.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}` });
     } else {
       res.send({
