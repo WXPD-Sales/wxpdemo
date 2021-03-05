@@ -127,6 +127,7 @@ function finalizeWebexAuth(data){
   }
 }
 
+
 function bindMeetingEvents(meeting) {
   console.log('This meeting', meeting);
   //meeting.setMeetingQuality('HIGH');
@@ -261,10 +262,7 @@ function bindMeetingEvents(meeting) {
       isSharing = false;
       meeting.stopShare();
       document.getElementById("self-share").srcObject = null;
-      $("#screen_share_icon").removeClass("icon-stop_24");
-      $("#screen_share_icon").addClass("icon-content-share_24");
-      $("#screen_share").removeClass("md-button--red");
-      $("#screen_share").addClass("md-button--grey");
+      resetShareIcon();
     } else {
       isSharing = true;
       meeting.shareScreen()
@@ -287,10 +285,7 @@ function bindMeetingEvents(meeting) {
      console.log('TOGGLE VIDEO MUTE');
      if(meeting.isVideoMuted()){
        meeting.unmuteVideo()
-       $("#video_mute_icon").removeClass("icon-camera-muted_24");
-       $("#video_mute_icon").addClass("icon-camera_24");
-       $("#video_mute").removeClass("md-button--red");
-       $("#video_mute").addClass("md-button--grey");
+       resetVideoIcon();
      } else {
        meeting.muteVideo();
        $("#video_mute_icon").removeClass("icon-camera_24");
@@ -305,10 +300,7 @@ function bindMeetingEvents(meeting) {
     console.log('TOGGLE AUDIO MUTE');
     if(meeting.isAudioMuted()){
       meeting.unmuteAudio()
-      $("#audio_mute_icon").removeClass("icon-microphone-muted_24");
-      $("#audio_mute_icon").addClass("icon-microphone_24");
-      $("#audio_mute").removeClass("md-button--red");
-      $("#audio_mute").addClass("md-button--grey");
+      resetAudioIcon();
     } else {
       meeting.muteAudio();
       $("#audio_mute_icon").removeClass("icon-microphone_24");
@@ -328,6 +320,27 @@ function bindMeetingEvents(meeting) {
   });
 }
 
+function resetShareIcon(){
+  $("#screen_share_icon").removeClass("icon-stop_24");
+  $("#screen_share_icon").addClass("icon-content-share_24");
+  $("#screen_share").removeClass("md-button--red");
+  $("#screen_share").addClass("md-button--grey");
+}
+
+function resetAudioIcon(){
+  $("#audio_mute_icon").removeClass("icon-microphone-muted_24");
+  $("#audio_mute_icon").addClass("icon-microphone_24");
+  $("#audio_mute").removeClass("md-button--red");
+  $("#audio_mute").addClass("md-button--grey");
+}
+
+function resetVideoIcon(){
+  $("#video_mute_icon").removeClass("icon-camera-muted_24");
+  $("#video_mute_icon").addClass("icon-camera_24");
+  $("#video_mute").removeClass("md-button--red");
+  $("#video_mute").addClass("md-button--grey");
+}
+
 function showControls(){
   $("#hangup_div").show();
   $("#v_select").show();
@@ -344,6 +357,9 @@ function hideControls(){
   $("#video_mute_div").hide();
   $("#audio_mute_div").hide();
   $("#share_screen_div").hide();
+  resetShareIcon();
+  resetAudioIcon();
+  resetVideoIcon();
 }
 
 // Join the meeting and add media
@@ -396,3 +412,24 @@ document.getElementById("call").addEventListener("click", event => {
       console.error(error);
     });
 });
+
+if(userType == "employee"){
+  // Listen incoming calls
+  webex.meetings.on('meeting:added', (addedMeetingEvent) => {
+  if (addedMeetingEvent.type === 'INCOMING') {
+    const addedMeeting = addedMeetingEvent.meeting;
+
+    // Acknowledge to the server that we received the call on our device
+    addedMeeting.acknowledge(addedMeetingEvent.type)
+      .then(() => {
+        if (confirm('Answer incoming call')) {
+          bindMeetingEvents(addedMeeting);
+          joinMeeting(addedMeeting);
+        }
+        else {
+          addedMeeting.decline();
+        }
+      });
+  }
+  });
+}
