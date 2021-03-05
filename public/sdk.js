@@ -334,7 +334,7 @@ function showControls(){
   $("#a_select").show();
   $("#video_mute_div").show();
   $("#audio_mute_div").show();
-  if(userType == "employee") $("#share_screen_div").show();
+  $("#share_screen_div").show();
 }
 
 function hideControls(){
