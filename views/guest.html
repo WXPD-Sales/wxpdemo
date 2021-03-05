@@ -59,24 +59,29 @@
     </header>
     <div class="md-top-bar__brand">
       <div id="call_buttons" class="myrow" style="width:auto;">
-            <div class="padit call-button">
+            <div id="call_div" class="padit call-button" style="display:None">
               <button id="call" class="md-button md-button--circle md-button--44 md-button--green" alt="Make video call " type="button">
                 <span class="md-button__children"><i class="icon icon-handset_24"></i></span>
               </button>
             </div>
-            <div class="padit call-button">
+            <div id="hangup_div" class="padit call-button" style="display:None">
               <button id="hangup" class="md-button md-button--circle md-button--44 md-button--red" alt="Reject call" type="button" aria-label="reject call">
                 <span class="md-button__children"><i class="icon icon-cancel_24"></i></span>
               </button>
             </div>
-            <div class="padit call-button">
-              <button id="audio_mute" class="md-button md-button--circle md-button--44 md-button--grey" style="display:None" alt="Mute audio" type="button" aria-label="mute audio">
-                <span class="md-button__children"><i class="icon icon-microphone_24"></i></span>
+            <div id="share_screen_div" class="padit call-button" style="display:None">
+              <button id="screen_share" class="md-button md-button--circle md-button--44 md-button--grey" alt="Share screen" type="button" aria-label="share screen">
+                <span class="md-button__children"><i id="screen_share_icon" class="icon icon-content-share_24"></i></span>
               </button>
             </div>
-            <div class="padit call-button">
-              <button id="video_mute" class="md-button md-button--circle md-button--44 md-button--grey" style="display:None" alt="Mute video" type="button" aria-label="mute video">
-                <span class="md-button__children"><i class="icon icon-camera_24"></i></span>
+            <div id="audio_mute_div" class="padit call-button" style="display:None">
+              <button id="audio_mute" class="md-button md-button--circle md-button--44 md-button--grey" alt="Mute audio" type="button" aria-label="mute audio">
+                <span class="md-button__children"><i id="audio_mute_icon" class="icon icon-microphone_24"></i></span>
+              </button>
+            </div>
+            <div id="video_mute_div" class="padit call-button" style="display:None">
+              <button id="video_mute" class="md-button md-button--circle md-button--44 md-button--grey" alt="Mute video" type="button" aria-label="mute video">
+                <span class="md-button__children"><i id="video_mute_icon" class="icon icon-camera_24"></i></span>
               </button>
             </div>
       </div>
@@ -90,6 +95,7 @@
     <div id="call_container" class="padit">
       <div id="self" class="self">
         <video id="self-view" class="self_video" muted autoplay></video>
+        <video id="self-share" class="self_video" muted autoplay></video>
       </div>
 
       <div id="remote" class="remote">

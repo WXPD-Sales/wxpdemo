@@ -46,7 +46,7 @@ let guest_data = {};
 async function create_guest_data_object(){
   //let message = {};
   //guest_data.display_name = document.getElementById('displayname').value;
-  guest_data.display_name = $('input[name="displayname"]:checked').val();
+  //guest_data.display_name = $('input[name="displayname"]:checked').val();
   guest_data.expiry_date = picked_date;
   guest_data.sip_target = document.getElementById('sipuri').value;
   guest_data.offset = offset;
@@ -81,16 +81,14 @@ async function post_data(){
   });
 };
 
-function copyFunction(){
-  let copyText = document.getElementById('generated-link-url').textContent;
+function copyFunction(url){
   const el = document.createElement('textarea');
-  el.value = copyText;
+  el.value = url;
   document.body.appendChild(el);
   el.select();
   el.setSelectionRange(0,99999); /*for mobile devices*/
   document.execCommand("copy");
   document.body.removeChild(el);
-  console.log('copied!');
 }
 
 function buildTable(response_message){
@@ -98,19 +96,21 @@ function buildTable(response_message){
       .append($('<tr>', {class:"link-row"})
         .append($('<td>', {class:"link-cell"}).text('Message'))
         .append($('<td>', {class:"link-cell"}).text(response_message['message'])))
-  if(response_message.hasOwnProperty('url')){
-    table.append($('<tr>', {class:"link-row"})
-      .append($('<td>', {class:"link-cell"}).text('URL'))
-      .append($('<td>', {class:"link-cell"})
-        .append($('<a>').attr("id", "generated-link-url")
-                        .attr("href", response_message['url'])
-                        .attr("target", "_blank")
-                        .text(response_message['url']))
-        .append($('<button>', {class:'md-button md-button--circle md-button--32 copy-button', onclick:"copyFunction()"})
-          .append($('<i>', {class:'cui-icon icon icon-copy_16'}))
+  if(response_message.hasOwnProperty('urls')){
+    for(let i in response_message['urls']){
+      table.append($('<tr>', {class:"link-row"})
+        .append($('<td>', {class:"link-cell"}).text('URL'))
+        .append($('<td>', {class:"link-cell"})
+          .append($('<a>').attr("id", "generated-link-url")
+                          .attr("href", response_message['urls'][i])
+                          .attr("target", "_blank")
+                          .text(response_message['urls'][i]))
+          .append($('<button>', {class:'md-button md-button--circle md-button--32 copy-button', onclick:'copyFunction("'+response_message['urls'][i]+'")'})
+            .append($('<i>', {class:'cui-icon icon icon-copy_16'}))
+          )
         )
       )
-    )
+    }
   }
   if(response_message.hasOwnProperty('expires'))
     table.append($('<tr>', {class:"link-row"})
@@ -124,15 +124,16 @@ function buildTable(response_message){
 function showMessage(response_message) {
   //messages.textContent += `\n${message}`;
   //messages.textContent = `\n${response_message}`;
+  let jResponse = JSON.parse(response_message);
   $("#messages").empty();
-  $("#messages").append(buildTable(JSON.parse(response_message)));
+  $("#messages").append(buildTable(jResponse));
   //messages.innerHTML = ;
   messages.scrollTop = messages.scrollHeight;
-  console.log(JSON.parse(response_message));
-  if((JSON.parse(response_message)).url){
-    guest_data.url = (JSON.parse(response_message)).url;
-    guest_data.expires = (JSON.parse(response_message)).expires;
-    console.log(`URL found - ${(JSON.parse(response_message)).url}`)
+  console.log(jResponse);
+  if(jResponse.hasOwnProperty('urls')){
+    //guest_data.url = (JSON.parse(response_message)).url;
+    //guest_data.expires = (JSON.parse(response_message)).expires;
+    console.log(`URL found - ${jResponse.urls}`)
     document.getElementById('send_as_email_section').style.display = 'block';
     document.getElementById('guest_info_section').style.display = 'none';
   };

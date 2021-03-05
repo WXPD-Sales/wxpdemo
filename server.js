@@ -17,6 +17,7 @@ const rr = new RedisRepo();
 const tokgen = require("./token-generator");
 const email_validator = require("email-validator");
 const request = require("request");
+var secured = require('./lib/middleware/secured');
 //sentry.io
 const Sentry = require("@sentry/node");
 Sentry.init({
@@ -87,14 +88,13 @@ var userInViews = require("./lib/middleware/userInViews");
 var authRouter = require("./routes/auth");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
-const linkgenRouter = require("./routes/linkgen");
 
 // ..
 app.use(userInViews());
 app.use("/", authRouter);
 app.use("/", indexRouter);
 app.use("/", usersRouter);
-app.use("/", linkgenRouter);
+
 // ..
 app.use(express.static("public"));
 
@@ -111,11 +111,21 @@ app.get('/link', function(req, res) {
 });
 */
 
+app.get('/linkgen', function (req, res, next) {
+  //const { _raw, _json, ...userProfile } = req.user;
+  if(req.session.userToken){
+    res.render('linkgen', {
+      // userProfile: JSON.stringify(userProfile, null, 2),
+      // title: 'Profile page'
+    });
+  } else {
+    res.redirect(`${process.env.WEBEX_AUTH_URL}&state=linkgen`);
+  }
+});
+
 let paths = {"guest":"guest", "widget":"widget", "guestsdk":"sdk"}
 function renderFunc(req, res) {
   rr.get(`URL:${req.params.guest_session_id}`).then(result => {
-    console.log(result);
-    //console.log(req);
     if (result == 1) {
       rr.get(req.params.guest_session_id).then(result => {
         parts = req.originalUrl.split("/");
@@ -132,9 +142,9 @@ function renderFunc(req, res) {
   });
 }
 
-app.get("/widget/:guest_session_id", renderFunc);
-app.get("/guestsdk/:guest_session_id", renderFunc);
-app.get("/guest/:guest_session_id", renderFunc);
+app.get("/widget/:guest_session_id", secured(), renderFunc);
+app.get("/guestsdk/:guest_session_id", secured(), renderFunc);
+app.get("/guest/:guest_session_id", secured(), renderFunc);
 
 
 app.get("/create_token", function(req, res) {
@@ -151,10 +161,13 @@ app.get("/create_token", function(req, res) {
         if (!error && resp.statusCode === 200) {
           jbody = JSON.parse(body);
           console.log(req.query.state);
-          console.log(jbody.access_token);
-          //res.json(body);
+          //console.log(jbody.access_token);
           req.session.userToken = jbody.access_token;
-          res.redirect(`/employee/${req.query.state}`);
+          if(req.query.state == "linkgen"){
+            res.redirect(`/linkgen`);
+          } else {
+            res.redirect(`/employee/${req.query.state}`);
+          }
         } else {
           res.json(error);
         }
@@ -165,7 +178,7 @@ app.get("/create_token", function(req, res) {
 
 app.get("/employee/:guest_session_id", function(req, res) {
   rr.get(`URL:${req.params.guest_session_id}`).then(result => {
-    console.log(result);
+    //console.log(result);
     if (result == 1) {
       rr.get(req.params.guest_session_id).then(result => {
         if(req.session.userToken){
@@ -216,26 +229,32 @@ app.post("/create_url", function(req, res) {
           req.body.expiry_date
         )
       );
-      let guestSessionID = randomize("Aa0", 16);
-      let urlPath = "guest";
-      if(req.body.display_name == "Employee") urlPath = "employee";
-      let guestUrl = `https://${req.get("host")}/${urlPath}/${guestSessionID}`;
-      req.body.url = guestUrl;
-      //console.log(`full url - ${guestUrl}`);
-      rr.setURL(guestSessionID, JSON.stringify(req.body), Urlexpiry)
-        .then(() => console.log(req.body))
-        .then(() =>
-          res.send({
-            result: "OK",
-            message: "Session Created",
-            url: `${guestUrl}`,
-            expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}`
+      let urlPaths = ["guest", "employee"];
+      let respObjects = [];
+      let rrPromises = [];
+      for(let i in urlPaths){
+        let guestSessionID = randomize("Aa0", 16);
+        let guestUrl = `https://${req.get("host")}/${urlPaths[i]}/${guestSessionID}`;
+        req.body.url = guestUrl;
+        req.body.display_name = urlPaths[i].charAt(0).toUpperCase() + urlPaths[i].slice(1);
+        let rrPromise = rr.setURL(guestSessionID, JSON.stringify(req.body), Urlexpiry)
+          .then(() => {
+            respObjects.push(guestUrl);
           })
-        )
-        .catch(function(err) {
-          console.log(err.message);
+          .catch(function(err) {
+            console.log(err.message);
+          });
+        rrPromises.push(rrPromise);
+      }
+      Promise.all(rrPromises).then(results => {
+        console.log(respObjects);
+        res.send({
+          result: "OK",
+          message: "Session Created",
+          urls: respObjects,
+          expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}`
         });
-      //res.send({ result: 'OK', message: 'Session Created', url: `${guestUrl}`, expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}` });
+      })
     } else {
       res.send({
         result: "Error",
