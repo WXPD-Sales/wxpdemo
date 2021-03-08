@@ -65,11 +65,6 @@ for (let i = 0; i !== deviceInfos.length; i += 1) {
     option.text = deviceInfo.label || `microphone ${audioInputSelect.length + 1}`;
     audioInputSelect.appendChild(option);
   }
-  /*
-  else if (deviceInfo.kind === 'audiooutput') {
-    option.text = deviceInfo.label || `speaker ${audioOutputSelect.length + 1}`;
-    audioOutputSelect.appendChild(option);
-  }*/
   else if (deviceInfo.kind === 'videoinput') {
     option.text = deviceInfo.label || `camera ${videoSelect.length + 1}`;
     videoSelect.appendChild(option);
@@ -98,7 +93,6 @@ webex.once("ready", () => {
       .requestAccessTokenFromJwt({jwt})
       .then(finalizeWebexAuth)
       .catch(e => {
-        // Do something with the auth error here
         console.error(e);
       });
   } else {
@@ -110,8 +104,6 @@ webex.once("ready", () => {
 function finalizeWebexAuth(data){
   if (webex.canAuthorize) {
     // Authorization is successful
-    // your app logic goes here
-    // Change Authentication status to `Authenticated`
     console.log("User Authenticated");
     console.log(`Data - ${JSON.stringify(webex)}`);
 
@@ -138,11 +130,6 @@ function bindMeetingEvents(meeting) {
   //meeting:stateChange
   meeting.on('meeting:stateChange', (payload) => {
     console.log("Meeting State Change", payload);
-    /*
-    if(payload.currentState === "ACTIVE"){
-      meeting.mediaProperties.mediaSettings.audio.echoCancellation=false;
-      meeting.mediaProperties.mediaSettings.audio.noiseSuppression=false;
-    }*/
   });
 
   meeting.on('meeting:ringing', (payload) => {
@@ -178,7 +165,6 @@ function bindMeetingEvents(meeting) {
 
   meeting.on('meeting:self:lobbyWaiting', () => {
     document.getElementById('log').innerHTML = 'Waiting in lobby';
-    //document.getElementById('lobby-space').innerHTML = 'User is guest to space, waiting to be admitted, wait to use addMedia';
     console.log('User is guest to space, waiting to be admitted, wait to use addMedia');
   });
 
@@ -223,7 +209,6 @@ function bindMeetingEvents(meeting) {
       document.getElementById("self-view").srcObject = media.stream;
     }
     if (media.type === "remoteVideo") {
-      //remoteVideoStream = media.stream;
       document.getElementById("remote-view-video").srcObject = media.stream;
     }
     if (media.type === "remoteAudio") {
@@ -367,7 +352,6 @@ function joinMeeting(meeting) {
   return meeting.join().then(() => {
     // Get our local media stream and add it to the meeting
     return meeting.getMediaStreams(mediaSettings,{audio:true, video:true}).then(mediaStreams => {
-      //console.log('Here are the mediaStreams',mediaStreams);
       const [localStream, localShare] = mediaStreams;
 
       meeting.addMedia({
@@ -392,8 +376,6 @@ function joinMeeting(meeting) {
 document.getElementById("call").addEventListener("click", event => {
   // again, we don't want to reload when we try to join
   event.preventDefault();
-  //const destination = document.getElementById("invitee").value;
-  // document.getElementById("welcome_message").style.display="none";
   console.log(`got destination - ${destination}`);
   // attaching before the request
   audio.deviceId = {exact: audioInputSelect.value};

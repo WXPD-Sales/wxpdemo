@@ -7,7 +7,6 @@ console.log(`time is ${time}`);
 flatpickr("#flatpckr", {
   enableTime: true,
   dateFormat: "Y-m-d H:i",
-  //dateFormat: "Z",
   minDate: "today",
   minTime: time,
   defaultTime: time,
@@ -17,16 +16,13 @@ flatpickr("#flatpckr", {
     document.getElementById('selected_expiry').innerHTML = picked_date;
   },
   allowInput: true,
-  //time_24hr: true
 });
 
 
 let create_button = document.getElementById('create_button');
 create_button.onclick = function (event){
-  //event.preventDefault();
   try {
     create_guest_data_object()
-    //.then((message) => validate_message_object(message))
     .then((result) => {
       console.log (result)
       if (result){
@@ -42,22 +38,15 @@ create_button.onclick = function (event){
 
 }
 let guest_data = {};
-//let invite_data = {};
 async function create_guest_data_object(){
-  //let message = {};
-  //guest_data.display_name = document.getElementById('displayname').value;
-  //guest_data.display_name = $('input[name="displayname"]:checked').val();
   guest_data.expiry_date = picked_date;
   guest_data.sip_target = document.getElementById('sipuri').value;
   guest_data.offset = offset;
-  //message.send_email = document.getElementById('email').value;
-  //message.send_sms = document.getElementById('sms').value;
   return guest_data;
 };
 
 async function validate_message_object(message){
   if(!message.expiry_date || !message.sip_target){
-    //console.log(`Bad data`);
     showMessage(`{"error":"Oops, you seem to be missing something.."}`);
     return false;
   } else {
@@ -117,22 +106,16 @@ function buildTable(response_message){
       .append($('<td>', {class:"link-cell"}).text('Expires'))
       .append($('<td>', {class:"link-cell"}).text(response_message['expires']))
     )
-  //table.append(messageRow);
   return table;
 }
 
 function showMessage(response_message) {
-  //messages.textContent += `\n${message}`;
-  //messages.textContent = `\n${response_message}`;
   let jResponse = JSON.parse(response_message);
   $("#messages").empty();
   $("#messages").append(buildTable(jResponse));
-  //messages.innerHTML = ;
   messages.scrollTop = messages.scrollHeight;
   console.log(jResponse);
   if(jResponse.hasOwnProperty('urls')){
-    //guest_data.url = (JSON.parse(response_message)).url;
-    //guest_data.expires = (JSON.parse(response_message)).expires;
     console.log(`URL found - ${jResponse.urls}`)
     document.getElementById('send_as_email_section').style.display = 'block';
     document.getElementById('guest_info_section').style.display = 'none';
@@ -169,20 +152,6 @@ async function send_to_email(){
 }
 
 async function send_to_sms(){
-
   guest_data.send_to_mobile = document.getElementById('send_to_mobile').value;
   console.log(guest_data);
-  /*
-    fetch('/sms_ivite', {
-    method: 'POST',
-    credentials: 'same-origin',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(message),
-  })
-  .then(handleResponse)
-  .then(showMessage)
-  .catch(function(err) {
-    showMessage(err.message);
-  });
-  */
 }

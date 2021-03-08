@@ -1,16 +1,10 @@
 .self {
-  /*background-color: yellow;*/
   position: absolute;
-  /*width: 200px;
-        /*padding-top: 56.25%; /* 16:9 Aspect Ratio */
   z-index: 100;
   display: inline-block;
 }
 .remote {
-  /*background-color: green;
-        /*position: absolute;*/
   width: 90%;
-  /*padding-top: 56.25%; /* 16:9 Aspect Ratio */
   z-index: 10;
   display: inline-block;
 }
@@ -57,7 +51,7 @@
 .link-cell {
   min-width: 100px;
 }
+
 #call_container {
   text-align: center;
-  /*display: flex*/
 }

@@ -52,23 +52,10 @@ header.padit.md-top-bar.md-top-bar--dark.myrow(role='navigation')
       input#sipuri.cui-input(type='email' placeholder='SIP URI ' required='')
       p
       br
-      //p.bold
-      //h4 Who should they connect as?
-      //input#displayname.cui-input(type='text' placeholder='Display Name' required='')
-      //div#displayname.display-radio
-      //  div#displayname-guest
-      //    input.radio-input(type="radio", name="displayname", value="Guest", checked)
-      //    | Guest
-      //  div#displayname-employee
-      //    input.radio-input(type="radio", name="displayname", value="Employee")
-      //    | Employee
-      //p
-      //br
       p.bold
       h4 When should this link expire?
       h5#selected_expiry
         | Select a Date and Time...
-      // input type="text" id="flatpckr" required="true" autocomplete="off"
       i#flatpckr.md-button--circle.md-button--48.cui-icon.icon.icon-calendar-month_36(style='color:#000000')
       p
       br
@@ -79,11 +66,6 @@ header.padit.md-top-bar.md-top-bar--dark.myrow(role='navigation')
         br
         p#messages
     section#send_as_email_section.dreams(style='display:none;')
-      //br
-      //input#send_to_email.cui-input(name='email' type='email' placeholder='Email Address')
-      //button#send_as_email_button.md-button.md-button--circle.md-button--48(onclick='send_to_email()')
-      //  i.cui-icon.icon.icon-email-invite_16
-      //br
       br
       button#reload_button.cui-button(onclick='window.location.reload();')
         | Create another Link

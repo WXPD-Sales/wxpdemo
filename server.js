@@ -24,9 +24,7 @@ Sentry.init({
   dsn:
     "https://f453e51294d34cdb9a2962000f5612e3@o450029.ingest.sentry.io/5434024"
 });
-//const send_email = require('./sendemail');
 const send_email = require("./sg-email");
-// http://expressjs.com/en/starter/static-files.html
 
 // config express-session
 var sess = {
@@ -104,20 +102,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // parse application/json
 app.use(bodyParser.json());
 
-/*
-// http://expressjs.com/en/starter/basic-routing.html
-app.get('/link', function(req, res) {
-  res.sendFile(__dirname + '/views/index.html');
-});
-*/
-
 app.get('/linkgen', function (req, res, next) {
-  //const { _raw, _json, ...userProfile } = req.user;
   if(req.session.userToken){
-    res.render('linkgen', {
-      // userProfile: JSON.stringify(userProfile, null, 2),
-      // title: 'Profile page'
-    });
+    res.render('linkgen', {});
   } else {
     res.redirect(`${process.env.WEBEX_AUTH_URL}&state=linkgen`);
   }
@@ -161,7 +148,6 @@ app.get("/create_token", function(req, res) {
         if (!error && resp.statusCode === 200) {
           jbody = JSON.parse(body);
           console.log(req.query.state);
-          //console.log(jbody.access_token);
           req.session.userToken = jbody.access_token;
           if(req.query.state == "linkgen"){
             res.redirect(`/linkgen`);
@@ -178,7 +164,6 @@ app.get("/create_token", function(req, res) {
 
 app.get("/employee/:guest_session_id", function(req, res) {
   rr.get(`URL:${req.params.guest_session_id}`).then(result => {
-    //console.log(result);
     if (result == 1) {
       rr.get(req.params.guest_session_id).then(result => {
         if(req.session.userToken){
@@ -209,12 +194,13 @@ app.get("/employee/:guest_session_id", function(req, res) {
   });
 });
 
+
 function isRoomId(myTarget){
   let result = base64url.decode(myTarget);
   return result.indexOf('ciscospark://us/ROOM/') >= 0;
 }
 
-// http://expressjs.com/en/starter/basic-routing.html
+
 app.post("/create_url", function(req, res) {
   if (req.body.expiry_date) {
     if(email_validator.validate(req.body.sip_target) || isRoomId(req.body.sip_target)){
