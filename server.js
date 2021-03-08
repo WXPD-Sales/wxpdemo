@@ -24,7 +24,6 @@ Sentry.init({
   dsn:
     "https://f453e51294d34cdb9a2962000f5612e3@o450029.ingest.sentry.io/5434024"
 });
-const send_email = require("./sg-email");
 
 // config express-session
 var sess = {
@@ -82,16 +81,12 @@ passport.deserializeUser(function(user, done) {
 app.engine('pug', require('pug').__express)
 app.set("view engine", "pug");
 
-var userInViews = require("./lib/middleware/userInViews");
 var authRouter = require("./routes/auth");
 var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
 
 // ..
-app.use(userInViews());
 app.use("/", authRouter);
 app.use("/", indexRouter);
-app.use("/", usersRouter);
 
 // ..
 app.use(express.static("public"));
@@ -253,39 +248,6 @@ app.post("/create_url", function(req, res) {
       message: "Invalid Expiry Date provided!"
     });
   }
-});
-
-app.post("/email_invite", function(req, res) {
-  console.log(req.body);
-  //send_email('harishchawla@hotmail.com','this is some body');
-  send_email(
-    req.body.send_to_email,
-    `Use this link to join the show ${req.body.url}. Remember, it expires ${req.body.expires}`
-  )
-    .then(() => {
-      res.send({ message: `Email sent!` });
-    })
-    .catch(e => {
-      Sentry.captureException(e);
-    });
-});
-
-app.post("/sms_invite", function(req, resposne) {});
-
-app.get("/sdk", function(req, res) {
-  res.sendFile(__dirname + "/views/sdk.html");
-});
-
-app.get("/theo", function(req, res) {
-  res.sendFile(__dirname + "/views/theo.html");
-});
-
-app.get("/theofs", function(req, res) {
-  res.sendFile(__dirname + "/views/theofs.html");
-});
-
-app.get("/sdkmm", function(req, res) {
-  res.sendFile(__dirname + "/views/sdk-mm.html");
 });
 
 // listen for requests :)

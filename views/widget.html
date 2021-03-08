@@ -16,11 +16,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <link rel="stylesheet" href="/momentum-ui.min.css">
-    <link rel="stylesheet" href="/momentum-ui-icons.min.css">
-    <link rel="stylesheet" href="/collab-ui.min.css">
-    <link rel="stylesheet" href="/collab-ui-icons.min.css">
+
+    <link rel="stylesheet" href="/css/momentum-ui.min.css">
+    <link rel="stylesheet" href="/css/momentum-ui-icons.min.css">
+    <link rel="stylesheet" href="/css/collab-ui.min.css">
+    <link rel="stylesheet" href="/css/collab-ui-icons.min.css">
     <!-- import JQuery for "dialog" widget  -->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -33,11 +33,11 @@
         });
       } );
     </script>
-    
+
     <!-- import Cisco Webex Teams Widget library -->
     <script src="https://code.s4d.io/widget-space/production/bundle.js"></script>
     <link rel="stylesheet" href="https://code.s4d.io/widget-space/production/main.css">
-    
+
     <!-- cookie parser for JS-->
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
@@ -48,7 +48,7 @@
       <div id="dialog" title=".">
         <div id="my-ciscospark-widget"></div>
       </div>
-    
+
     <script>
       var widgetEl = document.getElementById('my-ciscospark-widget');
       // Init a new widget
@@ -62,7 +62,7 @@
         initialActivity: 'meet',
         secondaryActivitiesFullWidth: false
       });
-      document.getElementById('dialog').title = "Hello! " + Cookies.get('label'); 
+      document.getElementById('dialog').title = "Hello! " + Cookies.get('label');
     </script>
 
   </body>
