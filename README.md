@@ -11,7 +11,9 @@ npm install pug
 ```
 
 **Environment File**
-You will need a file titled ".env" in the root directory that contains the following variables.  
+
+You will need a file titled ".env" in the root directory that contains the following variables.
+
 Please note you will **need to replace most of these values with your own!**
 ```
 GLITCH_DEBUGGER=true #Only required if you run this on glitch.me
