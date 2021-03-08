@@ -2,11 +2,17 @@ Node v12.16.1 (npm v6.13.4)
 
 **Node Module Requirements**
 npm install dotenv
+
 npm install express
+
 npm install body-parser
+
 npm install jsonwebtoken
+
 npm install passport-auth0
+
 npm install pug
+
 
 **Environment File**
 You will need a file titled ".env" in the root directory that contains the following variables.  
