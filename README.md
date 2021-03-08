@@ -43,13 +43,20 @@ AUTH0_CALLBACK_URL='https://1234.eu.ngrok.io/callback' #This is BASE_URL + "/cal
 ```
 
 When you create a new Auth0 app, please use the following settings:
+
 Application Type: **Regular Web Application**
 Token Endpoint Authentication Method: **POST**
+
 Application login uri: **BASE_URL + "/login"**
+
 Application callback URLs: **BASE_URL + "/callback"**
+
 Application logout uri: **BASE_URL + "/logout?returnTo=https%3A%2F%2Fwww.cisco.com, https://www.cisco.com"**
+
 Allowed Web Origins: Your Auth0 domain, example: https://dev-rd1234p.us.auth0.com
 
+
 Once all of the above is complete, you can run:
+
 ```node server.js```
 
