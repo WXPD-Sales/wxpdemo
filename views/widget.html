@@ -51,17 +51,21 @@
 
     <script>
       var widgetEl = document.getElementById('my-ciscospark-widget');
+      const userType = Cookies.get("type");
       // Init a new widget
-      ciscospark.widget(widgetEl).spaceWidget({
-        guestToken: Cookies.get('token'),
-        //accessToken: 'NzJmN2VhN2MtYjQzOS00Y2U3LWJjYmEtNWJiMWIzN2JjMzYxNzg1M2U2MTQtYjAx_PF84_1eb65fdf-9643-417f-9974-ad72cae0e10f',
+      let widgetOptions = {
         destinationId: Cookies.get('target'),
-        //destinationId: 'Y2lzY29zcGFyazovL3VzL1JPT00vNmNmNzJlMDAtNjZkMC0xMWU5LWIxN2YtMjE5NGQyYTI1ODAx',
         destinationType: 'sip',
         spaceActivities: {"files":true,"meet":true,"message":true,"people":false},
         initialActivity: 'meet',
         secondaryActivitiesFullWidth: false
-      });
+      }
+      if(userType == "employee"){
+        widgetOptions.accessToken = Cookies.get('token');
+      } else {
+        widgetOptions.guestToken = Cookies.get('token');
+      }
+      ciscospark.widget(widgetEl).spaceWidget(widgetOptions);
       document.getElementById('dialog').title = "Hello! " + Cookies.get('label');
     </script>
 

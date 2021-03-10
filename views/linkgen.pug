@@ -42,25 +42,25 @@ header.padit.md-top-bar.md-top-bar--dark.myrow(role='navigation')
           // Note: use either image or icon, but not both
           // img src="/assets/spark-logo.svg" alt="Momentum UI"
           i.icon.icon-cisco-logo
-        .md-brand__title     Webex Demo Link Generator
+        .md-brand__title     Webex Demo Session Generator
 #container(align='center' style='margin: 10px; align-content: center;')
   main
     br
     section#guest_info_section.dreams
       p.bold
       h4 To what endpoint should we connect the users?
-      input#sipuri.cui-input(type='email' placeholder='SIP URI ' required='')
+      input#sipuri.cui-input(type='email' placeholder='SIP URI or roomId' required='')
       p
       br
       p.bold
-      h4 When should this link expire?
+      h4 When should the session expire?
       h5#selected_expiry
         | Select a Date and Time...
       i#flatpckr.md-button--circle.md-button--48.cui-icon.icon.icon-calendar-month_36(style='color:#000000')
       p
       br
       button#create_button.cui-button
-        | Create Access Link
+        | Create Session
     section
       div
         br
@@ -68,7 +68,7 @@ header.padit.md-top-bar.md-top-bar--dark.myrow(role='navigation')
     section#send_as_email_section.dreams(style='display:none;')
       br
       button#reload_button.cui-button(onclick='window.location.reload();')
-        | Create another Link
+        | Create Another Session
   br
   footer
     | Made with 

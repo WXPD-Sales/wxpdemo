@@ -82,30 +82,38 @@ function copyFunction(url){
 
 function buildTable(response_message){
   let table = $('<table>', {class:"link-table"})
-      .append($('<tr>', {class:"link-row"})
+      .append($('<tr>')
         .append($('<td>', {class:"link-cell"}).text('Message'))
         .append($('<td>', {class:"link-cell"}).text(response_message['message'])))
-  if(response_message.hasOwnProperty('urls')){
-    for(let i in response_message['urls']){
-      table.append($('<tr>', {class:"link-row"})
-        .append($('<td>', {class:"link-cell"}).text('URL'))
-        .append($('<td>', {class:"link-cell"})
-          .append($('<a>').attr("id", "generated-link-url")
-                          .attr("href", response_message['urls'][i])
-                          .attr("target", "_blank")
-                          .text(response_message['urls'][i]))
-          .append($('<button>', {class:'md-button md-button--circle md-button--32 copy-button', onclick:'copyFunction("'+response_message['urls'][i]+'")'})
-            .append($('<i>', {class:'cui-icon icon icon-copy_16'}))
-          )
-        )
-      )
-    }
-  }
   if(response_message.hasOwnProperty('expires'))
-    table.append($('<tr>', {class:"link-row"})
+    table.append($('<tr>')
       .append($('<td>', {class:"link-cell"}).text('Expires'))
       .append($('<td>', {class:"link-cell"}).text(response_message['expires']))
     )
+  if(response_message.hasOwnProperty('urls')){
+    for(let urlType in response_message['urls']){
+      table.append($('<tr>', {class:"header-row"})
+        .append($('<td>', {class:"link-cell", "style":"font-weight:bold"}).text(urlType + ' URLs'))
+        .append($('<td>', {class:"link-cell"})));
+      for(let url in response_message['urls'][urlType]){
+        let cellTitle = "SDK";
+        if(response_message['urls'][urlType][url].indexOf("widget") > 0) cellTitle = "Widget";
+        table.append($('<tr>')
+          .append($('<td>', {class:"link-cell"}).text(cellTitle))
+          .append($('<td>', {class:"link-cell"})
+            .append($('<a>').attr("id", "generated-link-url")
+                            .attr("href", response_message['urls'][urlType][url])
+                            .attr("target", "_blank")
+                            .text(response_message['urls'][urlType][url]))
+            .append($('<button>', {class:'md-button md-button--circle md-button--32 copy-button', onclick:'copyFunction("'+response_message['urls'][urlType][url]+'")'})
+              .append($('<i>', {class:'cui-icon icon icon-copy_16'}))
+            )
+          )
+        )
+      }
+    }
+  }
+
   return table;
 }
 

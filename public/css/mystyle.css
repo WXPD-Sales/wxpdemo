@@ -52,6 +52,11 @@
   min-width: 100px;
 }
 
+.header-row {
+  display: grid;
+  margin-top: 10px;
+}
+
 #call_container {
   text-align: center;
 }

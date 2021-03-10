@@ -129,6 +129,49 @@ app.get("/guestsdk/:guest_session_id", secured(), renderFunc);
 app.get("/guest/:guest_session_id", secured(), renderFunc);
 
 
+let employeePaths = {"employee":"guest", "employee-widget":"widget"}
+function renderEmployeeFunc(req, res) {
+  rr.get(`URL:${req.params.guest_session_id}`).then(result => {
+    if (result == 1) {
+      rr.get(req.params.guest_session_id).then(result => {
+        parts = req.originalUrl.split("/");
+        console.log(parts);
+        if(req.session.userToken){
+          request.get({
+              url: 'https://webexapis.com/people/me',
+              headers: { 'Authorization': `Bearer ${req.session.userToken}` }
+            },function(error, resp, body) {
+              console.log(body);
+                if (!error && resp.statusCode === 200) {
+                  jbody = JSON.parse(body);
+                  res.cookie("type", "employee");
+                  res.cookie("token", req.session.userToken);
+                  res.cookie("target", JSON.parse(result).sip_target);
+                  res.cookie("label", jbody.displayName);
+                  res.sendFile(__dirname + `/views/${employeePaths[parts[1]]}.html`);
+                } else {
+                  res.json(error);
+                }
+              }
+            );
+        } else {
+          res.redirect(`${process.env.WEBEX_AUTH_URL}&state=${parts[1]}/${req.params.guest_session_id}`);
+        }
+      });
+    } else {
+      res.send({ message: `this link has expired` });
+    }
+  });
+}
+app.get("/employee/:guest_session_id", renderEmployeeFunc);
+app.get("/employee-widget/:guest_session_id", renderEmployeeFunc);
+
+
+function isRoomId(myTarget){
+  let result = base64url.decode(myTarget);
+  return result.indexOf('ciscospark://us/ROOM/') >= 0;
+}
+
 app.get("/create_token", function(req, res) {
   request.post({
       url: 'https://webexapis.com/access_token',
@@ -147,7 +190,7 @@ app.get("/create_token", function(req, res) {
           if(req.query.state == "linkgen"){
             res.redirect(`/linkgen`);
           } else {
-            res.redirect(`/employee/${req.query.state}`);
+            res.redirect(`/${req.query.state}`);
           }
         } else {
           res.json(error);
@@ -155,46 +198,6 @@ app.get("/create_token", function(req, res) {
       }
     );
 });
-
-
-app.get("/employee/:guest_session_id", function(req, res) {
-  rr.get(`URL:${req.params.guest_session_id}`).then(result => {
-    if (result == 1) {
-      rr.get(req.params.guest_session_id).then(result => {
-        if(req.session.userToken){
-          request.get({
-              url: 'https://webexapis.com/people/me',
-              headers: { 'Authorization': `Bearer ${req.session.userToken}` }
-            },function(error, resp, body) {
-              console.log(body);
-                if (!error && resp.statusCode === 200) {
-                  jbody = JSON.parse(body);
-                  res.cookie("type", "employee");
-                  res.cookie("token", req.session.userToken);
-                  res.cookie("target", JSON.parse(result).sip_target);
-                  res.cookie("label", jbody.displayName);
-                  res.sendFile(__dirname + "/views/guest.html");
-                } else {
-                  res.json(error);
-                }
-              }
-            );
-        } else {
-          res.redirect(`${process.env.WEBEX_AUTH_URL}&state=${req.params.guest_session_id}`);
-        }
-      });
-    } else {
-      res.send({ message: `this link has expired` });
-    }
-  });
-});
-
-
-function isRoomId(myTarget){
-  let result = base64url.decode(myTarget);
-  return result.indexOf('ciscospark://us/ROOM/') >= 0;
-}
-
 
 app.post("/create_url", function(req, res) {
   if (req.body.expiry_date) {
@@ -210,17 +213,19 @@ app.post("/create_url", function(req, res) {
           req.body.expiry_date
         )
       );
-      let urlPaths = ["guest", "employee"];
-      let respObjects = [];
+      let urlPaths = {"guest":["guest", "widget"], "employee": ["employee", "employee-widget"]};
+      let respObjects = {};
       let rrPromises = [];
       for(let i in urlPaths){
         let guestSessionID = randomize("Aa0", 16);
-        let guestUrl = `https://${req.get("host")}/${urlPaths[i]}/${guestSessionID}`;
-        req.body.url = guestUrl;
-        req.body.display_name = urlPaths[i].charAt(0).toUpperCase() + urlPaths[i].slice(1);
+        let displayName = i.charAt(0).toUpperCase() + i.slice(1);//capitalize first letter
+        req.body.display_name = displayName
         let rrPromise = rr.setURL(guestSessionID, JSON.stringify(req.body), Urlexpiry)
           .then(() => {
-            respObjects.push(guestUrl);
+            respObjects[displayName] = [];
+            for(let j in urlPaths[i]){
+              respObjects[displayName].push(`https://${req.get("host")}/${urlPaths[i][j]}/${guestSessionID}`);
+            }
           })
           .catch(function(err) {
             console.log(err.message);
