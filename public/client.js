@@ -39,8 +39,10 @@ create_button.onclick = function (event){
 }
 let guest_data = {};
 async function create_guest_data_object(){
+  let sipval = $("input[type='radio'][name='sip_uri']:checked").val();
+  if(sipval == "custom") sipval = document.getElementById('sipuri').value;
+  guest_data.sip_target = sipval;
   guest_data.expiry_date = picked_date;
-  guest_data.sip_target = document.getElementById('sipuri').value;
   guest_data.offset = offset;
   return guest_data;
 };

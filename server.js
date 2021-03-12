@@ -148,6 +148,9 @@ function renderEmployeeFunc(req, res) {
                   res.cookie("token", req.session.userToken);
                   res.cookie("target", JSON.parse(result).sip_target);
                   res.cookie("label", jbody.displayName);
+                  console.log(employeePaths);
+                  console.log(parts[1]);
+                  console.log(employeePaths[parts[1]]);
                   res.sendFile(__dirname + `/views/${employeePaths[parts[1]]}.html`);
                 } else {
                   res.json(error);
@@ -187,6 +190,7 @@ app.get("/create_token", function(req, res) {
           jbody = JSON.parse(body);
           console.log(req.query.state);
           req.session.userToken = jbody.access_token;
+          req.session.save();
           if(req.query.state == "linkgen"){
             res.redirect(`/linkgen`);
           } else {
@@ -199,9 +203,41 @@ app.get("/create_token", function(req, res) {
     );
 });
 
+function generateLinks(req, res, Urlexpiry){
+  console.log('generateLinks');
+  let urlPaths = {"guest":["guest", "widget"], "employee": ["employee", "employee-widget"]};
+  let respObjects = {};
+  let rrPromises = [];
+  for(let i in urlPaths){
+    let guestSessionID = randomize("Aa0", 16);
+    let displayName = i.charAt(0).toUpperCase() + i.slice(1);//capitalize first letter
+    req.body.display_name = displayName
+    let rrPromise = rr.setURL(guestSessionID, JSON.stringify(req.body), Urlexpiry)
+      .then(() => {
+        respObjects[displayName] = [];
+        for(let j in urlPaths[i]){
+          respObjects[displayName].push(`https://${req.get("host")}/${urlPaths[i][j]}/${guestSessionID}`);
+        }
+      })
+      .catch(function(err) {
+        console.log(err.message);
+      });
+    rrPromises.push(rrPromise);
+  }
+  Promise.all(rrPromises).then(results => {
+    console.log(respObjects);
+    res.send({
+      result: "OK",
+      message: "Session Created",
+      urls: respObjects,
+      expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}`
+    });
+  })
+}
+
 app.post("/create_url", function(req, res) {
   if (req.body.expiry_date) {
-    if(email_validator.validate(req.body.sip_target) || isRoomId(req.body.sip_target)){
+    if(email_validator.validate(req.body.sip_target) || isRoomId(req.body.sip_target) || req.body.sip_target == "pmr"){
       console.log(thismoment(req.body.expiry_date).utcOffset(req.body.offset));
       let endmoment = thismoment(req.body.expiry_date).utcOffset(
         req.body.offset
@@ -213,34 +249,27 @@ app.post("/create_url", function(req, res) {
           req.body.expiry_date
         )
       );
-      let urlPaths = {"guest":["guest", "widget"], "employee": ["employee", "employee-widget"]};
-      let respObjects = {};
-      let rrPromises = [];
-      for(let i in urlPaths){
-        let guestSessionID = randomize("Aa0", 16);
-        let displayName = i.charAt(0).toUpperCase() + i.slice(1);//capitalize first letter
-        req.body.display_name = displayName
-        let rrPromise = rr.setURL(guestSessionID, JSON.stringify(req.body), Urlexpiry)
-          .then(() => {
-            respObjects[displayName] = [];
-            for(let j in urlPaths[i]){
-              respObjects[displayName].push(`https://${req.get("host")}/${urlPaths[i][j]}/${guestSessionID}`);
+
+      if(req.body.sip_target == "pmr"){
+        request.get({
+            url: 'https://webexapis.com/v1/meetingPreferences/personalMeetingRoom',
+            headers: { 'Authorization': `Bearer ${req.session.userToken}` }
+          },function(error, resp, body) {
+            console.log(body);
+              if (!error && resp.statusCode === 200) {
+                jbody = JSON.parse(body);
+                console.log(jbody['personalMeetingRoomLink']);
+                req.body.sip_target = jbody['personalMeetingRoomLink'];
+                console.log('first');
+                generateLinks(req, res, Urlexpiry);
+              } else {
+                res.json(error);
+              }
             }
-          })
-          .catch(function(err) {
-            console.log(err.message);
-          });
-        rrPromises.push(rrPromise);
+          );
+      } else {
+        generateLinks(req, res, Urlexpiry);
       }
-      Promise.all(rrPromises).then(results => {
-        console.log(respObjects);
-        res.send({
-          result: "OK",
-          message: "Session Created",
-          urls: respObjects,
-          expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}`
-        });
-      })
     } else {
       res.send({
         result: "Error",

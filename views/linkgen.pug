@@ -49,7 +49,14 @@ header.padit.md-top-bar.md-top-bar--dark.myrow(role='navigation')
     section#guest_info_section.dreams
       p.bold
       h4 To what endpoint should we connect the users?
-      input#sipuri.cui-input(type='email' placeholder='SIP URI or roomId' required='')
+      div#sip_uri_radio.display-radio
+        div#sip_uri_radio-pmr
+          input.radio-input(type="radio", name="sip_uri", value="pmr", checked)
+          | My Personal Meeting Room
+        div#sip_uri_radio-custom
+          input.radio-input(type="radio", name="sip_uri", value="custom")
+          | #[input#sipuri.cui-input(type='email' placeholder='SIP URI or roomId' required='')]
+      //input#sipuri.cui-input(type='email' placeholder='SIP URI or roomId' required='')
       p
       br
       p.bold
