@@ -80,6 +80,7 @@ passport.deserializeUser(function(user, done) {
 
 app.engine('pug', require('pug').__express)
 app.set("view engine", "pug");
+app.set('views', __dirname + '/public');
 
 var authRouter = require("./routes/auth");
 var indexRouter = require("./routes/index");
@@ -117,7 +118,7 @@ function renderFunc(req, res) {
         res.cookie("token", tokgen(JSON.parse(result).display_name).token);
         res.cookie("target", JSON.parse(result).sip_target);
         res.cookie("label", JSON.parse(result).display_name);
-        res.sendFile(__dirname + `/views/${parts[1]}.html`);
+        res.sendFile(__dirname + `/public/${parts[1]}.html`);
       });
     } else {
       res.send({ message: `this link has expired` });
@@ -132,7 +133,7 @@ function quickRenderFunc(req, res) {
   let useFile = parts[1];
   if(useFile.indexOf("?") > 0) useFile = useFile.split("?")[0];
   useFile = useFiles[useFile];
-  res.sendFile(__dirname + `/views/${useFile}.html`);
+  res.sendFile(__dirname + `/public/${useFile}.html`);
 }
 
 app.get("/widget", quickRenderFunc);
@@ -160,7 +161,7 @@ function renderEmployeeFunc(req, res) {
                   res.cookie("token", req.session.userToken);
                   res.cookie("target", JSON.parse(result).sip_target);
                   res.cookie("label", jbody.displayName);
-                  res.sendFile(__dirname + `/views/${employeePaths[parts[1]]}.html`);
+                  res.sendFile(__dirname + `/public/${employeePaths[parts[1]]}.html`);
                 } else {
                   res.json(error);
                 }
