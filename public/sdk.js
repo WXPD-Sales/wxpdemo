@@ -92,7 +92,7 @@ webex.once("ready", () => {
   console.log(`Webex OBJ ready ${webex.version}`);
   if(userType == "guest"){
     webex.authorization
-      .requestAccessTokenFromJwt({token})
+      .requestAccessTokenFromJwt({jwt:token})
       .then(finalizeWebexAuth)
       .catch(e => {
         console.error(e);
