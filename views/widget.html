@@ -50,20 +50,28 @@
       </div>
 
     <script>
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const destination = urlParams.get('destination') == null ? Cookies.get('target') : urlParams.get('destination');
+      const destinationType = urlParams.get('destinationType') == null ? Cookies.get('destinationType') : urlParams.get('destinationType');
+      const token = urlParams.get('token') == null ? Cookies.get('token') : urlParams.get('token');
+      console.log(destination);
+      console.log(destinationType);
+      console.log(token);
       var widgetEl = document.getElementById('my-ciscospark-widget');
-      const userType = Cookies.get("type");
+      const userType = Cookies.get("userType");
       // Init a new widget
       let widgetOptions = {
-        destinationId: Cookies.get('target'),
-        destinationType: 'sip',
+        destinationId: destination,
+        destinationType: destinationType,
         spaceActivities: {"files":true,"meet":true,"message":true,"people":false},
-        initialActivity: 'meet',
+        initialActivity: destinationType == "email" ? 'message' : 'meet',
         secondaryActivitiesFullWidth: false
       }
-      if(userType == "employee"){
-        widgetOptions.accessToken = Cookies.get('token');
+      if(userType == "guest"){
+        widgetOptions.guestToken = token;
       } else {
-        widgetOptions.guestToken = Cookies.get('token');
+        widgetOptions.accessToken = token;
       }
       ciscospark.widget(widgetEl).spaceWidget(widgetOptions);
       document.getElementById('dialog').title = "Hello! " + Cookies.get('label');

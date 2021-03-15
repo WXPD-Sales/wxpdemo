@@ -105,18 +105,19 @@ app.get('/linkgen', function (req, res, next) {
   }
 });
 
-let paths = {"guest":"guest", "widget":"widget", "guestsdk":"sdk"}
 function renderFunc(req, res) {
   rr.get(`URL:${req.params.guest_session_id}`).then(result => {
     if (result == 1) {
       rr.get(req.params.guest_session_id).then(result => {
         parts = req.originalUrl.split("/");
         console.log(parts);
-        res.cookie("type", parts[1]);
+
+
+        res.cookie("userType", "guest");
         res.cookie("token", tokgen(JSON.parse(result).display_name).token);
         res.cookie("target", JSON.parse(result).sip_target);
         res.cookie("label", JSON.parse(result).display_name);
-        res.sendFile(__dirname + `/views/${paths[parts[1]]}.html`);
+        res.sendFile(__dirname + `/views/${parts[1]}.html`);
       });
     } else {
       res.send({ message: `this link has expired` });
@@ -124,8 +125,19 @@ function renderFunc(req, res) {
   });
 }
 
+let useFiles = {"guest":"guest", "widget":"widget", "employee":"guest", "employee-widget":"widget"}
+function quickRenderFunc(req, res) {
+  parts = req.originalUrl.split("/");
+  console.log(parts);
+  let useFile = parts[1];
+  if(useFile.indexOf("?") > 0) useFile = useFile.split("?")[0];
+  useFile = useFiles[useFile];
+  res.sendFile(__dirname + `/views/${useFile}.html`);
+}
+
+app.get("/widget", quickRenderFunc);
+app.get("/guest", quickRenderFunc);
 app.get("/widget/:guest_session_id", secured(), renderFunc);
-app.get("/guestsdk/:guest_session_id", secured(), renderFunc);
 app.get("/guest/:guest_session_id", secured(), renderFunc);
 
 
@@ -144,13 +156,10 @@ function renderEmployeeFunc(req, res) {
               console.log(body);
                 if (!error && resp.statusCode === 200) {
                   jbody = JSON.parse(body);
-                  res.cookie("type", "employee");
+                  res.cookie("userType", "employee");
                   res.cookie("token", req.session.userToken);
                   res.cookie("target", JSON.parse(result).sip_target);
                   res.cookie("label", jbody.displayName);
-                  console.log(employeePaths);
-                  console.log(parts[1]);
-                  console.log(employeePaths[parts[1]]);
                   res.sendFile(__dirname + `/views/${employeePaths[parts[1]]}.html`);
                 } else {
                   res.json(error);
@@ -166,6 +175,9 @@ function renderEmployeeFunc(req, res) {
     }
   });
 }
+
+app.get("/employee", quickRenderFunc);
+app.get("/employee-widget", quickRenderFunc);
 app.get("/employee/:guest_session_id", renderEmployeeFunc);
 app.get("/employee-widget/:guest_session_id", renderEmployeeFunc);
 
@@ -204,7 +216,6 @@ app.get("/create_token", function(req, res) {
 });
 
 function generateLinks(req, res, Urlexpiry){
-  console.log('generateLinks');
   let urlPaths = {"guest":["guest", "widget"], "employee": ["employee", "employee-widget"]};
   let respObjects = {};
   let rrPromises = [];
@@ -249,7 +260,7 @@ app.post("/create_url", function(req, res) {
           req.body.expiry_date
         )
       );
-
+      res.cookie("destinationType", 'sip');
       if(req.body.sip_target == "pmr"){
         request.get({
             url: 'https://webexapis.com/v1/meetingPreferences/personalMeetingRoom',
@@ -260,7 +271,6 @@ app.post("/create_url", function(req, res) {
                 jbody = JSON.parse(body);
                 console.log(jbody['personalMeetingRoomLink']);
                 req.body.sip_target = jbody['personalMeetingRoomLink'];
-                console.log('first');
                 generateLinks(req, res, Urlexpiry);
               } else {
                 res.json(error);
@@ -268,7 +278,18 @@ app.post("/create_url", function(req, res) {
             }
           );
       } else {
-        generateLinks(req, res, Urlexpiry);
+        request.get({
+            url: `https://webexapis.com/v1/people?email=${req.body.sip_target}`,
+            headers: { 'Authorization': `Bearer ${req.session.userToken}` }
+          },function(error, resp, body) {
+              console.log(body);
+              if (!error && resp.statusCode === 200) {
+                jbody = JSON.parse(body);
+                if(jbody['items'].length != 0) res.cookie("destinationType", 'email');
+              }
+              generateLinks(req, res, Urlexpiry);
+            }
+          );
       }
     } else {
       res.send({

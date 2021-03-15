@@ -5,19 +5,21 @@ let credentials = {
   }
 };
 
-const userType = Cookies.get("type");
-const destination = Cookies.get("target");
-let jwt;
-let userToken;
+const userType = Cookies.get("userType");
+
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const destination = urlParams.get('destination') == null ? Cookies.get("target") : urlParams.get('destination');
+const token = urlParams.get('token') == null ? Cookies.get("token") : urlParams.get('token');
+console.log(destination);
+console.log(token);
 console.log(userType);
-if(userType == "employee"){
-  $('#main-title').text("Webex Employee Access");
-  userToken = Cookies.get("token");
-  console.log(`Found userToken - ${userToken}`);
-  credentials.credentials = { access_token: userToken };
+if(userType == "guest"){
+  console.log(`Found JWT - ${token}`);
 } else {
-  jwt = Cookies.get("token");
-  console.log(`Found JWT - ${jwt}`);
+  $('#main-title').text("Webex Employee Access");
+  console.log(`Found token - ${token}`);
+  credentials.credentials = { access_token: token };
 }
 
 const webex = (window.webex = Webex.init(credentials));
@@ -88,9 +90,9 @@ let m, remoteShareStream;
 
 webex.once("ready", () => {
   console.log(`Webex OBJ ready ${webex.version}`);
-  if(jwt != null){
+  if(userType == "guest"){
     webex.authorization
-      .requestAccessTokenFromJwt({jwt})
+      .requestAccessTokenFromJwt({token})
       .then(finalizeWebexAuth)
       .catch(e => {
         console.error(e);
@@ -395,7 +397,7 @@ document.getElementById("call").addEventListener("click", event => {
     });
 });
 
-if(userType == "employee"){
+if(userType != "guest"){
   // Listen incoming calls
   webex.meetings.on('meeting:added', (addedMeetingEvent) => {
   if (addedMeetingEvent.type === 'INCOMING') {
