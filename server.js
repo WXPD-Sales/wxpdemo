@@ -81,6 +81,7 @@ passport.deserializeUser(function(user, done) {
 app.engine('pug', require('pug').__express)
 app.set("view engine", "pug");
 app.set('views', __dirname + '/public');
+//app.set('/css', __dirname +'/public/css');
 
 var authRouter = require("./routes/auth");
 var indexRouter = require("./routes/index");
@@ -141,6 +142,9 @@ app.get("/guest", quickRenderFunc);
 app.get("/widget/:guest_session_id", secured(), renderFunc);
 app.get("/guest/:guest_session_id", secured(), renderFunc);
 
+app.use('/widget', express.static(__dirname + '/public'));
+app.use('/guest', express.static(__dirname + '/public'));
+
 
 let employeePaths = {"employee":"guest", "employee-widget":"widget"}
 function renderEmployeeFunc(req, res) {
@@ -181,6 +185,9 @@ app.get("/employee", quickRenderFunc);
 app.get("/employee-widget", quickRenderFunc);
 app.get("/employee/:guest_session_id", renderEmployeeFunc);
 app.get("/employee-widget/:guest_session_id", renderEmployeeFunc);
+
+app.use('/employee', express.static(__dirname + '/public'));
+app.use('/employee-widget', express.static(__dirname + '/public'));
 
 
 function isRoomId(myTarget){
