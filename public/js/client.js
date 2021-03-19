@@ -1,15 +1,20 @@
 const offset = new Date().getTimezoneOffset();
 var today = new Date();
-var time = today.getHours() + ":" + today.getMinutes();
-let picked_date;
-console.log(`time is ${time}`);
+var defaultDate = new Date(today);
+defaultDate.setDate(today.getDate() + 1);
+var time = today.toISOString().slice(11,16);
+let picked_date = defaultDate.toISOString().slice(0,10) + " " + time;
+document.getElementById('selected_expiry').innerHTML = picked_date;
+//console.log(`today is ${time}`);
+//console.log(`today is ${today}`);
+//console.log(picked_date);
 
 flatpickr("#flatpckr", {
   enableTime: true,
   dateFormat: "Y-m-d H:i",
   minDate: "today",
   minTime: time,
-  defaultTime: time,
+  defaultDate: picked_date,
   onChange: function(selectedDates, dateStr, instance) {
     console.log(`selection changed ${dateStr} `);
     picked_date = dateStr;
@@ -35,8 +40,16 @@ create_button.onclick = function (event){
   catch (err){
     console.log(err);
   }
-
 }
+
+$("#sipuri").focus(function(){
+  $('.radio-input[name=sip_uri][value=custom]').prop("checked", true);
+})
+
+$("#sip_uri_radio-pmr").click(function(){
+  $('.radio-input[name=sip_uri][value=pmr]').prop("checked", true);
+})
+
 let guest_data = {};
 async function create_guest_data_object(){
   let sipval = $("input[type='radio'][name='sip_uri']:checked").val();

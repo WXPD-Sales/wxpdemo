@@ -4,31 +4,6 @@
     <link rel="stylesheet" href="css/mystyle.css">
     <link rel="stylesheet" href="css/collab-ui.min.css" />
     <link rel="stylesheet" href="css/momentum-ui.min.css" />
-    <style>
-      .self {
-        position: absolute;
-        z-index: 100;
-        display: inline-block;
-      }
-      .remote {
-        width: 90%;
-        z-index: 10;
-        display: inline-block;
-
-      }
-      .remote_video {
-        width: 100%;
-      }
-      .self_video {
-        width: 100px;
-
-      }
-      .padit {
-        padding: 10px;
-      }
-      #call_container {
-      }
-    </style>
 
     <!-- cookie parser for JS-->
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
@@ -36,8 +11,8 @@
   </head>
   <title>Webex Connect Demo</title>
   <body>
-    <header class="padit md-top-bar md-top-bar--dark myrow" role="navigation">
-      <div class="padit md-top-bar__container">
+    <header class="md-top-bar md-top-bar--dark myrow" role="navigation">
+      <div class="md-top-bar__container">
         <div class="md-top-bar__brand">
           <a class="md-brand" href="/">
             <div class="md-brand__logo md-brand__logo--pad">
@@ -48,7 +23,7 @@
         </div>
       </div>
     </header>
-    <div class="md-top-bar__brand">
+    <div id="call_container">
       <div id="call_buttons" class="myrow" style="width:auto;">
             <div id="call_div" class="padit call-button" style="display:None">
               <button id="call" class="md-button md-button--circle md-button--44 md-button--green" alt="Make video call " type="button">
@@ -76,22 +51,22 @@
               </button>
             </div>
       </div>
-      <div id="v_select" class="padit myrow" style="display:none;justify-content:center;">
-        <i class="icon icon-camera-swap_24"></i><select id="videoSource" style="width:auto;"></select>
+      <div id="peripheral_selectors">
+        <div id="v_select" class="padit myrow" style="display:None;justify-content:center;">
+          <i class="icon icon-camera-swap_24 circle-icon"></i><select id="videoSource" style="width:auto;"></select>
+        </div>
+        <div id="a_select" class="padit myrow" style="display:None;justify-content:center;">
+          <i class="icon icon-microphone_24 circle-icon"></i><select id="audioSource" style="width:auto;"></select>
+        </div>
       </div>
-      <div id="a_select" class="padit myrow" style="display:none;justify-content:center;">
-        <i class="icon icon-microphone_24"></i><select id="audioSource" style="width:auto;"></select>
-      </div>
-    </div>
-    <div id="call_container" class="padit">
-      <div id="self" class="self">
-        <video id="self-view" class="self_video" muted autoplay></video>
-        <video id="self-share" class="self_video" muted autoplay></video>
-      </div>
-
       <div id="remote" class="remote">
+        <div id="self" class="self">
+          <video id="self-view" class="self_video" muted autoplay></video>
+          <video id="self-share" class="self_video" muted autoplay></video>
+        </div>
         <audio id="remote-view-audio" autoplay></audio>
-        <video id="remote-view-video" class="remote_video" autoplay></video>
+        <video id="remote-view-video" class="remote_video" autoplay>
+        </video>
       </div>
     </div>
 

@@ -1,18 +1,25 @@
 .self {
   position: absolute;
-  z-index: 100;
+  z-index: 4;
   display: inline-block;
 }
 .remote {
-  width: 90%;
-  z-index: 10;
+  height: 100%;
+  width:90%;
+  z-index: 2;
   display: inline-block;
 }
+
 .remote_video {
-  width: 100%;
+  height:100%;
+  z-index:3;
+  max-width: 100%;
+  background-size: cover;
 }
+
 .self_video {
-  width: 100px;
+  width: 150px;
+  z-index: 5;
 }
 
 .display-radio {
@@ -57,6 +64,40 @@
   margin-top: 10px;
 }
 
+#call_buttons {
+  position:absolute;
+  left:0;
+  right:0;
+  margin:auto;
+  margin-top:10px;
+  z-index: 1000;
+}
+
 #call_container {
   text-align: center;
+  margin:auto;
+  margin-top: 10px;
+  position: relative;
+  height: 85%;
+  width:85%;
+  z-index:1;
+}
+
+#peripheral_selectors {
+  position:absolute;
+  left:0;
+  right:0;
+  margin:auto;
+  bottom:0;
+  margin-bottom: 10px;
+  z-index: 1000;
+}
+
+.circle-icon {
+  background: #e6e8e8;
+  border-radius:50%;
+  text-align: center;
+  vertical-align: middle;
+  padding:5px;
+  margin-right: 5px;
 }

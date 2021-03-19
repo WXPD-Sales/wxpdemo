@@ -1,12 +1,6 @@
 <!-- This is a static file -->
 <!-- served from your routes in server.js -->
 
-<!-- You might want to try something fancier: -->
-<!-- html/nunjucks docs: https://mozilla.github.io/nunjucks/ -->
-<!-- pug: https://pugjs.org/ -->
-<!-- haml: http://haml.info/ -->
-<!-- hbs(handlebars): http://handlebarsjs.com/ -->
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -21,7 +15,6 @@
     <link rel="stylesheet" href="css/momentum-ui-icons.min.css">
     <link rel="stylesheet" href="css/collab-ui.min.css">
     <link rel="stylesheet" href="css/collab-ui-icons.min.css">
-    <!-- import JQuery for "dialog" widget  -->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -74,7 +67,7 @@
         widgetOptions.accessToken = token;
       }
       ciscospark.widget(widgetEl).spaceWidget(widgetOptions);
-      document.getElementById('dialog').title = "Hello! " + Cookies.get('label');
+      document.getElementById('dialog').title = `Hello, ${Cookies.get('label')}!`;
     </script>
 
   </body>
