@@ -16,7 +16,7 @@ if(mobileCheck()){ //increase button sizes for mobile devices
     $('.padit').css('padding', '20px');
   })
 }
-
+let listenOnly = false;
 let credentials = {
   logger: {
     level: "debug"
@@ -130,6 +130,7 @@ function finalizeWebexAuth(data){
     webex.meetings.register()
       .then((data) => {
         $("#call_div").show();
+        $("#call_listen_div").show();
       })
       .catch(err => {
       console.error(err);
@@ -248,6 +249,7 @@ function bindMeetingEvents(meeting) {
     console.log('media:stopped', media);
     // Remove media streams
     hideControls();
+    listenOnly = false;
     if (media.type === "local") {
       document.getElementById("self-view").srcObject = null;
     }
@@ -315,6 +317,14 @@ function bindMeetingEvents(meeting) {
     }
   });
 
+
+  document.getElementById("videoLayout").addEventListener("change", function (event){
+    console.log(event);
+    let selectedVal = $('#videoLayout').find(":selected").val();
+    console.log(selectedVal);
+    meeting.changeVideoLayout(selectedVal);
+  });
+
   // Of course, we'd also like to be able to leave the meeting:
   document.getElementById("hangup").addEventListener("click", () => {
     document.getElementById("self-view").srcObject = null;
@@ -347,7 +357,8 @@ function resetVideoIcon(){
 }
 
 function showControls(){
-  $("#hangup_div").show();
+  showHangup();
+  showLayoutSelect();
   $("#v_select").show();
   $("#a_select").show();
   $("#video_mute_div").show();
@@ -355,10 +366,23 @@ function showControls(){
   $("#share_screen_div").show();
 }
 
+function showLayoutSelect(){
+  $("#layout_select").show();
+}
+
+function showHangup(){
+  $("#hangup_div").show();
+  $("#call_div").hide();
+  $("#call_listen_div").hide();
+}
+
 function hideControls(){
+  $("#call_div").show();
+  $("#call_listen_div").show();
   $("#hangup_div").hide();
   $("#v_select").hide();
   $("#a_select").hide();
+  $("#layout_select").hide();
   $("#video_mute_div").hide();
   $("#audio_mute_div").hide();
   $("#share_screen_div").hide();
@@ -371,30 +395,38 @@ function hideControls(){
 function joinMeeting(meeting) {
   return meeting.join().then(() => {
     // Get our local media stream and add it to the meeting
-    return meeting.getMediaStreams(mediaSettings,{audio:true, video:true}).then(mediaStreams => {
-      const [localStream, localShare] = mediaStreams;
-
+    if(listenOnly === true){
+      console.log('help');
       meeting.addMedia({
-        localShare,
-        localStream,
         mediaSettings
       });
-      console.log(meeting.getDevices().then(devices => {
-        for(var i in devices){
-          let selector = "audioSource";
-          if(devices[i].kind == "videoinput"){
-            selector = "videoSource";
+      showHangup();
+      showLayoutSelect();
+    } else {
+      return meeting.getMediaStreams(mediaSettings,{audio:true, video:true}).then(mediaStreams => {
+        const [localStream, localShare] = mediaStreams;
+
+        meeting.addMedia({
+          localShare,
+          localStream,
+          mediaSettings
+        });
+        console.log(meeting.getDevices().then(devices => {
+          for(var i in devices){
+            let selector = "audioSource";
+            if(devices[i].kind == "videoinput"){
+              selector = "videoSource";
+            }
+            $(`#${selector} option[value="${devices[i].deviceId}"]`).text(devices[i].label);
           }
-          $(`#${selector} option[value="${devices[i].deviceId}"]`).text(devices[i].label);
-        }
-        showControls();
-      }));
-    });
+          showControls();
+        }));
+      });
+    }
   });
 }
 
-document.getElementById("call").addEventListener("click", event => {
-  // again, we don't want to reload when we try to join
+function callFunction(event){
   event.preventDefault();
   console.log(`got destination - ${destination}`);
   // attaching before the request
@@ -413,7 +445,20 @@ document.getElementById("call").addEventListener("click", event => {
       // Report the error
       console.error(error);
     });
-});
+}
+
+function callButtonFunction(event){
+  callFunction(event);
+}
+
+function callButtonListenFunction(event){
+  listenOnly = true;
+  callFunction(event);
+}
+
+document.getElementById("call").addEventListener("click", callButtonFunction);
+document.getElementById("call-listen").addEventListener("click", callButtonListenFunction);
+
 
 if(userType != "guest"){
   // Listen incoming calls

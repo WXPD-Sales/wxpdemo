@@ -26,8 +26,13 @@
     <div id="call_container">
       <div id="call_buttons" class="myrow" style="width:auto;">
             <div id="call_div" class="padit call-button" style="display:None">
-              <button id="call" class="md-button md-button--circle md-button--44 md-button--green" alt="Make video call " type="button">
-                <span class="md-button__children"><i class="icon icon-handset_24"></i></span>
+              <button id="call" class="md-button md-button--circle md-button--44 md-button--green" title="Make Video Call" type="button">
+                <span class="md-button__children"><i class="icon icon-audio-video_24"></i></span>
+              </button>
+            </div>
+            <div id="call_listen_div" class="padit call-button" style="display:None">
+              <button id="call-listen" class="md-button md-button--circle md-button--44 md-button--green" title="Join Meeting as Listener" type="button">
+                <span class="md-button__children"><i class="icon icon-telepresence_24"></i></span>
               </button>
             </div>
             <div id="hangup_div" class="padit call-button" style="display:None">
@@ -57,6 +62,16 @@
         </div>
         <div id="a_select" class="padit myrow" style="display:None;justify-content:center;">
           <i class="icon icon-microphone_24 circle-icon"></i><select id="audioSource" style="width:auto;"></select>
+        </div>
+        <div id="layout_select" class="padit myrow" style="display:None;justify-content:center;">
+          <i class="icon icon-video-layout-overlay_24 circle-icon"></i>
+          <select id="videoLayout" style="width:auto;">
+            <option value="Single">Single</option>
+            <option value="Equal">Equal</option>
+            <option value="ActivePresence">ActivePresence</option>
+            <option value="Prominent">Prominent</option>
+            <option value="OnePlusN">OnePlusN</option>
+          </select>
         </div>
       </div>
       <div id="remote" class="remote">
