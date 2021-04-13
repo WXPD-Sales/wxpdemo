@@ -2,9 +2,10 @@
 <html>
   <head>
     <link rel="stylesheet" href="css/mystyle.css">
+    <link rel="stylesheet" href="css/guest.css">
     <link rel="stylesheet" href="css/collab-ui.min.css" />
     <link rel="stylesheet" href="css/momentum-ui.min.css" />
-
+    <link rel="icon" type="image/png" href="images/favicon.ico"/>
     <!-- cookie parser for JS-->
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
@@ -23,56 +24,85 @@
         </div>
       </div>
     </header>
-    <div id="call_container">
+    <div id="call_container" class="desktopDimensions">
       <div id="call_buttons" class="myrow" style="width:auto;">
             <div id="call_div" class="padit call-button" style="display:None">
               <button id="call" class="md-button md-button--circle md-button--44 md-button--green" title="Make Video Call" type="button">
-                <span class="md-button__children"><i class="icon icon-audio-video_24"></i></span>
+                <!--<span class="md-button__children"><i class="icon icon-audio-video_24"></i></span>-->
+                <span class="md-button__children">
+                  <img src="images/icons/audio-video_24@3x.png" class="desktopImg"></img>
+                </span>
               </button>
             </div>
             <div id="call_listen_div" class="padit call-button" style="display:None">
               <button id="call-listen" class="md-button md-button--circle md-button--44 md-button--green" title="Join Meeting as Listener" type="button">
-                <span class="md-button__children"><i class="icon icon-telepresence_24"></i></span>
+                <span class="md-button__children">
+                  <img src="images/icons/telepresence_24@3x.png" class="desktopImg"></img>
+                </span>
               </button>
             </div>
             <div id="hangup_div" class="padit call-button" style="display:None">
               <button id="hangup" class="md-button md-button--circle md-button--44 md-button--red" alt="Reject call" type="button" aria-label="reject call">
-                <span class="md-button__children"><i class="icon icon-cancel_24"></i></span>
+                <span class="md-button__children">
+                  <img src="images/icons/cancel_24@3x.png" class="desktopImg"></img>
+                </span>
               </button>
             </div>
             <div id="share_screen_div" class="padit call-button" style="display:None">
               <button id="screen_share" class="md-button md-button--circle md-button--44 md-button--grey" alt="Share screen" type="button" aria-label="share screen">
-                <span class="md-button__children"><i id="screen_share_icon" class="icon icon-content-share_24"></i></span>
+                <span class="md-button__children">
+                  <img id="screen_share_off" src="images/icons/content-share_24@3x.png" class="desktopImg"></img>
+                  <img id="screen_share_on" src="images/icons/stop-content-share_20@3x.png" class="desktopImg" style="display:none"></img>
+                </span>
               </button>
             </div>
             <div id="audio_mute_div" class="padit call-button" style="display:None">
               <button id="audio_mute" class="md-button md-button--circle md-button--44 md-button--grey" alt="Mute audio" type="button" aria-label="mute audio">
-                <span class="md-button__children"><i id="audio_mute_icon" class="icon icon-microphone_24"></i></span>
+                <span class="md-button__children">
+                  <img id="audio_mute_off" src="images/icons/microphone_24@3x.png" class="desktopImg"></img>
+                  <img id="audio_mute_on" src="images/icons/microphone-muted_24@3x.png" class="desktopImg" style="display:none"></img>
+                </span>
               </button>
             </div>
             <div id="video_mute_div" class="padit call-button" style="display:None">
               <button id="video_mute" class="md-button md-button--circle md-button--44 md-button--grey" alt="Mute video" type="button" aria-label="mute video">
-                <span class="md-button__children"><i id="video_mute_icon" class="icon icon-camera_24"></i></span>
+                <span class="md-button__children">
+                  <img id="video_mute_off" src="images/icons/camera_24@3x.png" class="desktopImg"></img>
+                  <img id="video_mute_on" src="images/icons/camera-muted_24@3x.png" class="desktopImg" style="display:none"></img>
+                </span>
+              </button>
+            </div>
+            <div id="settings_div" class="padit call-button" style="display:None">
+              <button id="settings" class="md-button md-button--circle md-button--44 md-button--grey" alt="Settings" type="button" aria-label="settings">
+                <span class="md-button__children">
+                  <img id="settings_off" src="images/icons/settings_24@3x.png" class="desktopImg"></img>
+                  <img id="settings_on" src="images/icons/settings-active_24@3x.png" class="desktopImg" style="display:none"></img>
+                </span>
               </button>
             </div>
       </div>
-      <div id="peripheral_selectors">
-        <div id="v_select" class="padit myrow" style="display:None;justify-content:center;">
-          <i class="icon icon-camera-swap_24 circle-icon"></i><select id="videoSource" style="width:auto;"></select>
-        </div>
-        <div id="a_select" class="padit myrow" style="display:None;justify-content:center;">
-          <i class="icon icon-microphone_24 circle-icon"></i><select id="audioSource" style="width:auto;"></select>
-        </div>
-        <div id="layout_select" class="padit myrow" style="display:None;justify-content:center;">
-          <i class="icon icon-video-layout-overlay_24 circle-icon"></i>
-          <select id="videoLayout" style="width:auto;">
-            <option value="Single">Single</option>
-            <option value="Equal">Equal</option>
-            <option value="ActivePresence">ActivePresence</option>
-            <option value="Prominent">Prominent</option>
-            <option value="OnePlusN">OnePlusN</option>
-          </select>
-        </div>
+      <div id="settings-popup" class="documentation">
+      	<div class="information">
+      		<div id="close-settings"><i class="icon icon-cancel_16 circle-icon"></i></div>
+      		<div id="settings-content">
+            <div id="v_select" class="padit myrow" style="justify-content:center;">
+              <i class="icon icon-camera-swap_24 circle-icon"></i><select id="videoSource" style=""></select>
+            </div>
+            <div id="a_select" class="padit myrow" style="justify-content:center;">
+              <i class="icon icon-microphone_24 circle-icon"></i><select id="audioSource" style=""></select>
+            </div>
+            <div id="layout_select" class="padit myrow" style="justify-content:center;">
+              <i class="icon icon-video-layout-overlay_24 circle-icon"></i>
+              <select id="videoLayout" style="">
+                <option value="Single">Single</option>
+                <option value="Equal">Equal</option>
+                <option value="ActivePresence">ActivePresence</option>
+                <option value="Prominent">Prominent</option>
+                <option value="OnePlusN">OnePlusN</option>
+              </select>
+            </div>
+      		</div>
+      	</div>
       </div>
       <div id="remote" class="remote">
         <div id="self" class="self">
@@ -89,6 +119,6 @@
 
     <script crossorigin src="https://unpkg.com/webex@^1/umd/webex.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="js/sdk.js" async ></script>
+    <script src="js/guest.js" async ></script>
   </body>
 </html>

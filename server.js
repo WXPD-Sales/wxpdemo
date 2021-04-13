@@ -1,5 +1,4 @@
 // server.js
-// where your node app starts
 require('dotenv').config();
 // init project
 const base64url = require('base64url');
@@ -17,7 +16,7 @@ const rr = new RedisRepo();
 const tokgen = require("./token-generator");
 const email_validator = require("email-validator");
 const request = require("request");
-var secured = require('./lib/middleware/secured');
+//var secured = require('./lib/middleware/secured');
 //sentry.io
 const Sentry = require("@sentry/node");
 Sentry.init({
@@ -28,10 +27,13 @@ Sentry.init({
 // config express-session
 var sess = {
   secret: "CHANGE THIS TO A RANDOM SECRET",
-  cookie: {},
+  //cookie: { sameSite: 'none', secure:false, httpOnly:true },
+  cookie: {  },
   resave: false,
   saveUninitialized: true
 };
+
+const cookieOptions = { maxAge: 40000, secure:true, sameSite: "lax"}
 
 if (app.get("env") === "production") {
   // Use secure cookies in production (requires SSL/TLS)
@@ -44,50 +46,13 @@ if (app.get("env") === "production") {
 
 app.use(session(sess));
 
-// Load Passport
-const passport = require("passport");
-const Auth0Strategy = require("passport-auth0");
-
-// Configure Passport to use Auth0
-var strategy = new Auth0Strategy(
-  {
-    domain: process.env.AUTH0_DOMAIN,
-    clientID: process.env.AUTH0_CLIENT_ID,
-    clientSecret: process.env.AUTH0_CLIENT_SECRET,
-    callbackURL:
-      process.env.AUTH0_CALLBACK_URL || "http://localhost:3000/callback"
-  },
-  function(accessToken, refreshToken, extraParams, profile, done) {
-    // accessToken is the token to call Auth0 API (not needed in the most cases)
-    // extraParams.id_token has the JSON Web Token
-    // profile has all the information from the user
-    return done(null, profile);
-  }
-);
-
-passport.use(strategy);
-
-app.use(passport.initialize());
-app.use(passport.session());
-// You can use this section to keep a smaller payload
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(user, done) {
-  done(null, user);
-});
-
 app.engine('pug', require('pug').__express)
 app.set("view engine", "pug");
 app.set('views', __dirname + '/public');
-//app.set('/css', __dirname +'/public/css');
 
-var authRouter = require("./routes/auth");
 var indexRouter = require("./routes/index");
 
 // ..
-app.use("/", authRouter);
 app.use("/", indexRouter);
 
 // ..
@@ -107,19 +72,96 @@ app.get('/linkgen', function (req, res, next) {
   }
 });
 
+app.get('/login', function (req, res, next) {
+  console.log(req.session);
+  //res.cookie("sessionId", req.session.userToken);
+  if(req.session.codeComplete){
+    let returnTo = req.session.returnTo;
+    delete req.session.returnTo;
+    if(returnTo == null || returnTo == undefined){
+      returnTo = "/linkgen";
+    }
+    res.redirect(returnTo);
+  } else {
+    res.sendFile(__dirname + `/public/login.html`);
+  }
+});
+
+app.post('/code', function(req, res, next) {
+  console.log(req.body);
+  rr.set(req.body.session, req.body.code, 600)
+    .then(() => {
+      console.log('stored code');
+      res.sendStatus(200);
+    })
+    .catch(function(err) {
+      console.log(err.message);
+      res.sendStatus(400);
+    });
+})
+
+app.post('/confirm', function(req, res, next) {
+  rr.get(req.session.sessionId).then(result => {
+    if(parseInt(result) != parseInt(req.body.code)){
+      res.json({"status":"failure", "message":"Code doesn't match.  Try again."});
+    } else {
+      req.session.codeComplete = true;
+      let returnTo = req.session.returnTo;
+      delete req.session.returnTo;
+      req.session.save();
+      if(returnTo == null || returnTo == undefined){
+        returnTo = "/linkgen";
+      }
+      res.json({"status":"success", "message":"", "url":returnTo});
+    }
+  }).catch(function(err) {
+    console.log(err.message);
+    res.json({"status":"failure", "message":"Code Expired. Refresh this page."});
+  });
+})
+
+app.post('/verify', function(req, res, next) {
+  console.log('verify');
+  console.log(req.body);
+  if(req.body.phoneNumber.length == 10){
+    req.body.phoneNumber = "1"+req.body.phoneNumber;
+  }
+  let sessionId = randomize("Aa0", 16);
+  req.session.sessionId = sessionId;
+  request.post({
+      url: process.env.IMIHOOK,
+      json: {
+        number: req.body.phoneNumber,
+        session: sessionId,
+        redirect_uri: `https://${req.get("host")}/code`
+      }
+    },function(error, resp, body) {
+        if (!error && resp.statusCode === 200) {
+          console.log('success to imi');
+          res.send('true')
+        } else {
+          res.send('false')
+        }
+      }
+    );
+})
+
 function renderFunc(req, res) {
   rr.get(`URL:${req.params.guest_session_id}`).then(result => {
     if (result == 1) {
       rr.get(req.params.guest_session_id).then(result => {
-        parts = req.originalUrl.split("/");
-        console.log(parts);
-
-
-        res.cookie("userType", "guest");
-        res.cookie("token", tokgen(JSON.parse(result).display_name).token);
-        res.cookie("target", JSON.parse(result).sip_target);
-        res.cookie("label", JSON.parse(result).display_name);
-        res.sendFile(__dirname + `/public/${parts[1]}.html`);
+        if(req.session.codeComplete){
+          parts = req.originalUrl.split("/");
+          console.log(parts);
+          res.cookie("userType", "guest", cookieOptions);
+          res.cookie("token", tokgen(JSON.parse(result).display_name).token, cookieOptions);
+          res.cookie("target", JSON.parse(result).sip_target, cookieOptions);
+          res.cookie("label", JSON.parse(result).display_name, cookieOptions);
+          res.sendFile(__dirname + `/public/${parts[1]}.html`);
+        } else {
+          req.session.returnTo = req.originalUrl;
+          res.redirect(`/login`);
+        }
       });
     } else {
       res.send({ message: `this link has expired` });
@@ -139,8 +181,8 @@ function quickRenderFunc(req, res) {
 
 app.get("/widget", quickRenderFunc);
 app.get("/guest", quickRenderFunc);
-app.get("/widget/:guest_session_id", secured(), renderFunc);
-app.get("/guest/:guest_session_id", secured(), renderFunc);
+app.get("/widget/:guest_session_id", renderFunc);
+app.get("/guest/:guest_session_id", renderFunc);
 
 app.use('/widget', express.static(__dirname + '/public'));
 app.use('/guest', express.static(__dirname + '/public'));
@@ -161,10 +203,10 @@ function renderEmployeeFunc(req, res) {
               console.log(body);
                 if (!error && resp.statusCode === 200) {
                   jbody = JSON.parse(body);
-                  res.cookie("userType", "employee");
-                  res.cookie("token", req.session.userToken);
-                  res.cookie("target", JSON.parse(result).sip_target);
-                  res.cookie("label", jbody.displayName);
+                  res.cookie("userType", "employee", cookieOptions);
+                  res.cookie("token", req.session.userToken, cookieOptions);
+                  res.cookie("target", JSON.parse(result).sip_target, cookieOptions);
+                  res.cookie("label", jbody.displayName, cookieOptions);
                   res.sendFile(__dirname + `/public/${employeePaths[parts[1]]}.html`);
                 } else {
                   res.json(error);
@@ -211,11 +253,7 @@ app.get("/create_token", function(req, res) {
           console.log(req.query.state);
           req.session.userToken = jbody.access_token;
           req.session.save();
-          if(req.query.state == "linkgen"){
-            res.redirect(`/linkgen`);
-          } else {
-            res.redirect(`/${req.query.state}`);
-          }
+          res.redirect(`/${req.query.state}`);
         } else {
           res.json(error);
         }
@@ -268,7 +306,7 @@ app.post("/create_url", function(req, res) {
           req.body.expiry_date
         )
       );
-      res.cookie("destinationType", 'sip');
+      res.cookie("destinationType", 'sip', cookieOptions);
       if(req.body.sip_target == "pmr"){
         request.get({
             url: 'https://webexapis.com/v1/meetingPreferences/personalMeetingRoom',
@@ -293,7 +331,7 @@ app.post("/create_url", function(req, res) {
               console.log(body);
               if (!error && resp.statusCode === 200) {
                 jbody = JSON.parse(body);
-                if(jbody['items'].length != 0) res.cookie("destinationType", 'email');
+                if(jbody['items'].length != 0) res.cookie("destinationType", 'email', cookieOptions);
               }
               generateLinks(req, res, Urlexpiry);
             }

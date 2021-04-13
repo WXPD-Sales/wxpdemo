@@ -4,18 +4,54 @@ window.mobileCheck = function() {
   return check;
 };
 
-if(mobileCheck()){ //increase button sizes for mobile devices
+function mobileSetup(){
+  $("#call_container").removeClass("desktopDimensions");
+  $("#call_container").addClass("mobileDimensions");
+  if(Math.abs(window.orientation) == 90){//landscape
+    $(".md-top-bar").hide();
+    $(".information").removeClass("informationPortrait");
+    $("#settings-content i").each(function(){
+      $(this).css({'font-size': ''});
+    });
+  } else {//portrait
+    $(".md-top-bar").show();
+    $(".information").addClass("informationPortrait");
+    $("#settings-content i").each(function(){
+      $(this).css({'font-size': '4rem'});
+    });
+  }
+
   $(".md-button").each(function(){
-    console.log($(this));
-    $(this).removeClass('md-button--44');
-    $(this).addClass('md-button--84');
-    let icon = $(this).find('span').find('i').first();
-    let iconClass = icon.attr('class');
-    icon.removeClass(iconClass);
-    icon.addClass(iconClass.replace('24','36'));
-    $('.padit').css('padding', '20px');
-  })
+    let button = $(this);
+    console.log(button);
+    button.find('span').find('img').each(function(){
+      let icon = $(this);
+      icon.removeClass("desktopImg");
+      if(Math.abs(window.orientation) == 90){
+        button.css({"width":"5rem", "height":"5rem"})
+        icon.removeClass("mobilePortraitImg");
+        icon.addClass("mobileLandscapeImg");
+      } else {
+        button.css({"width":"10rem", "height":"10rem"})
+        icon.removeClass("mobileLandscapeImg");
+        icon.addClass("mobilePortraitImg");
+      }
+      $('.padit').css('padding', '20px');
+    });
+    });
+
 }
+
+window.addEventListener("orientationchange", function(){
+  mobileSetup();
+})
+
+if(mobileCheck()){ //increase button sizes for mobile devices
+  mobileSetup();
+}
+
+let timeout;
+let isActiveMeeting = false;
 let listenOnly = false;
 let credentials = {
   logger: {
@@ -24,7 +60,6 @@ let credentials = {
 };
 
 const userType = Cookies.get("userType");
-
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const destination = urlParams.get('destination') == null ? Cookies.get("target") : urlParams.get('destination');
@@ -40,12 +75,14 @@ if(userType == "guest"){
   credentials.credentials = { access_token: token };
 }
 
+settingsPopup();
+
 const webex = (window.webex = Webex.init(credentials));
 
 //-----
 //AV Sources
 const audioInputSelect = document.querySelector('select#audioSource');
-const videoSelect = document.querySelector('select#videoSource');
+const videoInputSelect = document.querySelector('select#videoSource');
 
 const audio = {};
 const video = {};
@@ -59,7 +96,7 @@ const mediaSettings = {
 };
 
 // setting up the devices
-const selectors = [audioInputSelect, /*audioOutputSelect,*/ videoSelect];
+const selectors = [audioInputSelect, /*audioOutputSelect,*/ videoInputSelect];
 
 //This requests the video/audio permissions at the beginning if we want to know them the whole time.
 /*navigator.mediaDevices.getUserMedia({audio:true, video:true}).then((stream) => {
@@ -79,15 +116,15 @@ selectors.forEach((select) => {
 for (let i = 0; i !== deviceInfos.length; i += 1) {
   const deviceInfo = deviceInfos[i];
   const option = document.createElement('option');
-
+  console.log(deviceInfo);
   option.value = deviceInfo.deviceId;
   if (deviceInfo.kind === 'audioinput') {
     option.text = deviceInfo.label || `microphone ${audioInputSelect.length + 1}`;
     audioInputSelect.appendChild(option);
   }
   else if (deviceInfo.kind === 'videoinput') {
-    option.text = deviceInfo.label || `camera ${videoSelect.length + 1}`;
-    videoSelect.appendChild(option);
+    option.text = deviceInfo.label || `camera ${videoInputSelect.length + 1}`;
+    videoInputSelect.appendChild(option);
   }
   else {
     console.log('Some other kind of source/device: ', deviceInfo);
@@ -219,6 +256,21 @@ function bindMeetingEvents(meeting) {
     }, 10000);
   });
 
+  meeting.on('meeting:stoppedSharingLocal', (payload) => {
+    console.log(`meeting:stoppedSharingLocal - ${JSON.stringify(payload)}`);
+    resetShareIcon();
+    isSharing = false;
+    document.getElementById('self-share').srcObject = null;
+  });
+
+  meeting.on('meeting:startedSharingLocal', (payload) => {
+    console.log(`meeting:startedSharingLocal - ${JSON.stringify(payload)}`);
+    $("#screen_share_off").hide();
+    $("#screen_share_on").show();
+    $("#screen_share").removeClass("md-button--grey");
+    $("#screen_share").addClass("md-button--red");
+  });
+
 
   // Handle media streams changes to ready state
   meeting.on("media:ready", media => {
@@ -248,7 +300,8 @@ function bindMeetingEvents(meeting) {
   meeting.on("media:stopped", media => {
     console.log('media:stopped', media);
     // Remove media streams
-    hideControls();
+    resetControls();
+    isActiveMeeting = false;
     listenOnly = false;
     if (media.type === "local") {
       document.getElementById("self-view").srcObject = null;
@@ -280,10 +333,6 @@ function bindMeetingEvents(meeting) {
           console.error('SHARE-SCREEN: Unable to share screen, error:');
           console.error(e);
         });
-      $("#screen_share_icon").removeClass("icon-content-share_24");
-      $("#screen_share_icon").addClass("icon-stop_24");
-      $("#screen_share").removeClass("md-button--grey");
-      $("#screen_share").addClass("md-button--red");
     }
   });
 
@@ -295,8 +344,8 @@ function bindMeetingEvents(meeting) {
        resetVideoIcon();
      } else {
        meeting.muteVideo();
-       $("#video_mute_icon").removeClass("icon-camera_24");
-       $("#video_mute_icon").addClass("icon-camera-muted_24");
+       $("#video_mute_off").hide();
+       $("#video_mute_on").show();
        $("#video_mute").removeClass("md-button--grey");
        $("#video_mute").addClass("md-button--red");
      }
@@ -310,13 +359,65 @@ function bindMeetingEvents(meeting) {
       resetAudioIcon();
     } else {
       meeting.muteAudio();
-      $("#audio_mute_icon").removeClass("icon-microphone_24");
-      $("#audio_mute_icon").addClass("icon-microphone-muted_24");
+      $("#audio_mute_off").hide();
+      $("#audio_mute_on").show();
       $("#audio_mute").removeClass("md-button--grey");
       $("#audio_mute").addClass("md-button--red");
     }
   });
 
+  document.getElementById("videoSource").addEventListener("change", function (event){
+    let selectedVal = $('#videoSource').find(":selected").val();
+    console.log(selectedVal);
+    const {sendVideo, receiveVideo} = {sendVideo:true, receiveVideo:true};
+    stopMediaTrack('video', meeting);
+    if(meeting.isVideoMuted()) meeting.unmuteVideo();
+    return meeting.getMediaStreams({sendVideo, receiveVideo}, {video : {deviceId: {exact: selectedVal}}})
+      .then(mediaStreams => {
+        const [localStream, localShare] = mediaStreams;
+        meeting.updateVideo({
+          sendVideo,
+          receiveVideo,
+          stream: localStream
+        });
+        setTimeout(() => {
+          console.log('second video update');
+          meeting.updateVideo({sendVideo, receiveVideo, stream:localStream});
+        }, 2000);
+        resetVideoIcon();
+      })
+      .catch((error) => {
+        console.log('MeetingControls#setVideoInputDevice :: Unable to set video input device');
+        console.error(error);
+      });
+
+  });
+
+  document.getElementById("audioSource").addEventListener("change", function (event){
+    let selectedVal = $('#audioSource').find(":selected").val();
+    console.log(selectedVal);
+    const {sendAudio, receiveAudio} = {sendAudio:true, receiveAudio:true};
+    stopMediaTrack('audio', meeting);
+    if(meeting.isAudioMuted())meeting.unmuteAudio();
+    return meeting.getMediaStreams({sendAudio, receiveAudio}, {audio : {deviceId: {exact: selectedVal}}})
+      .then(mediaStreams => {
+        const [localStream, localShare] = mediaStreams;
+        meeting.updateAudio({
+          sendAudio,
+          receiveAudio,
+          stream: localStream
+        });
+        setTimeout(() => {
+          console.log('second audio update');
+          meeting.updateVideo({sendAudio, receiveAudio, stream:localStream});
+        }, 2000);
+        resetAudioIcon();
+      })
+      .catch((error) => {
+        console.log('MeetingControls#setAudioInputDevice :: Unable to set audio input device');
+        console.error(error);
+      });
+  });
 
   document.getElementById("videoLayout").addEventListener("change", function (event){
     console.log(event);
@@ -335,35 +436,68 @@ function bindMeetingEvents(meeting) {
   });
 }
 
+function stopMediaTrack(type, meeting) {
+  if (!meeting) return;
+  const {audioTrack, videoTrack, shareTrack} = meeting.mediaProperties;
+  // eslint-disable-next-line default-case
+  switch (type) {
+    case 'audio':
+      audioTrack.stop();
+      break;
+    case 'video':
+      videoTrack.stop();
+      break;
+    case 'share':
+      shareTrack.stop();
+      break;
+  }
+}
+
 function resetShareIcon(){
-  $("#screen_share_icon").removeClass("icon-stop_24");
-  $("#screen_share_icon").addClass("icon-content-share_24");
+  $("#screen_share_off").show();
+  $("#screen_share_on").hide();
   $("#screen_share").removeClass("md-button--red");
   $("#screen_share").addClass("md-button--grey");
 }
 
 function resetAudioIcon(){
-  $("#audio_mute_icon").removeClass("icon-microphone-muted_24");
-  $("#audio_mute_icon").addClass("icon-microphone_24");
+  $("#audio_mute_off").show();
+  $("#audio_mute_on").hide();
   $("#audio_mute").removeClass("md-button--red");
   $("#audio_mute").addClass("md-button--grey");
 }
 
 function resetVideoIcon(){
-  $("#video_mute_icon").removeClass("icon-camera-muted_24");
-  $("#video_mute_icon").addClass("icon-camera_24");
+  $("#video_mute_off").show();
+  $("#video_mute_on").hide();
   $("#video_mute").removeClass("md-button--red");
   $("#video_mute").addClass("md-button--grey");
 }
 
+function resetSettings(){
+  $("#settings-popup").hide();
+  viewSettings = false;
+  $("#settings_off").show();
+  $("#settings_on").hide();
+}
+
+let inMeetingDivs = ["audio_mute", "video_mute", "share_screen", "settings"]
 function showControls(){
-  showHangup();
-  showLayoutSelect();
-  $("#v_select").show();
-  $("#a_select").show();
-  $("#video_mute_div").show();
-  $("#audio_mute_div").show();
-  $("#share_screen_div").show();
+  if(isActiveMeeting){
+    showHangup();
+    for(let i in inMeetingDivs){
+      $(`#${inMeetingDivs[i]}_div`).show();
+    }
+    if(timeout) clearTimeout(timeout);
+    timeout = setTimeout(fadeOutControls, 3000);
+  }
+}
+
+function fadeOutControls(){
+  $("#hangup_div").fadeOut();
+  for(let i in inMeetingDivs){
+    $(`#${inMeetingDivs[i]}_div`).fadeOut();
+  }
 }
 
 function showLayoutSelect(){
@@ -376,19 +510,20 @@ function showHangup(){
   $("#call_listen_div").hide();
 }
 
-function hideControls(){
+function resetControls(){
   $("#call_div").show();
   $("#call_listen_div").show();
   $("#hangup_div").hide();
-  $("#v_select").hide();
+  /*$("#v_select").hide();
   $("#a_select").hide();
-  $("#layout_select").hide();
-  $("#video_mute_div").hide();
-  $("#audio_mute_div").hide();
-  $("#share_screen_div").hide();
+  $("#layout_select").hide();*/
+  for(let i in inMeetingDivs){
+    $(`#${inMeetingDivs[i]}_div`).hide();
+  }
   resetShareIcon();
   resetAudioIcon();
   resetVideoIcon();
+  resetSettings();
 }
 
 // Join the meeting and add media
@@ -401,26 +536,40 @@ function joinMeeting(meeting) {
         mediaSettings
       });
       showHangup();
-      showLayoutSelect();
+      //showLayoutSelect();
     } else {
+      //const {audio};
+      //const {video};
+      //let avObj = {}
       return meeting.getMediaStreams(mediaSettings,{audio:true, video:true}).then(mediaStreams => {
         const [localStream, localShare] = mediaStreams;
-
+        //console.log(meeting.mediaProperties.videoTrack.getSettings().deviceID)
+        //console.log(meeting.mediaProperties.audioTrack.getSettings().deviceID)
         meeting.addMedia({
           localShare,
           localStream,
           mediaSettings
         });
-        console.log(meeting.getDevices().then(devices => {
+        let myTracks = localStream.getTracks();
+        meeting.getDevices().then(devices => {
+          console.log("devices:");
+          console.log(devices);
           for(var i in devices){
             let selector = "audioSource";
             if(devices[i].kind == "videoinput"){
               selector = "videoSource";
             }
-            $(`#${selector} option[value="${devices[i].deviceId}"]`).text(devices[i].label);
+            selected = false;
+            for(var j in myTracks){
+              if(myTracks[j].kind + "Source" == selector && myTracks[j].label == devices[i].label){
+                selected = true;
+              }
+            }
+            $(`#${selector} option[value="${devices[i].deviceId}"]`).text(devices[i].label).prop('selected', selected);
           }
+          isActiveMeeting = true;
           showControls();
-        }));
+        });
       });
     }
   });
@@ -433,7 +582,7 @@ function callFunction(event){
   audio.deviceId = {exact: audioInputSelect.value};
   audio.noiseSuppression=false;
   audio.echoCancellation=true;
-  video.deviceId = {exact: videoSelect.value};
+  video.deviceId = {exact: videoInputSelect.value};
   return webex.meetings
     .create(destination)
     .then(meeting => {
@@ -458,6 +607,8 @@ function callButtonListenFunction(event){
 
 document.getElementById("call").addEventListener("click", callButtonFunction);
 document.getElementById("call-listen").addEventListener("click", callButtonListenFunction);
+document.addEventListener("mousemove", showControls);
+
 
 
 if(userType != "guest"){
@@ -479,4 +630,29 @@ if(userType != "guest"){
       });
   }
   });
+}
+
+let viewSettings = false;
+function settingsPopup(){
+  $("#settings").on('click', function(){
+    if(viewSettings){
+      resetSettings();
+    } else {
+      $("#settings-popup").show();
+      viewSettings = true;
+      $("#settings_off").hide();
+      $("#settings_on").show();
+    }
+  });
+
+  $("#close-settings").on('click', function(){
+    resetSettings();
+  });
+
+  $("#settings-popup").on('click', function(e){
+    if(e.target.id=="settings-popup"){
+      resetSettings();
+    }
+  });
+
 }

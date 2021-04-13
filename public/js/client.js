@@ -133,16 +133,22 @@ function buildTable(response_message){
 }
 
 function showMessage(response_message) {
-  let jResponse = JSON.parse(response_message);
-  $("#messages").empty();
-  $("#messages").append(buildTable(jResponse));
-  messages.scrollTop = messages.scrollHeight;
-  console.log(jResponse);
-  if(jResponse.hasOwnProperty('urls')){
-    console.log(`URL found - ${jResponse.urls}`)
-    document.getElementById('send_as_email_section').style.display = 'block';
-    document.getElementById('guest_info_section').style.display = 'none';
-  };
+  if(response_message == "null"){
+    alert("Error: Cannot Find PMR for you. Please enter a SIP URI or roomId");
+  } else {
+    console.log(response_message)
+    let jResponse = JSON.parse(response_message);
+    $("#messages").empty();
+    $("#messages").append(buildTable(jResponse));
+    messages.scrollTop = messages.scrollHeight;
+    console.log(jResponse);
+    if(jResponse.hasOwnProperty('urls')){
+      console.log(`URL found - ${jResponse.urls}`)
+      document.getElementById('send_as_email_section').style.display = 'block';
+      document.getElementById('guest_info_section').style.display = 'none';
+    };
+  }
+
 }
 
 function handleResponse(response) {

@@ -7,17 +7,25 @@ class RedisRepo {
       this.redis.config("SET", "notify-keyspace-events", "Ex");
     });
   }
-  
+
   async get(key) {
     return this.redis.get(key);
   }
-  
+
   async setReminder(key, value, expire) {
     this.redis
       .multi()
       .set(key, value)
       .set(`reminder:${key}`, 1)
       .expire(`reminder:${key}`, expire)
+      .exec();
+  }
+
+  async set(key, value, expire) {
+    this.redis
+      .multi()
+      .set(key, value)
+      .expire(key, expire)
       .exec();
   }
   
@@ -29,7 +37,7 @@ class RedisRepo {
       .expire(`URL:${key}`, expire)
       .exec();
   }
-  
+
 }
 
 module.exports = RedisRepo;
