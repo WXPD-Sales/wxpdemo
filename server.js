@@ -53,10 +53,10 @@ app.set('views', __dirname + '/public');
 var indexRouter = require("./routes/index");
 
 // ..
-app.use("/", indexRouter);
+app.use(`/${process.env.MY_ROUTE}`, indexRouter);
 
 // ..
-app.use(express.static("public"));
+app.use(`/${process.env.MY_ROUTE}`, express.static("public"));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -64,7 +64,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.get('/linkgen', function (req, res, next) {
+app.get(`/${process.env.MY_ROUTE}/linkgen`, function (req, res, next) {
   if(req.session.userToken){
     res.render('linkgen', {});
   } else {
@@ -72,14 +72,14 @@ app.get('/linkgen', function (req, res, next) {
   }
 });
 
-app.get('/login', function (req, res, next) {
+app.get(`/${process.env.MY_ROUTE}/login`, function (req, res, next) {
   console.log(req.session);
   //res.cookie("sessionId", req.session.userToken);
   if(req.session.codeComplete){
     let returnTo = req.session.returnTo;
     delete req.session.returnTo;
     if(returnTo == null || returnTo == undefined){
-      returnTo = "/linkgen";
+      returnTo = `/${process.env.MY_ROUTE}/linkgen`;
     }
     res.redirect(returnTo);
   } else {
@@ -87,7 +87,7 @@ app.get('/login', function (req, res, next) {
   }
 });
 
-app.post('/code', function(req, res, next) {
+app.post(`/${process.env.MY_ROUTE}/code`, function(req, res, next) {
   console.log(req.body);
   rr.set(req.body.session, req.body.code, 600)
     .then(() => {
@@ -100,7 +100,7 @@ app.post('/code', function(req, res, next) {
     });
 })
 
-app.post('/confirm', function(req, res, next) {
+app.post(`/${process.env.MY_ROUTE}/confirm`, function(req, res, next) {
   rr.get(req.session.sessionId).then(result => {
     if(parseInt(result) != parseInt(req.body.code)){
       res.json({"status":"failure", "message":"Code doesn't match.  Try again."});
@@ -110,7 +110,7 @@ app.post('/confirm', function(req, res, next) {
       delete req.session.returnTo;
       req.session.save();
       if(returnTo == null || returnTo == undefined){
-        returnTo = "/linkgen";
+        returnTo = `/${process.env.MY_ROUTE}/linkgen`;
       }
       res.json({"status":"success", "message":"", "url":returnTo});
     }
@@ -120,7 +120,7 @@ app.post('/confirm', function(req, res, next) {
   });
 })
 
-app.post('/verify', function(req, res, next) {
+app.post(`/${process.env.MY_ROUTE}/verify`, function(req, res, next) {
   console.log('verify');
   console.log(req.body);
   if(req.body.phoneNumber.length == 10){
@@ -160,7 +160,7 @@ function renderFunc(req, res) {
           res.sendFile(__dirname + `/public/${parts[1]}.html`);
         } else {
           req.session.returnTo = req.originalUrl;
-          res.redirect(`/login`);
+          res.redirect(`/${process.env.MY_ROUTE}/login`);
         }
       });
     } else {
@@ -179,13 +179,13 @@ function quickRenderFunc(req, res) {
   res.sendFile(__dirname + `/public/${useFile}.html`);
 }
 
-app.get("/widget", quickRenderFunc);
-app.get("/guest", quickRenderFunc);
-app.get("/widget/:guest_session_id", renderFunc);
-app.get("/guest/:guest_session_id", renderFunc);
+app.get(`/${process.env.MY_ROUTE}/widget`, quickRenderFunc);
+app.get(`/${process.env.MY_ROUTE}/guest`, quickRenderFunc);
+app.get(`/${process.env.MY_ROUTE}/widget/:guest_session_id`, renderFunc);
+app.get(`/${process.env.MY_ROUTE}/guest/:guest_session_id`, renderFunc);
 
-app.use('/widget', express.static(__dirname + '/public'));
-app.use('/guest', express.static(__dirname + '/public'));
+app.use(`/${process.env.MY_ROUTE}/widget`, express.static(__dirname + '/public'));
+app.use(`/${process.env.MY_ROUTE}/guest`, express.static(__dirname + '/public'));
 
 
 let employeePaths = {"employee":"guest", "employee-widget":"widget"}
@@ -223,13 +223,13 @@ function renderEmployeeFunc(req, res) {
   });
 }
 
-app.get("/employee", quickRenderFunc);
-app.get("/employee-widget", quickRenderFunc);
-app.get("/employee/:guest_session_id", renderEmployeeFunc);
-app.get("/employee-widget/:guest_session_id", renderEmployeeFunc);
+app.get(`/${process.env.MY_ROUTE}/employee`, quickRenderFunc);
+app.get(`/${process.env.MY_ROUTE}/employee-widget`, quickRenderFunc);
+app.get(`/${process.env.MY_ROUTE}/employee/:guest_session_id`, renderEmployeeFunc);
+app.get(`/${process.env.MY_ROUTE}/employee-widget/:guest_session_id`, renderEmployeeFunc);
 
-app.use('/employee', express.static(__dirname + '/public'));
-app.use('/employee-widget', express.static(__dirname + '/public'));
+app.use(`/${process.env.MY_ROUTE}/employee`, express.static(__dirname + '/public'));
+app.use(`/${process.env.MY_ROUTE}/employee-widget`, express.static(__dirname + '/public'));
 
 
 function isRoomId(myTarget){
@@ -237,7 +237,7 @@ function isRoomId(myTarget){
   return result.indexOf('ciscospark://us/ROOM/') >= 0;
 }
 
-app.get("/create_token", function(req, res) {
+app.get(`/${process.env.MY_ROUTE}/create_token`, function(req, res) {
   request.post({
       url: 'https://webexapis.com/access_token',
       form: {
@@ -253,7 +253,7 @@ app.get("/create_token", function(req, res) {
           console.log(req.query.state);
           req.session.userToken = jbody.access_token;
           req.session.save();
-          res.redirect(`/${req.query.state}`);
+          res.redirect(`/${process.env.MY_ROUTE}/${req.query.state}`);
         } else {
           res.json(error);
         }
@@ -292,7 +292,7 @@ function generateLinks(req, res, Urlexpiry){
   })
 }
 
-app.post("/create_url", function(req, res) {
+app.post(`/${process.env.MY_ROUTE}/create_url`, function(req, res) {
   if (req.body.expiry_date) {
     if(email_validator.validate(req.body.sip_target) || isRoomId(req.body.sip_target) || req.body.sip_target == "pmr"){
       console.log(thismoment(req.body.expiry_date).utcOffset(req.body.offset));

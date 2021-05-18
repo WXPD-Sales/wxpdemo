@@ -4,7 +4,26 @@ window.mobileCheck = function() {
   return check;
 };
 
+function rearrangeVideoViews(){
+  //TODO: Something is up with the width on mobile?
+  $("#self").css({"position":"initial"});
+  $("#self-view").css({"height":"50%",
+                       "margin":"auto",
+                       "position":"absolute",
+                       "left":"0",
+                       "right":"0",
+                       "bottom":"0",
+                       "width":"initial"})
+  $("#remote-view-video").css({"height":"50%",
+                               "position":"absolute",
+                               "left":"0",
+                               "right":"0",
+                               "top":"0",
+                               "margin":"auto"})
+}
+
 function mobileSetup(){
+  //rearrangeVideoViews();
   $("#call_container").removeClass("desktopDimensions");
   $("#call_container").addClass("mobileDimensions");
   if(Math.abs(window.orientation) == 90){//landscape
@@ -89,7 +108,7 @@ const video = {};
 const mediaSettings = {
   receiveVideo: true,
   receiveAudio: true,
-  receiveShare: false,
+  receiveShare: false, //this should be true to split the inbound streams
   sendShare: false,
   sendVideo: true,
   sendAudio: true
@@ -271,6 +290,14 @@ function bindMeetingEvents(meeting) {
     $("#screen_share").addClass("md-button--red");
   });
 
+  meeting.on('meeting:startedSharingRemote', (payload) => {
+    console.log(`meeting:startedSharingLocal - ${JSON.stringify(payload)}`);
+  });
+
+  meeting.on('meeting:startedSharingRemote', (payload) => {
+    console.log(`meeting:stoppedSharingRemote - ${JSON.stringify(payload)}`);
+  });
+
 
   // Handle media streams changes to ready state
   meeting.on("media:ready", media => {
@@ -282,6 +309,7 @@ function bindMeetingEvents(meeting) {
       document.getElementById("self-view").srcObject = media.stream;
     }
     if (media.type === "remoteVideo") {
+      console.log('wow!')
       document.getElementById("remote-view-video").srcObject = media.stream;
     }
     if (media.type === "remoteAudio") {
@@ -289,7 +317,8 @@ function bindMeetingEvents(meeting) {
     }
     if (media.type === 'remoteShare') {
       // Remote share streams become active immediately on join, even if nothing is being shared
-      document.getElementById("remote-view-video").srcObject = media.stream;
+      console.log('sharing!')
+      document.getElementById("remote-view-share").srcObject = media.stream;
     }
     if (media.type === 'localShare') {
       document.getElementById('self-share').srcObject = media.stream;

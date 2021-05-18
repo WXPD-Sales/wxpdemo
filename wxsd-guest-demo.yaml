@@ -1,0 +1,59 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: wxsd-guest-demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: wxsd-guest-demo
+  name: wxsd-guest-demo
+spec:
+  selector:
+    matchLabels:
+      app: wxsd-guest-demo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: wxsd-guest-demo
+    spec:
+      containers:
+      - image: 191518685251.dkr.ecr.us-west-1.amazonaws.com/wxsd-guest-demo:latest
+        imagePullPolicy: Always
+        name: wxsd-guest-demo
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: wxsd-guest-demo
+  name: wxsd-guest-demo-service
+spec:
+  ports:
+    - port: 80
+      targetPort: 10031
+      protocol: TCP
+  type: NodePort
+  selector:
+    app: wxsd-guest-demo
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: wxsd-guest-demo
+  name: wxsd-guest-demo-ingress
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: wxsd-guest-demo-service
+              servicePort: 80
