@@ -14,6 +14,9 @@ FROM node:8.16.0-alpine
 #kubectl apply -f wxsd-guest-demo.yaml
 #kubectl get ingress -n wxsd-guest-demo
 
+#kubectl get pods
+#kubectl describe pod <pod name>
+
 WORKDIR /app
 COPY package*.json ./
 RUN npm install

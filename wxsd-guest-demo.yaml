@@ -24,7 +24,7 @@ spec:
         imagePullPolicy: Always
         name: wxsd-guest-demo
         ports:
-        - containerPort: 80
+        - containerPort: 10031
 ---
 apiVersion: v1
 kind: Service
@@ -33,7 +33,7 @@ metadata:
   name: wxsd-guest-demo-service
 spec:
   ports:
-    - port: 80
+    - port: 443
       targetPort: 10031
       protocol: TCP
   type: NodePort
@@ -56,4 +56,4 @@ spec:
           - path: /*
             backend:
               serviceName: wxsd-guest-demo-service
-              servicePort: 80
+              servicePort: 443
