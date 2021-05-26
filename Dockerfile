@@ -25,4 +25,6 @@ COPY . .
 #overwrite default environment variables
 COPY bdm.env .env
 
+EXPOSE 10031
+
 CMD [ "npm", "start" ]
