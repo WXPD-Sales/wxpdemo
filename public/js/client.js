@@ -8,6 +8,9 @@ document.getElementById('selected_expiry').innerHTML = picked_date;
 //console.log(`today is ${time}`);
 //console.log(`today is ${today}`);
 //console.log(picked_date);
+let urlPath = window.location.pathname;
+let deployPath = urlPath.split('/linkgen')[0];
+console.log(deployPath);
 
 flatpickr("#flatpckr", {
   enableTime: true,
@@ -72,7 +75,7 @@ async function validate_message_object(message){
 };
 
 async function post_data(){
-  fetch('/create_url', {
+  fetch(deployPath + '/create_url', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {'Content-Type': 'application/json'},
@@ -165,7 +168,7 @@ async function send_to_email(){
   guest_data.send_to_email = document.getElementById('send_to_email').value;
   console.log(guest_data);
 
-  fetch('/email_invite', {
+  fetch(deployPath + '/email_invite', {
     method: 'POST',
     credentials: 'same-origin',
     headers: {'Content-Type': 'application/json'},

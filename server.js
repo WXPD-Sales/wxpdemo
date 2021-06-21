@@ -133,7 +133,7 @@ app.post(`/${process.env.MY_ROUTE}/verify`, function(req, res, next) {
       json: {
         number: req.body.phoneNumber,
         session: sessionId,
-        redirect_uri: `https://${req.get("host")}/code`
+        redirect_uri: `https://${req.get("host")}/${process.env.MY_ROUTE}/code`
       }
     },function(error, resp, body) {
         if (!error && resp.statusCode === 200) {
@@ -157,7 +157,7 @@ function renderFunc(req, res) {
           res.cookie("token", tokgen(JSON.parse(result).display_name).token, cookieOptions);
           res.cookie("target", JSON.parse(result).sip_target, cookieOptions);
           res.cookie("label", JSON.parse(result).display_name, cookieOptions);
-          res.sendFile(__dirname + `/public/${parts[1]}.html`);
+          res.sendFile(__dirname + `/public/${parts[2]}.html`);
         } else {
           req.session.returnTo = req.originalUrl;
           res.redirect(`/${process.env.MY_ROUTE}/login`);
@@ -173,7 +173,7 @@ let useFiles = {"guest":"guest", "widget":"widget", "employee":"guest", "employe
 function quickRenderFunc(req, res) {
   parts = req.originalUrl.split("/");
   console.log(parts);
-  let useFile = parts[1];
+  let useFile = parts[2];
   if(useFile.indexOf("?") > 0) useFile = useFile.split("?")[0];
   useFile = useFiles[useFile];
   res.sendFile(__dirname + `/public/${useFile}.html`);
@@ -207,14 +207,14 @@ function renderEmployeeFunc(req, res) {
                   res.cookie("token", req.session.userToken, cookieOptions);
                   res.cookie("target", JSON.parse(result).sip_target, cookieOptions);
                   res.cookie("label", jbody.displayName, cookieOptions);
-                  res.sendFile(__dirname + `/public/${employeePaths[parts[1]]}.html`);
+                  res.sendFile(__dirname + `/public/${employeePaths[parts[2]]}.html`);
                 } else {
                   res.json(error);
                 }
               }
             );
         } else {
-          res.redirect(`${process.env.WEBEX_AUTH_URL}&state=${parts[1]}/${req.params.guest_session_id}`);
+          res.redirect(`${process.env.WEBEX_AUTH_URL}&state=${parts[2]}/${req.params.guest_session_id}`);
         }
       });
     } else {
@@ -273,7 +273,8 @@ function generateLinks(req, res, Urlexpiry){
       .then(() => {
         respObjects[displayName] = [];
         for(let j in urlPaths[i]){
-          respObjects[displayName].push(`https://${req.get("host")}/${urlPaths[i][j]}/${guestSessionID}`);
+          //TODO
+          respObjects[displayName].push(`https://${req.get("host")}/${process.env.MY_ROUTE}/${urlPaths[i][j]}/${guestSessionID}`);
         }
       })
       .catch(function(err) {

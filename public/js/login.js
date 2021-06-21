@@ -1,6 +1,10 @@
 (function ($) {
     "use strict";
 
+    let urlPath = window.location.pathname;
+    let deployPath = urlPath.split('/login')[0];
+    console.log(deployPath);
+
     $(document).ready(function() {
       $("#tel").focus();
     })
@@ -51,7 +55,7 @@
             let phoneNumber = $(input).val().trim();
             phoneNumber = phoneNumber.replace(/[^0-9]/g, "");//remove anything that isn't a number
             console.log(phoneNumber);
-            $.post("/verify", {"phoneNumber": phoneNumber}, function(data){
+            $.post(deployPath + "/verify", {"phoneNumber": phoneNumber}, function(data){
               console.log('response data:')
               console.log(data);
               $("#part2").fadeIn();
@@ -63,7 +67,7 @@
           console.log('ok');
           let code = $(input).val().trim();
           console.log(code);
-          $.post(`/confirm`, {"code":code}, function(data){
+          $.post(deployPath + `/confirm`, {"code":code}, function(data){
             console.log('response data /code:')
             console.log(data);
             if(data.status == "success"){
