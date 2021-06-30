@@ -55,19 +55,33 @@
             let phoneNumber = $(input).val().trim();
             phoneNumber = phoneNumber.replace(/[^0-9]/g, "");//remove anything that isn't a number
             console.log(phoneNumber);
-            $.post(deployPath + "/verify", {"phoneNumber": phoneNumber}, function(data){
+            fetch(deployPath + '/verify', {
+              method: 'POST',
+              credentials: 'same-origin',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({phoneNumber:phoneNumber}),
+            })
+            .then(response => response.json())
+            .then(function(data){
               console.log('response data:')
               console.log(data);
               $("#part2").fadeIn();
               $("#code").focus();
-            });
+            })
           });
         } else if(check && btnId == "verify"){
           console.log(check)
           console.log('ok');
           let code = $(input).val().trim();
           console.log(code);
-          $.post(deployPath + `/confirm`, {"code":code}, function(data){
+          fetch(deployPath + '/confirm', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({code:code}),
+          })
+          .then(response => response.json())
+          .then(function(data){
             console.log('response data /code:')
             console.log(data);
             if(data.status == "success"){
@@ -76,7 +90,7 @@
             } else {
               showValidate(input, data.message);
             }
-          });
+          })
         }
         return check;
     }
@@ -100,11 +114,10 @@
         });
     });
 
+
     function validate (input) {
         if($(input).attr('id') == 'tel') {
-            if($(input).val().trim().match(/^((\+1)?[\s-]?)?\(?[1-9]\d\d\)?[\s-]?[1-9]\d\d[\s-]?\d\d\d\d/) == null) {
-                return false;
-            }
+            phoneValidate($(input).val());
         }
         else {
             if($(input).val().trim().match(/[0-9]{4}/) == null){

@@ -72,6 +72,7 @@ if(mobileCheck()){ //increase button sizes for mobile devices
 let timeout;
 let isActiveMeeting = false;
 let listenOnly = false;
+let manualLeave = false;
 let credentials = {
   logger: {
     level: "debug"
@@ -95,7 +96,8 @@ if(userType == "guest"){
 }
 
 settingsPopup();
-
+let pollMeetingStateInterval = 2000;
+let maxCounterAttempts = 30;
 const webex = (window.webex = Webex.init(credentials));
 
 //-----
@@ -461,7 +463,17 @@ function bindMeetingEvents(meeting) {
     document.getElementById("self-share").srcObject = null;
     document.getElementById("remote-view-video").srcObject = null;
     document.getElementById("remote-view-audio").srcObject = null;
-    meeting.leave(meeting.id);
+    if(meeting.state != "JOINED"){
+      resetControls();
+      manualLeave = true;
+    }
+    try{
+      meeting.leave(meeting.id);
+    } catch (e) {
+      console.log('caught meeting.leave error:');
+      console.log(e);
+    }
+
   });
 }
 
@@ -555,17 +567,68 @@ function resetControls(){
   resetSettings();
 }
 
+function addMediaFunction(meeting, localStream, localShare) {
+  meeting.addMedia({localShare, localStream, mediaSettings});
+  let myTracks = localStream.getTracks();
+  meeting.getDevices().then(devices => {
+    console.log("devices:");
+    console.log(devices);
+    for(var i in devices){
+      let selector = "audioSource";
+      if(devices[i].kind == "videoinput"){
+        selector = "videoSource";
+      }
+      selected = false;
+      for(var j in myTracks){
+        if(myTracks[j].kind + "Source" == selector && myTracks[j].label == devices[i].label){
+          selected = true;
+        }
+      }
+      $(`#${selector} option[value="${devices[i].deviceId}"]`).text(devices[i].label).prop('selected', selected);
+    }
+    isActiveMeeting = true;
+    showControls();
+  });
+}
+
 // Join the meeting and add media
 function joinMeeting(meeting) {
+  manualLeave = false;
+  let connectCounter = 0;
   return meeting.join().then(() => {
     // Get our local media stream and add it to the meeting
     if(listenOnly === true){
       console.log('help');
-      meeting.addMedia({
-        mediaSettings
-      });
-      showHangup();
-      //showLayoutSelect();
+      if(meeting.state == "JOINED"){
+        meeting.addMedia({mediaSettings});
+        //showHangup();
+      } else {
+        var intervalID = setInterval(function(){
+          console.log(meeting.state);
+          if(meeting.state == "JOINED"){
+            console.log('clearing interval');
+            clearInterval(intervalID);
+            connectCounter = 0;
+            meeting.addMedia({mediaSettings});
+            //showHangup();
+          } else {
+            connectCounter += 1;
+            if(connectCounter > maxCounterAttempts || manualLeave || meeting.state == "LEFT"){
+              let err_msg = `no one let me in, clearing interval`;
+              console.log(err_msg);
+              clearInterval(intervalID);
+              connectCounter = 0;
+              try {
+                resetControls();
+                meeting.leave()
+              } catch (e) {
+                console.log('probably already left, thus the reason for this error:');
+                console.log(e);
+              }
+            }
+          }
+        }, pollMeetingStateInterval);
+      }
     } else {
       //const {audio};
       //const {video};
@@ -574,37 +637,43 @@ function joinMeeting(meeting) {
         const [localStream, localShare] = mediaStreams;
         //console.log(meeting.mediaProperties.videoTrack.getSettings().deviceID)
         //console.log(meeting.mediaProperties.audioTrack.getSettings().deviceID)
-        meeting.addMedia({
-          localShare,
-          localStream,
-          mediaSettings
-        });
-        let myTracks = localStream.getTracks();
-        meeting.getDevices().then(devices => {
-          console.log("devices:");
-          console.log(devices);
-          for(var i in devices){
-            let selector = "audioSource";
-            if(devices[i].kind == "videoinput"){
-              selector = "videoSource";
-            }
-            selected = false;
-            for(var j in myTracks){
-              if(myTracks[j].kind + "Source" == selector && myTracks[j].label == devices[i].label){
-                selected = true;
+        //showHangup();
+        if(meeting.state == "JOINED"){
+          addMediaFunction(meeting, localStream, localShare);
+        } else {
+          var intervalID = setInterval(function(){
+            console.log(meeting.state);
+            if(meeting.state == "JOINED"){
+              console.log('clearing interval');
+              clearInterval(intervalID);
+              connectCounter = 0;
+              addMediaFunction(meeting, localStream, localShare);
+            } else {
+              connectCounter += 1;
+              if(connectCounter > maxCounterAttempts || manualLeave || meeting.state == "LEFT"){
+                let err_msg = `no one let me in, clearing interval`;
+                console.log(err_msg);
+                clearInterval(intervalID);
+                connectCounter = 0;
+                try {
+                  resetControls();
+                  meeting.leave()
+                } catch (e) {
+                  console.log('probably already left, thus the reason for this error:');
+                  console.log(e);
+                }
               }
             }
-            $(`#${selector} option[value="${devices[i].deviceId}"]`).text(devices[i].label).prop('selected', selected);
-          }
-          isActiveMeeting = true;
-          showControls();
-        });
+          }, pollMeetingStateInterval);
+        }
+
       });
     }
   });
 }
 
 function callFunction(event){
+  showHangup();
   event.preventDefault();
   console.log(`got destination - ${destination}`);
   // attaching before the request
@@ -622,6 +691,8 @@ function callFunction(event){
     .catch(error => {
       // Report the error
       console.error(error);
+      alert(error);
+      resetControls();
     });
 }
 

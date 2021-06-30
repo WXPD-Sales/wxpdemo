@@ -13,6 +13,7 @@ head
   link(rel='stylesheet' href='css/guest.css')
 
   script(src='https://browser.sentry-cdn.com/5.23.0/bundle.tracing.min.js' crossorigin='anonymous')
+  script(src="js/phoneNumberValidate.js")
   script(src='js/client.js' defer='')
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
 
@@ -30,6 +31,18 @@ header.padit.md-top-bar.md-top-bar--dark.myrow(role='navigation')
         .md-brand__title     Webex Demo Session Generator
 #container(align='center' style='margin: 10px; align-content: center;')
   main
+    div#overlay
+      div#sms-input
+        | Enter a mobile number to send link
+        br
+        input#number-input.cui-input(type="text")
+        br
+        p#error-number-input
+        br
+        button#send-sms.cui-button(onclick='sendSMS();')
+          | Send SMS
+        br
+        img#spinner(src="images/icons/spinner_16.png")
     br
     section#guest_info_section.dreams
       p.bold

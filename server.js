@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const RedisExpiredEvents = require("./redis-expired-events");
 const expiry = require("./expiry");
 const app = express();
+const fs = require('fs');
 const thismoment = require("moment");
 const url = require("url");
 const randomize = require("randomatic");
@@ -16,7 +17,7 @@ const rr = new RedisRepo();
 const tokgen = require("./token-generator");
 const email_validator = require("email-validator");
 const request = require("request");
-//var secured = require('./lib/middleware/secured');
+var webex = require('webex/env');
 //sentry.io
 const Sentry = require("@sentry/node");
 Sentry.init({
@@ -50,44 +51,55 @@ app.engine('pug', require('pug').__express)
 app.set("view engine", "pug");
 app.set('views', __dirname + '/public');
 
-var indexRouter = require("./routes/index");
+var router = express.Router();
+// simple logger for this router's requests
+// all requests to this router will first hit this middleware
+router.use(function(req, res, next) {
+  console.log('%s %s %s', req.method, req.url, req.path);
+  next();
+});
 
-// ..
-app.use(`/${process.env.MY_ROUTE}`, indexRouter);
+function redirect(res, url){
+  res.redirect(`${process.env.MY_ROUTE}${url}`);
+}
 
-// ..
-app.use(`/${process.env.MY_ROUTE}`, express.static("public"));
+router.get(`/`, function (req, res, next) {
+  redirect(res, `/linkgen`);
+});
+
+router.use(express.static("public"));
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+//router.use(bodyParser.urlencoded({ extended: true }));
 
 // parse application/json
-app.use(bodyParser.json());
+router.use(bodyParser.json());
 
-app.get(`/${process.env.MY_ROUTE}/linkgen`, function (req, res, next) {
+router.get(`/linkgen`, function (req, res, next) {
+  console.log('in linkgen')
   if(req.session.userToken){
+    console.log('trying to render')
     res.render('linkgen', {});
   } else {
     res.redirect(`${process.env.WEBEX_AUTH_URL}&state=linkgen`);
   }
 });
 
-app.get(`/${process.env.MY_ROUTE}/login`, function (req, res, next) {
+router.get(`/login`, function (req, res, next) {
   console.log(req.session);
-  //res.cookie("sessionId", req.session.userToken);
   if(req.session.codeComplete){
     let returnTo = req.session.returnTo;
     delete req.session.returnTo;
     if(returnTo == null || returnTo == undefined){
-      returnTo = `/${process.env.MY_ROUTE}/linkgen`;
+      returnTo = `${process.env.MY_ROUTE}/linkgen`;
     }
-    res.redirect(returnTo);
+    redirect(res, `/linkgen`);
   } else {
     res.sendFile(__dirname + `/public/login.html`);
   }
 });
 
-app.post(`/${process.env.MY_ROUTE}/code`, function(req, res, next) {
+router.post(`/code`, function(req, res, next) {
   console.log(req.body);
   rr.set(req.body.session, req.body.code, 600)
     .then(() => {
@@ -100,7 +112,7 @@ app.post(`/${process.env.MY_ROUTE}/code`, function(req, res, next) {
     });
 })
 
-app.post(`/${process.env.MY_ROUTE}/confirm`, function(req, res, next) {
+router.post(`/confirm`, function(req, res, next) {
   rr.get(req.session.sessionId).then(result => {
     if(parseInt(result) != parseInt(req.body.code)){
       res.json({"status":"failure", "message":"Code doesn't match.  Try again."});
@@ -110,7 +122,7 @@ app.post(`/${process.env.MY_ROUTE}/confirm`, function(req, res, next) {
       delete req.session.returnTo;
       req.session.save();
       if(returnTo == null || returnTo == undefined){
-        returnTo = `/${process.env.MY_ROUTE}/linkgen`;
+        returnTo = `${process.env.MY_ROUTE}/linkgen`;
       }
       res.json({"status":"success", "message":"", "url":returnTo});
     }
@@ -120,7 +132,7 @@ app.post(`/${process.env.MY_ROUTE}/confirm`, function(req, res, next) {
   });
 })
 
-app.post(`/${process.env.MY_ROUTE}/verify`, function(req, res, next) {
+router.post(`/verify`, function(req, res, next) {
   console.log('verify');
   console.log(req.body);
   if(req.body.phoneNumber.length == 10){
@@ -133,7 +145,7 @@ app.post(`/${process.env.MY_ROUTE}/verify`, function(req, res, next) {
       json: {
         number: req.body.phoneNumber,
         session: sessionId,
-        redirect_uri: `https://${req.get("host")}/${process.env.MY_ROUTE}/code`
+        redirect_uri: `https://${req.get("host")}${process.env.MY_ROUTE}/code`
       }
     },function(error, resp, body) {
         if (!error && resp.statusCode === 200) {
@@ -156,11 +168,12 @@ function renderFunc(req, res) {
           res.cookie("userType", "guest", cookieOptions);
           res.cookie("token", tokgen(JSON.parse(result).display_name).token, cookieOptions);
           res.cookie("target", JSON.parse(result).sip_target, cookieOptions);
+          res.cookie("destinationType", JSON.parse(result).destination_type, cookieOptions);
           res.cookie("label", JSON.parse(result).display_name, cookieOptions);
           res.sendFile(__dirname + `/public/${parts[2]}.html`);
         } else {
           req.session.returnTo = req.originalUrl;
-          res.redirect(`/${process.env.MY_ROUTE}/login`);
+          redirect(res, `/login`);
         }
       });
     } else {
@@ -179,13 +192,13 @@ function quickRenderFunc(req, res) {
   res.sendFile(__dirname + `/public/${useFile}.html`);
 }
 
-app.get(`/${process.env.MY_ROUTE}/widget`, quickRenderFunc);
-app.get(`/${process.env.MY_ROUTE}/guest`, quickRenderFunc);
-app.get(`/${process.env.MY_ROUTE}/widget/:guest_session_id`, renderFunc);
-app.get(`/${process.env.MY_ROUTE}/guest/:guest_session_id`, renderFunc);
+router.get(`/widget`, quickRenderFunc);
+router.get(`/guest`, quickRenderFunc);
+router.get(`/widget/:guest_session_id`, renderFunc);
+router.get(`/guest/:guest_session_id`, renderFunc);
 
-app.use(`/${process.env.MY_ROUTE}/widget`, express.static(__dirname + '/public'));
-app.use(`/${process.env.MY_ROUTE}/guest`, express.static(__dirname + '/public'));
+router.use(`/widget`, express.static(__dirname + '/public'));
+router.use(`/guest`, express.static(__dirname + '/public'));
 
 
 let employeePaths = {"employee":"guest", "employee-widget":"widget"}
@@ -206,6 +219,7 @@ function renderEmployeeFunc(req, res) {
                   res.cookie("userType", "employee", cookieOptions);
                   res.cookie("token", req.session.userToken, cookieOptions);
                   res.cookie("target", JSON.parse(result).sip_target, cookieOptions);
+                  res.cookie("destinationType", JSON.parse(result).destination_type, cookieOptions);
                   res.cookie("label", jbody.displayName, cookieOptions);
                   res.sendFile(__dirname + `/public/${employeePaths[parts[2]]}.html`);
                 } else {
@@ -223,13 +237,13 @@ function renderEmployeeFunc(req, res) {
   });
 }
 
-app.get(`/${process.env.MY_ROUTE}/employee`, quickRenderFunc);
-app.get(`/${process.env.MY_ROUTE}/employee-widget`, quickRenderFunc);
-app.get(`/${process.env.MY_ROUTE}/employee/:guest_session_id`, renderEmployeeFunc);
-app.get(`/${process.env.MY_ROUTE}/employee-widget/:guest_session_id`, renderEmployeeFunc);
+router.get(`/employee`, quickRenderFunc);
+router.get(`/employee-widget`, quickRenderFunc);
+router.get(`/employee/:guest_session_id`, renderEmployeeFunc);
+router.get(`/employee-widget/:guest_session_id`, renderEmployeeFunc);
 
-app.use(`/${process.env.MY_ROUTE}/employee`, express.static(__dirname + '/public'));
-app.use(`/${process.env.MY_ROUTE}/employee-widget`, express.static(__dirname + '/public'));
+router.use(`/employee`, express.static(__dirname + '/public'));
+router.use(`/employee-widget`, express.static(__dirname + '/public'));
 
 
 function isRoomId(myTarget){
@@ -237,7 +251,11 @@ function isRoomId(myTarget){
   return result.indexOf('ciscospark://us/ROOM/') >= 0;
 }
 
-app.get(`/${process.env.MY_ROUTE}/create_token`, function(req, res) {
+router.get(`/create_token`, function(req, res, next) {
+  console.log('here');
+  console.log(next)
+  let redirectURI = `https://${req.get("host")}${process.env.MY_ROUTE}${req.route.path}`;
+  console.log(redirectURI);
   request.post({
       url: 'https://webexapis.com/access_token',
       form: {
@@ -245,15 +263,16 @@ app.get(`/${process.env.MY_ROUTE}/create_token`, function(req, res) {
         client_id: process.env.WEBEX_AUTH_CLIENT,
         client_secret: process.env.WEBEX_AUTH_SECRET,
         code: req.query.code,
-        redirect_uri: `https://${req.get("host")}${req.route.path}`
+        redirect_uri: redirectURI
       }
     },function(error, resp, body) {
+      console.log(body);
         if (!error && resp.statusCode === 200) {
           jbody = JSON.parse(body);
           console.log(req.query.state);
           req.session.userToken = jbody.access_token;
           req.session.save();
-          res.redirect(`/${process.env.MY_ROUTE}/${req.query.state}`);
+          redirect(res, `/${req.query.state}`);
         } else {
           res.json(error);
         }
@@ -261,7 +280,7 @@ app.get(`/${process.env.MY_ROUTE}/create_token`, function(req, res) {
     );
 });
 
-function generateLinks(req, res, Urlexpiry){
+function generateLinks(req, res, Urlexpiry, destinationType){
   let urlPaths = {"guest":["guest", "widget"], "employee": ["employee", "employee-widget"]};
   let respObjects = {};
   let rrPromises = [];
@@ -269,12 +288,13 @@ function generateLinks(req, res, Urlexpiry){
     let guestSessionID = randomize("Aa0", 16);
     let displayName = i.charAt(0).toUpperCase() + i.slice(1);//capitalize first letter
     req.body.display_name = displayName
+    req.body.destination_type = destinationType
     let rrPromise = rr.setURL(guestSessionID, JSON.stringify(req.body), Urlexpiry)
       .then(() => {
         respObjects[displayName] = [];
         for(let j in urlPaths[i]){
           //TODO
-          respObjects[displayName].push(`https://${req.get("host")}/${process.env.MY_ROUTE}/${urlPaths[i][j]}/${guestSessionID}`);
+          respObjects[displayName].push(`${process.env.BASE_URL}${process.env.MY_ROUTE}/${urlPaths[i][j]}/${guestSessionID}`);
         }
       })
       .catch(function(err) {
@@ -293,7 +313,7 @@ function generateLinks(req, res, Urlexpiry){
   })
 }
 
-app.post(`/${process.env.MY_ROUTE}/create_url`, function(req, res) {
+router.post(`/create_url`, function(req, res) {
   if (req.body.expiry_date) {
     if(email_validator.validate(req.body.sip_target) || isRoomId(req.body.sip_target) || req.body.sip_target == "pmr"){
       console.log(thismoment(req.body.expiry_date).utcOffset(req.body.offset));
@@ -307,7 +327,7 @@ app.post(`/${process.env.MY_ROUTE}/create_url`, function(req, res) {
           req.body.expiry_date
         )
       );
-      res.cookie("destinationType", 'sip', cookieOptions);
+      let destinationType = 'sip';
       if(req.body.sip_target == "pmr"){
         request.get({
             url: 'https://webexapis.com/v1/meetingPreferences/personalMeetingRoom',
@@ -318,25 +338,29 @@ app.post(`/${process.env.MY_ROUTE}/create_url`, function(req, res) {
                 jbody = JSON.parse(body);
                 console.log(jbody['personalMeetingRoomLink']);
                 req.body.sip_target = jbody['personalMeetingRoomLink'];
-                generateLinks(req, res, Urlexpiry);
+                generateLinks(req, res, Urlexpiry, destinationType);
               } else {
                 res.json(error);
               }
             }
           );
       } else {
-        request.get({
-            url: `https://webexapis.com/v1/people?email=${req.body.sip_target}`,
-            headers: { 'Authorization': `Bearer ${req.session.userToken}` }
-          },function(error, resp, body) {
-              console.log(body);
-              if (!error && resp.statusCode === 200) {
-                jbody = JSON.parse(body);
-                if(jbody['items'].length != 0) res.cookie("destinationType", 'email', cookieOptions);
+        if(req.session.userToken != undefined){
+          request.get({
+              url: `https://webexapis.com/v1/people?email=${req.body.sip_target}`,
+              headers: { 'Authorization': `Bearer ${req.session.userToken}` }
+            },function(error, resp, body) {
+                console.log(body);
+                if (!error && resp.statusCode === 200) {
+                  jbody = JSON.parse(body);
+                  if(jbody['items'].length != 0) destinationType = 'email';
+                }
+                generateLinks(req, res, Urlexpiry, destinationType);
               }
-              generateLinks(req, res, Urlexpiry);
-            }
-          );
+            );
+        } else {
+          generateLinks(req, res, Urlexpiry, destinationType);
+        }
       }
     } else {
       res.send({
@@ -352,6 +376,175 @@ app.post(`/${process.env.MY_ROUTE}/create_url`, function(req, res) {
   }
 });
 
+function sendCreateCard(destination){
+  let rawCard = fs.readFileSync(__dirname +'/cards/create.json');
+  let card = JSON.parse(rawCard);
+  sendCard(card, destination);
+}
+
+function sendLinksCard(destination, target, urls){
+  let rawCard = fs.readFileSync(__dirname +'/cards/links.json');
+  let card = JSON.parse(rawCard);
+  card.body[1].columns[1].items[0].text = target;
+  for(let demoType in urls){
+    for(let url of urls[demoType]){
+      let connectType = "Browser SDK";
+      if(url.indexOf("widget") >= 0){
+        connectType = "Widget";
+      }
+      let title = demoType + " " + connectType
+      card.body[2].choices.push({
+        "title": `[${title}](${url})`,
+        "value": url
+      })
+    }
+  }
+  sendCard(card, destination);
+}
+
+
+function sendCard(card, destination){
+  let message = {   "roomId":destination,
+                    "markdown":"Guest Demo AdaptiveCard",
+                    "attachments":[
+                        {
+                            "contentType": "application/vnd.microsoft.card.adaptive",
+                            "content": card
+                        }
+                    ]
+                }
+  webex.messages.create(message).then(function(res){
+    console.log('sendCard messages.create:');
+    console.log(res);
+  });
+}
+
+router.post(`/bot`, function(req, res) {
+  if(req.body.actorId != process.env.WEBEX_BOT_ID){
+    console.log(req.body)
+    sendCreateCard(req.body.data.roomId);
+    res.send('OK');
+  }
+});
+
+function getExpireDate(){
+  let today = new Date();
+  let defaultDate = new Date(today);
+  defaultDate.setDate(today.getDate() + 1);
+  let time = today.toISOString().slice(11,16);
+  return defaultDate.toISOString().slice(0,10) + " " + time;
+}
+
+router.post(`/card`, function(req, res) {
+  if(req.body.actorId != process.env.WEBEX_BOT_ID){
+    //console.log(req.body)
+    //sendCard(req.body.data.roomId);
+    webex.attachmentActions.get(req.body.data.id).then(function(result){
+      //console.log(`/card res:${res}`)
+      console.log(result);
+      if(result.inputs.submit == "create"){
+        let new_data = {}
+        new_data.sip_target = result.inputs.destination;
+        new_data.expiry_date = getExpireDate();
+        new_data.offset = 0;
+        request.post({
+              url: `http://localhost:${process.env.PORT}${process.env.MY_ROUTE}/create_url`,
+              headers: {'content-type' : 'application/json'},
+              body:    JSON.stringify(new_data)
+          }, function(error, response, createResult){
+            //console.log(error);
+            //console.log(response);
+            console.log(createResult);
+            jresult = JSON.parse(createResult);
+            if(jresult.result == "Error"){
+              webex.messages.create({"roomId":req.body.data.roomId, "markdown":jresult.message});
+            } else {
+              sendLinksCard(req.body.data.roomId, result.inputs.destination, jresult.urls);
+            }
+          }
+        )
+      } else if(result.inputs.submit == "links"){
+        //webex.messages.create({"roomId":req.body.data.roomId, "markdown":phone});
+        let message = "";
+        let new_data = {}
+        new_data.number = result.inputs.phone;
+        new_data.url = result.inputs.url;
+        if(new_data.url == null){
+          message = "You must select one of the url choices in the card."
+          webex.messages.create({"roomId":req.body.data.roomId, "markdown":message});
+        } else {
+          request.post({
+                url: `http://localhost:${process.env.PORT}${process.env.MY_ROUTE}/sms`,
+                headers: {'content-type' : 'application/json'},
+                body:    JSON.stringify(new_data)
+            }, function(error, response, body){
+              console.log(body);
+              jresult = JSON.parse(body);
+              if(jresult.status == "failure"){
+                message = jresult.message;
+              } else {
+                message = `Success - [Link](${result.inputs.url}) sent to ${result.inputs.phone} (be sure to check your spam)!`;
+              }
+              webex.messages.create({"roomId":req.body.data.roomId, "markdown":message});
+            }
+          )
+        }
+      }
+    })
+    res.send('OK');
+  }
+});
+
+router.post(`/sms`, function(req, res, next) {
+  console.log('sms');
+  console.log(req.body);
+  let status = "success"
+  let message = "";
+  if(req.body.number == null){
+    message = "No phone 'number' key provided."
+  } else if(req.body.url == null){
+    message = "No 'url' key provided."
+  }
+
+  let number = req.body.number;
+  number = number.replace(/[^0-9]/g, "");//remove anything that isn't a number
+
+  if(number.length == 10){
+    number = "1"+number;
+  }
+
+  if(number.length != 11){
+    message = "Phone number must be a 10 digit US/Canadian number."
+  }
+
+  if(message != ""){
+    status = "failure";
+  }
+  //TODO: Make sure PMRs work for destinationType in widget and check joining PMR alone (wait to addMedia for JOIN - see bridgeCall)
+  if(status == "success"){
+    request.post({
+        url: 'https://hooks-us.imiconnect.io/events/F86333B431', //process.env.IMISMS_RELAY,
+        json: {
+          number: number,
+          message: req.body.url
+        }
+      },function(error, resp, body) {
+          if (!error && resp.statusCode === 200) {
+            console.log('success to imi');
+          } else {
+            console.log(error);
+            status = "failure";
+            message = `An error occurred sending the SMS to ${number}`;
+          }
+          res.send({"status":status, "message":message});
+        }
+      );
+  } else {
+      res.send({"status":status, "message":message});
+  }
+})
+
+app.use(`${process.env.MY_ROUTE}`, router);
 // listen for requests :)
 const listener = app.listen(process.env.PORT, function() {
   console.log("Your app is listening on port " + listener.address().port);

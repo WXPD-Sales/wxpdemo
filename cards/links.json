@@ -1,0 +1,94 @@
+{
+    "type": "AdaptiveCard",
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.2",
+    "body": [
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "auto",
+                    "items": [
+                        {
+                            "type": "Image",
+                            "url": "https://wxsd.wbx.ninja/wxsd-guest-demo/images/cisco/cisco-logo-blue.png",
+                            "width": "64px"
+                        }
+                    ]
+                },
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "wrap": true,
+                            "text": "Webex Demo Session Links",
+                            "size": "Medium"
+                        }
+                    ],
+                    "verticalContentAlignment": "Center"
+                }
+            ]
+        },
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "auto",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Meeting Destination:",
+                            "wrap": true
+                        }
+                    ],
+                    "verticalContentAlignment": "Center"
+                },
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "verticalContentAlignment": "Center",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "1234567890@webex.com",
+                            "weight": "Lighter"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Input.ChoiceSet",
+            "choices": [
+            ],
+            "placeholder": "Placeholder text",
+            "style": "expanded",
+            "id": "url"
+        },
+        {
+            "type": "TextBlock",
+            "text": "Select a choice above, enter your mobile phone number, and click **Send** to receive the link as an SMS.",
+            "wrap": true,
+            "weight": "Lighter"
+        },
+        {
+            "type": "Input.Text",
+            "placeholder": "Mobile Phone Number",
+            "id": "phone"
+        },
+        {
+            "type": "ActionSet",
+            "actions": [
+                {
+                    "type": "Action.Submit",
+                    "title": "Send",
+                    "data":{"submit":"links"}
+                }
+            ]
+        }
+    ]
+}

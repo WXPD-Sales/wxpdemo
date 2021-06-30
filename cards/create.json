@@ -1,0 +1,57 @@
+{
+    "type": "AdaptiveCard",
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.2",
+    "body": [
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "auto",
+                    "items": [
+                        {
+                            "type": "Image",
+                            "url": "https://wxsd.wbx.ninja/wxsd-guest-demo/images/cisco/cisco-logo-blue.png",
+                            "width": "64px"
+                        }
+                    ]
+                },
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "wrap": true,
+                            "text": "Webex Demo Session Generator",
+                            "size": "Medium"
+                        }
+                    ],
+                    "verticalContentAlignment": "Center"
+                }
+            ]
+        },
+        {
+            "type": "TextBlock",
+            "text": "Enter an existing SIP URI or roomId and you will receive links to join a meeting at that destination. The links will allow you to join as either a Guest or Licensed User from the SDK or Widget.",
+            "wrap": true,
+            "weight": "Lighter"
+        },
+        {
+            "type": "Input.Text",
+            "placeholder": "SIP URI or roomId",
+            "id": "destination"
+        },
+        {
+            "type": "ActionSet",
+            "actions": [
+                {
+                    "type": "Action.Submit",
+                    "title": "Create",
+                    "data":{"submit":"create"}
+                }
+            ]
+        }
+    ]
+}
