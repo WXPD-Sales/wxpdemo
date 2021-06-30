@@ -523,7 +523,7 @@ router.post(`/sms`, function(req, res, next) {
   //TODO: Make sure PMRs work for destinationType in widget and check joining PMR alone (wait to addMedia for JOIN - see bridgeCall)
   if(status == "success"){
     request.post({
-        url: 'https://hooks-us.imiconnect.io/events/F86333B431', //process.env.IMISMS_RELAY,
+        url: process.env.IMISMS_RELAY,
         json: {
           number: number,
           message: req.body.url
