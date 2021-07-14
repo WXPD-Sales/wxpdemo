@@ -1,6 +1,6 @@
 doctype html
 head
-  title Welcome to a Webex Platform demo on Glitch!
+  title WXSD Guest Link Generator
   meta(name='description' content='A cool Webex Programmable Platform demo made with Glitch')
   link#favicon(rel='icon' href='images/favicon.ico' type='image/x-icon')
   meta(charset='utf-8')
@@ -20,15 +20,15 @@ head
   link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css')
   link(rel='stylesheet' type='text/css' href='https://npmcdn.com/flatpickr/dist/themes/dark.css')
   script(src='https://cdn.jsdelivr.net/npm/flatpickr')
-header.padit.md-top-bar.md-top-bar--dark.myrow(role='navigation')
-  .padit.md-top-bar__container
+header.md-top-bar.md-top-bar--dark.myrow(role='navigation')
+  .md-top-bar__container
     .md-top-bar__brand
       a.md-brand(href='/')
         .md-brand__logo.md-brand__logo--pad
           // Note: use either image or icon, but not both
-          // img src="/assets/spark-logo.svg" alt="Momentum UI"
-          i.icon.icon-cisco-logo
-        .md-brand__title     Webex Demo Session Generator
+          img#webex-logo(src="images/cisco-webex/webex-logo_128.png" alt="Webex Logo")
+          //i.icon.icon-cisco-logo
+        .md-brand__title     Guest Link Generator
 #container(align='center' style='margin: 10px; align-content: center;')
   main
     div#overlay
@@ -77,5 +77,5 @@ header.padit.md-top-bar.md-top-bar--dark.myrow(role='navigation')
   br
   footer
     | Made with 
-    a(href='https://developer.webex.com') Cisco Webex
+    a(href='https://developer.webex.com') Webex
     | !

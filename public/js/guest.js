@@ -90,7 +90,7 @@ console.log(userType);
 if(userType == "guest"){
   console.log(`Found JWT - ${token}`);
 } else {
-  $('#main-title').text("Webex Employee Access");
+  $('#main-title').text("Licensed User Access");
   console.log(`Found token - ${token}`);
   credentials.credentials = { access_token: token };
 }
