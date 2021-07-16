@@ -45,7 +45,6 @@ header.md-top-bar.md-top-bar--dark.myrow(role='navigation')
         img#spinner(src="images/icons/spinner_16.png")
     br
     section#guest_info_section.dreams
-      p.bold
       h4 To what endpoint should we connect the users?
       div#sip_uri_radio.display-radio
         div#sip_uri_radio-pmr
@@ -55,14 +54,21 @@ header.md-top-bar.md-top-bar--dark.myrow(role='navigation')
           input.radio-input(type="radio", name="sip_uri", value="custom")
           | #[input#sipuri.cui-input(type='email' placeholder='SIP URI or roomId' required='')]
       //input#sipuri.cui-input(type='email' placeholder='SIP URI or roomId' required='')
-      p
       br
-      p.bold
       h4 When should the session expire?
       h5#selected_expiry
+      //    | (hours)
+      //div#expire_div
+      //  select#expire_hours.select
+      //      option(value='1') 1
+      //      option(value='4') 4
+      //      option(value='8' selected= true) 8
+      //      option(value='12') 12
+      //      option(value='24') 24
+      //  p
+      //    | (hours)
         | Select a Date and Time...
       i#flatpckr.md-button--circle.md-button--48.cui-icon.icon.icon-calendar-month_36(style='color:#000000')
-      p
       br
       button#create_button.cui-button
         | Create Session

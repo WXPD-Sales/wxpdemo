@@ -37,19 +37,18 @@
             "columns": [
                 {
                     "type": "Column",
-                    "width": "auto",
                     "items": [
                         {
                             "type": "TextBlock",
-                            "text": "Meeting Destination:",
-                            "wrap": true
+                            "text": "Meeting Destination:"
                         }
                     ],
-                    "verticalContentAlignment": "Center"
+                    "verticalContentAlignment": "Center",
+                    "width": 35
                 },
                 {
                     "type": "Column",
-                    "width": "stretch",
+                    "width": 65,
                     "verticalContentAlignment": "Center",
                     "items": [
                         {
@@ -62,12 +61,41 @@
             ]
         },
         {
+            "type": "ColumnSet",
+            "spacing": "None",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": 35,
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Expires in:",
+                            "wrap": true
+                        }
+                    ],
+                    "verticalContentAlignment": "Center"
+                },
+                {
+                    "type": "Column",
+                    "width": 65,
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "a day",
+                            "wrap": true,
+                            "weight": "Lighter"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "type": "Input.ChoiceSet",
-            "choices": [
-            ],
             "placeholder": "Placeholder text",
             "style": "expanded",
-            "id": "url"
+            "id": "url",
+            "choices":[]
         },
         {
             "type": "TextBlock",
@@ -86,7 +114,9 @@
                 {
                     "type": "Action.Submit",
                     "title": "Send",
-                    "data":{"submit":"links"}
+                    "data": {
+                        "submit": "links"
+                    }
                 }
             ]
         }

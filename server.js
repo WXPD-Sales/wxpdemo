@@ -314,19 +314,22 @@ function generateLinks(req, res, Urlexpiry, destinationType){
 }
 
 router.post(`/create_url`, function(req, res) {
-  if (req.body.expiry_date) {
+  if (req.body.expire_hours || req.body.expiry_date) {
     if(email_validator.validate(req.body.sip_target) || isRoomId(req.body.sip_target) || req.body.sip_target == "pmr"){
-      console.log(thismoment(req.body.expiry_date).utcOffset(req.body.offset));
+      /*console.log(thismoment(req.body.expiry_date).utcOffset(req.body.offset));
       let endmoment = thismoment(req.body.expiry_date).utcOffset(
         req.body.offset
-      );
-
-      let Urlexpiry = Math.round(
-        expiry.calculateSeconds(
-          thismoment().utcOffset(req.body.offset, true),
-          req.body.expiry_date
-        )
-      );
+      );*/
+      let Urlexpiry = req.body.expire_hours * 60 * 60 //convert hours to seconds;
+      if(req.body.expiry_date){
+        Urlexpiry = Math.round(
+          expiry.calculateSeconds(
+            thismoment().utcOffset(req.body.offset * -1),
+            req.body.expiry_date
+          )
+        );
+      }
+      console.log(Urlexpiry);
       let destinationType = 'sip';
       if(req.body.sip_target == "pmr"){
         request.get({
@@ -379,13 +382,21 @@ router.post(`/create_url`, function(req, res) {
 function sendCreateCard(destination){
   let rawCard = fs.readFileSync(__dirname +'/cards/create.json');
   let card = JSON.parse(rawCard);
+  //const offset = new Date().getTimezoneOffset();
+  /*var today = new Date();
+  var defaultDate = new Date(today);
+  defaultDate.setDate(today.getDate() + 1);
+  //var time = today.toISOString().slice(11,16);
+  let picked_date = defaultDate.toISOString().slice(0,10) + " " + time;
+  document.getElementById('selected_expiry').innerHTML = picked_date;*/
   sendCard(card, destination);
 }
 
-function sendLinksCard(destination, target, urls){
+function sendLinksCard(destination, target, urls, expires_msg){
   let rawCard = fs.readFileSync(__dirname +'/cards/links.json');
   let card = JSON.parse(rawCard);
   card.body[1].columns[1].items[0].text = target;
+  card.body[2].columns[1].items[0].text = expires_msg;
   for(let demoType in urls){
     for(let url of urls[demoType]){
       let connectType = "Browser SDK";
@@ -393,7 +404,7 @@ function sendLinksCard(destination, target, urls){
         connectType = "Widget";
       }
       let title = demoType + " " + connectType
-      card.body[2].choices.push({
+      card.body[3].choices.push({
         "title": `[${title}](${url})`,
         "value": url
       })
@@ -426,14 +437,20 @@ router.post(`/bot`, function(req, res) {
     res.send('OK');
   }
 });
-
-function getExpireDate(){
+/*
+function getExpireDate(hours){
   let today = new Date();
-  let defaultDate = new Date(today);
-  defaultDate.setDate(today.getDate() + 1);
-  let time = today.toISOString().slice(11,16);
-  return defaultDate.toISOString().slice(0,10) + " " + time;
-}
+  //let defaultDate = new Date(today);
+  //TODO: make this work for hours, not days.
+  //TODO: will also need to adjust the front end (currently defaults to 1 day and allows many more days to be selected)
+  //defaultDate.setDate(today.getDate() + parseInt(days,10));
+  //defaultDate.setHours(defau)
+  //let time = today.toISOString().slice(11,16);
+  //return defaultDate.toISOString().slice(0,10) + " " + time;
+  today.setHours(today.getHours() + parseInt(hours,10));//This will add an extra hour when crossing the DST switch over, but not a big deal.
+  return today.toISOString();
+  //return today.toISOString().slice(0,10) + " " + today.toISOString().slice(11,16);
+}*/
 
 router.post(`/card`, function(req, res) {
   if(req.body.actorId != process.env.WEBEX_BOT_ID){
@@ -445,7 +462,10 @@ router.post(`/card`, function(req, res) {
       if(result.inputs.submit == "create"){
         let new_data = {}
         new_data.sip_target = result.inputs.destination;
-        new_data.expiry_date = getExpireDate();
+        let expire_hours = result.inputs.expires_in;
+        console.log(expire_hours);
+        new_data.expire_hours = parseInt(expire_hours,10);//getExpireDate(expire_hours);
+        console.log(new_data.expire_hours);
         new_data.offset = 0;
         request.post({
               url: `http://localhost:${process.env.PORT}${process.env.MY_ROUTE}/create_url`,
@@ -459,7 +479,7 @@ router.post(`/card`, function(req, res) {
             if(jresult.result == "Error"){
               webex.messages.create({"roomId":req.body.data.roomId, "markdown":jresult.message});
             } else {
-              sendLinksCard(req.body.data.roomId, result.inputs.destination, jresult.urls);
+              sendLinksCard(req.body.data.roomId, result.inputs.destination, jresult.urls, jresult.expires);
             }
           }
         )
@@ -494,6 +514,7 @@ router.post(`/card`, function(req, res) {
     res.send('OK');
   }
 });
+
 
 router.post(`/sms`, function(req, res, next) {
   console.log('sms');
@@ -552,7 +573,6 @@ const listener = app.listen(process.env.PORT, function() {
 
 RedisExpiredEvents();
 //YYYYMMDD
-//console.log(expiry.calculateDays(thismoment(),'20190714'));
 //console.log(expiry.calculateSeconds(thismoment(),'20200714'));
 
 //rr.setURL('98r34982r', '325325', 500);

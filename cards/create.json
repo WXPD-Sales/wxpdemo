@@ -44,14 +44,70 @@
             "id": "destination"
         },
         {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "auto",
+                    "spacing": "None",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Expires in (hours):",
+                            "weight": "Lighter"
+                        }
+                    ],
+                    "verticalContentAlignment": "Center"
+                },
+                {
+                    "type": "Column",
+                    "width": "auto",
+                    "items": [
+                        {
+                            "type": "Input.ChoiceSet",
+                            "choices": [
+                                {
+                                    "title": "1",
+                                    "value": "1"
+                                },
+                                {
+                                    "title": "4",
+                                    "value": "4"
+                                },
+                                {
+                                    "title": "8",
+                                    "value": "8"
+                                },
+                                {
+                                    "title": "12",
+                                    "value": "12"
+                                },
+                                {
+                                    "title": "24",
+                                    "value": "24"
+                                }
+                            ],
+                            "id": "expires_in",
+                            "spacing": "None",
+                            "value": "8"
+                        }
+                    ],
+                    "verticalContentAlignment": "Center"
+                }
+            ]
+        },
+        {
             "type": "ActionSet",
             "actions": [
                 {
                     "type": "Action.Submit",
                     "title": "Create",
-                    "data":{"submit":"create"}
+                    "data": {
+                        "submit": "create"
+                    }
                 }
-            ]
+            ],
+            "spacing": "None"
         }
     ]
 }

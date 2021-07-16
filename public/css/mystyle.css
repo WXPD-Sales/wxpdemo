@@ -23,6 +23,10 @@
   justify-content: center;
 }
 
+#expire_div {
+  width:max-content;
+}
+
 #error-number-input {
   display: none;
   color: red;

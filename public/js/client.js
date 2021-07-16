@@ -1,17 +1,48 @@
 const offset = new Date().getTimezoneOffset();
 var today = new Date();
-var defaultDate = new Date(today);
-defaultDate.setDate(today.getDate() + 1);
-var time = today.toISOString().slice(11,16);
-let picked_date = defaultDate.toISOString().slice(0,10) + " " + time;
+today.setHours(today.getHours() + 8);//This will add an extra hour when crossing the DST switch over, but not a big deal.
+//var defaultDate = new Date(today);
+//defaultDate.setDate(today.getDate() + 1);
+//var time = today.toISOString().slice(11,16);
+//let picked_date = defaultDate.toISOString().slice(0,10) + " " + time;
+function getPickedDateStr(addDay){
+  if(addDay == undefined){
+    addDay = 0;
+  }
+  return today.getFullYear() + "-" + ('0' + (today.getMonth()+1)).slice(-2) + "-" + ('0' + (today.getDate() + addDay)).slice(-2) + " " + today.toLocaleTimeString();
+}
+let picked_date = getPickedDateStr();
+//let picked_date =  today.toLocaleTimeString();
 document.getElementById('selected_expiry').innerHTML = picked_date;
 //console.log(`today is ${time}`);
-//console.log(`today is ${today}`);
-//console.log(picked_date);
+console.log(`today is ${today}`);
+console.log(picked_date);
 let urlPath = window.location.pathname;
 let deployPath = urlPath.split('/linkgen')[0];
 console.log(deployPath);
 
+today.toLocaleTimeString().slice(0,5)
+//TODO: fix timepicker not date.
+
+flatpickr("#flatpckr",{
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    defaultDate: ('0' + today.getHours()).slice(-2) + ":" + ('0' + today.getMinutes()).slice(-2),
+    onChange: function(selectedDates, dateStr, instance) {
+      let hr_min_array = dateStr.split(':');
+      today.setHours(parseInt(hr_min_array[0],10));
+      today.setMinutes(parseInt(hr_min_array[1],10));
+      let current = new Date();
+      let addDay = 0;
+      if(today < current){
+        addDay = 1;
+      }
+      picked_date = getPickedDateStr(addDay);
+      document.getElementById('selected_expiry').innerHTML = picked_date;
+    },
+});
+/*
 flatpickr("#flatpckr", {
   enableTime: true,
   dateFormat: "Y-m-d H:i",
@@ -24,7 +55,7 @@ flatpickr("#flatpckr", {
     document.getElementById('selected_expiry').innerHTML = picked_date;
   },
   allowInput: true,
-});
+});*/
 
 
 let create_button = document.getElementById('create_button');
@@ -63,16 +94,6 @@ async function create_guest_data_object(){
   return guest_data;
 };
 
-async function validate_message_object(message){
-  if(!message.expiry_date || !message.sip_target){
-    showMessage(`{"error":"Oops, you seem to be missing something.."}`);
-    return false;
-  } else {
-    console.log (JSON.stringify(message));
-    document.getElementById('selected_expiry').innerHTML = message.expiry_date;
-    return true;
-  }
-};
 
 async function post_data(){
   fetch(deployPath + '/create_url', {
@@ -183,11 +204,6 @@ async function send_to_email(){
 
 
 }
-/*
-async function send_to_sms(){
-  guest_data.send_to_mobile = document.getElementById('send_to_mobile').value;
-  console.log(guest_data);
-}*/
 
 let selectedLink = null;
 function smsFunction(link){
