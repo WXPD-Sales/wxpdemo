@@ -87,10 +87,12 @@
 
 <h2><a id="quick_custom_demo"></a>Quick Custom Demo with Github Pages</h2>
 
-You can access a dynamic widget (without proper authentication by using this url in your browser:
+### Widget
+
+You can access a dynamic widget (without proper authentication) by using this url in your browser:  
 https://wxsd-sales.github.io/wxpdemo/public/widget.html
 
-The page accepts the following URL parameters:
+The widget.html page accepts the following URL parameters:
 | Parameter  | Required | Description |
 | ------------- | ------------- | ------------- |
 | destination | required | The email address, roomId, or SIP URI  |
@@ -108,6 +110,25 @@ https://wxsd-sales.github.io/wxpdemo/public/widget.html?destination=someone@gmai
 https://wxsd-sales.github.io/wxpdemo/public/widget.html?destination=someone@gmail.com&destinationType=email&token=ABCD-EFG_HIJK&backgroundImage=https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80
 
 
+### SDK
+
+You can access a dynamic SDK page (without proper authentication) by using this url in your browser:  
+https://wxsd-sales.github.io/wxpdemo/public/guest.html
+
+The guest.html page accepts the following URL parameters:
+| Parameter  | Required | Description |
+| ------------- | ------------- | ------------- |
+| destination | required | The email address, roomId, or SIP URI  |
+| token | required | The Webex Bearer token of the local user (your token from the developer portal) |
+| userType | optional | "guest" (if using a guest JWT. If using a developer or OAuth token, do not include this parameter.) |
+
+All URL parameters must be properly URL encoded, for example:
+
+**Valid:**  
+https://wxsd-sales.github.io/wxpdemo/public/guest.html?destination=someone%2Btest@gmail.com&token=ABCD-EFG_HIJK
+
+**NOT Valid:** (because email address includes "+", but is not URL encoded)  
+https://wxsd-sales.github.io/wxpdemo/public/guest.html?destination=someone+test@gmail.com&token=ABCD-EFG_HIJK
 
 
 ## License
