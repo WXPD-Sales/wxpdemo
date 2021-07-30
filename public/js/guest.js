@@ -79,9 +79,11 @@ let credentials = {
   }
 };
 
-const userType = Cookies.get("userType");
+
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
+
+const userType = urlParams.get('userType') == null ? Cookies.get("userType") : urlParams.get('userType');
 const destination = urlParams.get('destination') == null ? Cookies.get("target") : urlParams.get('destination');
 const token = urlParams.get('token') == null ? Cookies.get("token") : urlParams.get('token');
 console.log(destination);
