@@ -9,6 +9,8 @@
     <a href="https://github.com/WXSD-Sales/wxpdemo/issues"><strong>Report Bug</strong></a>
     ·
     <a href="https://github.com/WXSD-Sales/wxpdemo/issues"><strong>Request Feature</strong></a>
+    .
+    <a href="#quick_custom_demo"><strong>Quick Custom Demo</strong></a>
   </p>
 </p>
 
@@ -82,6 +84,52 @@
    ```sh
    >$ node server.js
    ```
+
+<h2><a id="quick_custom_demo"></a>Quick Custom Demo with Github Pages</h2>
+
+### Widget
+
+You can access a dynamic widget (without proper authentication) by using this url in your browser:  
+https://wxsd-sales.github.io/wxpdemo/public/widget.html
+
+The widget.html page accepts the following URL parameters:
+| Parameter  | Required | Description |
+| ------------- | ------------- | ------------- |
+| destination | required | The email address, roomId, or SIP URI  |
+| destinationType | required | "email", "spaceId", "sip" |
+| token | required | The Webex Bearer token of the local user (your token from the developer portal) |
+| label | optional | The email address, roomId, or SIP URI  |
+| backgroundImage | optional | The publicly accessible URL of a custom background image to use |
+
+All URL parameters must be properly URL encoded, for example:
+
+**Valid:**  
+https://wxsd-sales.github.io/wxpdemo/public/widget.html?destination=someone@gmail.com&destinationType=email&token=ABCD-EFG_HIJK&backgroundImage=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1579546929518-9e396f3cc809%3Fixlib%3Drb-1.2.1%26ixid%3DMnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8%26w%3D1000%26q%3D80
+
+**NOT Valid:** (because backgroundImage is not URL encoded)  
+https://wxsd-sales.github.io/wxpdemo/public/widget.html?destination=someone@gmail.com&destinationType=email&token=ABCD-EFG_HIJK&backgroundImage=https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80
+
+
+### SDK
+
+You can access a dynamic SDK page (without proper authentication) by using this url in your browser:  
+https://wxsd-sales.github.io/wxpdemo/public/guest.html
+
+The guest.html page accepts the following URL parameters:
+| Parameter  | Required | Description |
+| ------------- | ------------- | ------------- |
+| destination | required | The email address, roomId, or SIP URI  |
+| token | required | The Webex Bearer token of the local user (your token from the developer portal) |
+| userType | optional | "guest" (if using a guest JWT. If using a developer or OAuth token, do not include this parameter.) |
+
+All URL parameters must be properly URL encoded, for example:
+
+**Valid:**  
+https://wxsd-sales.github.io/wxpdemo/public/guest.html?destination=someone%2Btest@gmail.com&token=ABCD-EFG_HIJK
+
+**NOT Valid:** (because email address includes "+", but is not URL encoded)  
+https://wxsd-sales.github.io/wxpdemo/public/guest.html?destination=someone+test@gmail.com&token=ABCD-EFG_HIJK
+
 
 ## License
 
