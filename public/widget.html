@@ -35,7 +35,7 @@
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
   </head>
-  <body style="background-image:url('https://cdn.glitch.com/e627e173-ddba-434f-ad34-e11549d64430%2F1_Ud5vq4XLOohhVKT1Nv94NQ.png?v=1585690687557');background-size: cover;">
+  <body style="background-size: cover;">
     <header>
     </header>
       <div id="dialog" title=".">
@@ -45,12 +45,23 @@
     <script>
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
+
+      const defaultBackground = 'https://cdn.glitch.com/e627e173-ddba-434f-ad34-e11549d64430%2F1_Ud5vq4XLOohhVKT1Nv94NQ.png?v=1585690687557'
+      const useBackground = urlParams.get('backgroundImage') == null ? defaultBackground : urlParams.get('backgroundImage');
+
       const destination = urlParams.get('destination') == null ? Cookies.get('target') : urlParams.get('destination');
       const destinationType = urlParams.get('destinationType') == null ? Cookies.get('destinationType') : urlParams.get('destinationType');
       const token = urlParams.get('token') == null ? Cookies.get('token') : urlParams.get('token');
+      let label = urlParams.get('label') == null ? Cookies.get('label') : urlParams.get('label');
+      if(label == undefined){
+        label = "User";
+      }
       console.log(destination);
       console.log(destinationType);
       console.log(token);
+
+      $('body').css({'background-image':`url(${useBackground})`});
+
       var widgetEl = document.getElementById('my-ciscospark-widget');
       const userType = Cookies.get("userType");
       // Init a new widget
@@ -67,7 +78,7 @@
         widgetOptions.accessToken = token;
       }
       ciscospark.widget(widgetEl).spaceWidget(widgetOptions);
-      document.getElementById('dialog').title = `Hello, ${Cookies.get('label')}!`;
+      document.getElementById('dialog').title = `Hello, ${label}!`;
     </script>
 
   </body>

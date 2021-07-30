@@ -98,6 +98,7 @@ if(userType == "guest"){
 settingsPopup();
 let pollMeetingStateInterval = 2000;
 let maxCounterAttempts = 30;
+
 const webex = (window.webex = Webex.init(credentials));
 
 //-----
@@ -596,7 +597,7 @@ function joinMeeting(meeting) {
   manualLeave = false;
   let connectCounter = 0;
   return meeting.join().then(() => {
-    // Get our local media stream and add it to the meeting
+
     if(listenOnly === true){
       console.log('help');
       if(meeting.state == "JOINED"){
@@ -630,14 +631,9 @@ function joinMeeting(meeting) {
         }, pollMeetingStateInterval);
       }
     } else {
-      //const {audio};
-      //const {video};
-      //let avObj = {}
+      // Get our local media stream and add it to the meeting
       return meeting.getMediaStreams(mediaSettings,{audio:true, video:true}).then(mediaStreams => {
         const [localStream, localShare] = mediaStreams;
-        //console.log(meeting.mediaProperties.videoTrack.getSettings().deviceID)
-        //console.log(meeting.mediaProperties.audioTrack.getSettings().deviceID)
-        //showHangup();
         if(meeting.state == "JOINED"){
           addMediaFunction(meeting, localStream, localShare);
         } else {
