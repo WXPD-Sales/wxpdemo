@@ -1,0 +1,6 @@
+Dockerfile
+*.yaml
+.DS_Store
+*.old
+*.env
+node_modules/

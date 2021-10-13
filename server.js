@@ -8,6 +8,7 @@ const RedisExpiredEvents = require("./redis-expired-events");
 const expiry = require("./expiry");
 const app = express();
 const fs = require('fs');
+const path = require('path');
 const thismoment = require("moment");
 const url = require("url");
 const randomize = require("randomatic");
@@ -19,11 +20,12 @@ const email_validator = require("email-validator");
 const request = require("request");
 var webex = require('webex/env');
 //sentry.io
+/*
 const Sentry = require("@sentry/node");
 Sentry.init({
   dsn:
     "https://f453e51294d34cdb9a2962000f5612e3@o450029.ingest.sentry.io/5434024"
-});
+});*/
 
 // config express-session
 var sess = {
@@ -33,6 +35,11 @@ var sess = {
   resave: false,
   saveUninitialized: true
 };
+
+const redirect_uri = encodeURIComponent(new URL(path.join(process.env.MY_ROUTE, 'create_token'), process.env.BASE_URL));
+console.log(redirect_uri);
+const AUTH_URL = `https://webexapis.com/v1/authorize?client_id=${process.env.WEBEX_AUTH_CLIENT}&response_type=code&redirect_uri=${redirect_uri}&scope=${process.env.WEBEX_AUTH_SCOPES}`;
+console.log(AUTH_URL);
 
 const cookieOptions = { maxAge: 40000, secure:true, sameSite: "lax"}
 
@@ -47,9 +54,9 @@ if (app.get("env") === "production") {
 
 app.use(session(sess));
 
-app.engine('pug', require('pug').__express)
-app.set("view engine", "pug");
-app.set('views', __dirname + '/public');
+//app.engine('pug', require('pug').__express)
+//app.set("view engine", "pug");
+//app.set('views', __dirname + '/public');
 
 var router = express.Router();
 // simple logger for this router's requests
@@ -69,19 +76,17 @@ router.get(`/`, function (req, res, next) {
 
 router.use(express.static("public"));
 
-// parse application/x-www-form-urlencoded
-//router.use(bodyParser.urlencoded({ extended: true }));
-
 // parse application/json
 router.use(bodyParser.json());
 
 router.get(`/linkgen`, function (req, res, next) {
   console.log('in linkgen')
   if(req.session.userToken){
-    console.log('trying to render')
-    res.render('linkgen', {});
+    console.log('loading linkgen');
+    //res.render('linkgen', {});
+    res.sendFile(__dirname + `/public/linkgen.html`);
   } else {
-    res.redirect(`${process.env.WEBEX_AUTH_URL}&state=linkgen`);
+    res.redirect(`${AUTH_URL}&state=linkgen`);
   }
 });
 
@@ -138,6 +143,10 @@ router.post(`/verify`, function(req, res, next) {
   if(req.body.phoneNumber.length == 10){
     req.body.phoneNumber = "1"+req.body.phoneNumber;
   }
+  if(!req.body.phoneNumber.startsWith("+")){
+    req.body.phoneNumber = "+" + req.body.phoneNumber;
+  }
+  console.log(req.body.phoneNumber);
   let sessionId = randomize("Aa0", 16);
   req.session.sessionId = sessionId;
   request.post({
@@ -158,6 +167,28 @@ router.post(`/verify`, function(req, res, next) {
     );
 })
 
+function setRenderedCookies(res, userType, jParse, token, label){
+  res.cookie("userType", userType, cookieOptions);
+  if(userType == "guest"){
+    res.cookie("token", tokgen(jParse.display_name).token, cookieOptions);
+    res.cookie("label", jParse.display_name, cookieOptions);
+  } else {
+    res.cookie("token", token, cookieOptions);
+    res.cookie("label", label, cookieOptions);
+  }
+  res.cookie("target", jParse.sip_target, cookieOptions);
+  res.cookie("destinationType", jParse.destination_type, cookieOptions);
+  //let backgroundImage = 'https://cdn.glitch.com/e627e173-ddba-434f-ad34-e11549d64430%2F1_Ud5vq4XLOohhVKT1Nv94NQ.png?v=1585690687557';
+  let backgroundImage = 'images/hero-seethrough1.webp';
+  if(["", null, undefined].indexOf(jParse.background_url) < 0){
+    backgroundImage = jParse.background_url;
+  }
+  res.cookie("backgroundImage", backgroundImage, cookieOptions);
+  return res;
+
+
+}
+
 function renderFunc(req, res) {
   rr.get(`URL:${req.params.guest_session_id}`).then(result => {
     if (result == 1) {
@@ -165,11 +196,8 @@ function renderFunc(req, res) {
         if(req.session.codeComplete){
           parts = req.originalUrl.split("/");
           console.log(parts);
-          res.cookie("userType", "guest", cookieOptions);
-          res.cookie("token", tokgen(JSON.parse(result).display_name).token, cookieOptions);
-          res.cookie("target", JSON.parse(result).sip_target, cookieOptions);
-          res.cookie("destinationType", JSON.parse(result).destination_type, cookieOptions);
-          res.cookie("label", JSON.parse(result).display_name, cookieOptions);
+          res = setRenderedCookies(res, "guest", JSON.parse(result));
+
           res.sendFile(__dirname + `/public/${parts[2]}.html`);
         } else {
           req.session.returnTo = req.originalUrl;
@@ -215,12 +243,8 @@ function renderEmployeeFunc(req, res) {
             },function(error, resp, body) {
               console.log(body);
                 if (!error && resp.statusCode === 200) {
-                  jbody = JSON.parse(body);
-                  res.cookie("userType", "employee", cookieOptions);
-                  res.cookie("token", req.session.userToken, cookieOptions);
-                  res.cookie("target", JSON.parse(result).sip_target, cookieOptions);
-                  res.cookie("destinationType", JSON.parse(result).destination_type, cookieOptions);
-                  res.cookie("label", jbody.displayName, cookieOptions);
+                  jbody = JSON.parse(result);
+                  res = setRenderedCookies(res, "employee", jbody, req.session.userToken, jbody.displayName);
                   res.sendFile(__dirname + `/public/${employeePaths[parts[2]]}.html`);
                 } else {
                   res.json(error);
@@ -228,7 +252,7 @@ function renderEmployeeFunc(req, res) {
               }
             );
         } else {
-          res.redirect(`${process.env.WEBEX_AUTH_URL}&state=${parts[2]}/${req.params.guest_session_id}`);
+          res.redirect(`${AUTH_URL}&state=${parts[2]}/${req.params.guest_session_id}`);
         }
       });
     } else {
@@ -252,10 +276,8 @@ function isRoomId(myTarget){
 }
 
 router.get(`/create_token`, function(req, res, next) {
-  console.log('here');
-  console.log(next)
   let redirectURI = `https://${req.get("host")}${process.env.MY_ROUTE}${req.route.path}`;
-  console.log(redirectURI);
+  console.log(`/create_token redirectURI: ${redirectURI}`);
   request.post({
       url: 'https://webexapis.com/access_token',
       form: {
@@ -271,8 +293,22 @@ router.get(`/create_token`, function(req, res, next) {
           jbody = JSON.parse(body);
           console.log(req.query.state);
           req.session.userToken = jbody.access_token;
-          req.session.save();
-          redirect(res, `/${req.query.state}`);
+          request.get({
+              url: 'https://webexapis.com/people/me',
+              headers: { 'Authorization': `Bearer ${req.session.userToken}` }
+            },function(error, resp, body) {
+              console.log(body);
+                if (!error && resp.statusCode === 200) {
+                  jbody = JSON.parse(body);
+                  //req.session.avatar = jbody.avatar;
+                  req.session.save();
+                  res.cookie('avatar', jbody.avatar);
+                  redirect(res, `/${req.query.state}`);
+                } else {
+                  res.json(error);
+                }
+              }
+            );
         } else {
           res.json(error);
         }
@@ -293,7 +329,6 @@ function generateLinks(req, res, Urlexpiry, destinationType){
       .then(() => {
         respObjects[displayName] = [];
         for(let j in urlPaths[i]){
-          //TODO
           respObjects[displayName].push(`${process.env.BASE_URL}${process.env.MY_ROUTE}/${urlPaths[i][j]}/${guestSessionID}`);
         }
       })
@@ -313,13 +348,10 @@ function generateLinks(req, res, Urlexpiry, destinationType){
   })
 }
 
+
 router.post(`/create_url`, function(req, res) {
   if (req.body.expire_hours || req.body.expiry_date) {
-    if(email_validator.validate(req.body.sip_target) || isRoomId(req.body.sip_target) || req.body.sip_target == "pmr"){
-      /*console.log(thismoment(req.body.expiry_date).utcOffset(req.body.offset));
-      let endmoment = thismoment(req.body.expiry_date).utcOffset(
-        req.body.offset
-      );*/
+    if(email_validator.validate(req.body.sip_target) || isRoomId(req.body.sip_target) || ["pmr", "ad_hoc"].indexOf(req.body.sip_target) >= 0){
       let Urlexpiry = req.body.expire_hours * 60 * 60 //convert hours to seconds;
       if(req.body.expiry_date){
         Urlexpiry = Math.round(
@@ -329,14 +361,15 @@ router.post(`/create_url`, function(req, res) {
           )
         );
       }
-      console.log(Urlexpiry);
+      console.log(req.body);
+      console.log(`Urlexpiry: ${Urlexpiry}`);
       let destinationType = 'sip';
       if(req.body.sip_target == "pmr"){
         request.get({
             url: 'https://webexapis.com/v1/meetingPreferences/personalMeetingRoom',
             headers: { 'Authorization': `Bearer ${req.session.userToken}` }
-          },function(error, resp, body) {
-            console.log(body);
+          }, function(error, resp, body) {
+              console.log(`body: ${body}`);
               if (!error && resp.statusCode === 200) {
                 jbody = JSON.parse(body);
                 console.log(jbody['personalMeetingRoomLink']);
@@ -347,7 +380,40 @@ router.post(`/create_url`, function(req, res) {
               }
             }
           );
-      } else {
+      } else if(req.body.sip_target == "ad_hoc"){
+        console.log("AD HOC!");
+        let start_date = new Date(new Date().getTime() + (2 * 60 * 1000))//2 minutes in the future
+        let end_date = new Date(start_date.getTime() + (1 * 60 * 60 * 1000));//1 hour after start_date
+        console.log(start_date.toISOString());
+        console.log(end_date.toISOString());
+        let createBody = {"title":"Ad Hoc Guest Demo Meeting",
+                      "start":start_date,
+                      "end":end_date,
+                      "allowAnyUserToBeCoHost":true,
+                      "allowAuthenticatedDevices":true,
+                      "enableAutomaticLock":false,
+                      "enableConnectAudioBeforeHost":true,
+                      "enabledAutoRecordMeeting":false,
+                      "enabledJoinBeforeHost":true,
+                      "sendEmail":false
+                      }
+        request.post({
+            url: 'https://webexapis.com/v1/meetings',
+            headers: { 'Authorization': `Bearer ${req.session.userToken}`, 'Content-Type':'application/json' },
+            body: JSON.stringify(createBody)
+          }, function(error, resp, body) {
+              console.log(`/meetings response body: ${body}`);
+              if (!error && resp.statusCode === 200) {
+                jbody = JSON.parse(body);
+                console.log(jbody['sipAddress']);
+                req.body.sip_target = jbody['sipAddress'];
+                generateLinks(req, res, Urlexpiry, destinationType);
+              } else {
+                res.json(error);
+              }
+            }
+          );
+      }else {
         if(req.session.userToken != undefined){
           request.get({
               url: `https://webexapis.com/v1/people?email=${req.body.sip_target}`,
@@ -382,13 +448,6 @@ router.post(`/create_url`, function(req, res) {
 function sendCreateCard(destination){
   let rawCard = fs.readFileSync(__dirname +'/cards/create.json');
   let card = JSON.parse(rawCard);
-  //const offset = new Date().getTimezoneOffset();
-  /*var today = new Date();
-  var defaultDate = new Date(today);
-  defaultDate.setDate(today.getDate() + 1);
-  //var time = today.toISOString().slice(11,16);
-  let picked_date = defaultDate.toISOString().slice(0,10) + " " + time;
-  document.getElementById('selected_expiry').innerHTML = picked_date;*/
   sendCard(card, destination);
 }
 
@@ -437,25 +496,10 @@ router.post(`/bot`, function(req, res) {
     res.send('OK');
   }
 });
-/*
-function getExpireDate(hours){
-  let today = new Date();
-  //let defaultDate = new Date(today);
-  //TODO: make this work for hours, not days.
-  //TODO: will also need to adjust the front end (currently defaults to 1 day and allows many more days to be selected)
-  //defaultDate.setDate(today.getDate() + parseInt(days,10));
-  //defaultDate.setHours(defau)
-  //let time = today.toISOString().slice(11,16);
-  //return defaultDate.toISOString().slice(0,10) + " " + time;
-  today.setHours(today.getHours() + parseInt(hours,10));//This will add an extra hour when crossing the DST switch over, but not a big deal.
-  return today.toISOString();
-  //return today.toISOString().slice(0,10) + " " + today.toISOString().slice(11,16);
-}*/
+
 
 router.post(`/card`, function(req, res) {
   if(req.body.actorId != process.env.WEBEX_BOT_ID){
-    //console.log(req.body)
-    //sendCard(req.body.data.roomId);
     webex.attachmentActions.get(req.body.data.id).then(function(result){
       //console.log(`/card res:${res}`)
       console.log(result);
@@ -472,8 +516,6 @@ router.post(`/card`, function(req, res) {
               headers: {'content-type' : 'application/json'},
               body:    JSON.stringify(new_data)
           }, function(error, response, createResult){
-            //console.log(error);
-            //console.log(response);
             console.log(createResult);
             jresult = JSON.parse(createResult);
             if(jresult.result == "Error"){
@@ -572,15 +614,3 @@ const listener = app.listen(process.env.PORT, function() {
 });
 
 RedisExpiredEvents();
-//YYYYMMDD
-//console.log(expiry.calculateSeconds(thismoment(),'20200714'));
-
-//rr.setURL('98r34982r', '325325', 500);
-//console.log(tokgen("Harish Chawla").token);
-
-//console.log(thismoment());
-//console.log(thismoment('2019-07-16 00:54').utcOffset(240));
-
-//send_email('zoneix@gmail.com', 'admin@bigbrainpan.com', 'this is a test', 'here\'s the body');
-//send_email('harishchawla@hotmail.com','this is some body');
-//console.log((send_email).toString());

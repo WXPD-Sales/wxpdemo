@@ -2,7 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="css/mystyle.css">
-    <link rel="stylesheet" href="css/guest.css">
+    <!--<link rel="stylesheet" href="css/guest.css">-->
     <link rel="stylesheet" href="css/collab-ui.min.css" />
     <link rel="stylesheet" href="css/momentum-ui.min.css" />
     <link rel="icon" type="image/png" href="images/favicon.ico"/>
@@ -11,7 +11,7 @@
 
   </head>
   <title>WXSD Guest Link Generator</title>
-  <body>
+  <body class="background-class">
     <div class="box">
       <div class="myheader">
         <header class="md-top-bar md-top-bar--dark myrow" role="navigation">
@@ -25,6 +25,9 @@
                 <div id="main-title" class="md-brand__title">Guest User Access</div>
               </a>
             </div>
+          </div>
+          <div class="md-brand__logo md-brand__logo--pad avatar-position">
+            <img id="user-avatar" class="circle-icon avatar-size" src="images/user.png" alt="User Avatar">
           </div>
         </header>
       </div>
@@ -120,9 +123,9 @@
       </div><!--end call container div-->
     </div><!--end box div-->
     <div id="log" class="padit"></div>
-
     <script crossorigin src="https://unpkg.com/webex@^1/umd/webex.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/avatar.js" async ></script>
     <script src="js/guest.js" async ></script>
   </body>
 </html>

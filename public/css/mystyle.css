@@ -1,35 +1,183 @@
-.display-radio {
-  display:table;
+.avatar-position {
+  position: absolute;
+  right: 2%;
+  top: 25px;
 }
 
-.radio-input {
-  margin-right: 5px;
+.avatar-size {
+  height: 40px;
+}
+
+.background-class {
+  background-size: cover;
+}
+
+.box {
+  display:flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+.call-button {
+  float:left;
 }
 
 .copy-button {
   margin-left: 5px;
 }
 
-.sms-button {
-  position: absolute;
+.circle-icon {
+  border-radius:50%;
+}
+
+.desktopImg {
+  height:25px;
+}
+
+.display-radio {
+  display:table;
+}
+
+.documentation {
+	display: none;
+	position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+	z-index: 1001;
+}
+
+.header-row {
+  display: grid;
+  margin-top: 10px;
+}
+
+.information {
+	position: absolute;
+  top: 50%;
+  left: 50%;
+	color: #58585b;
+	border-radius: 10px;
+	background-color: white;
+  transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+	overflow-y: auto;
+}
+
+.informationPortrait {
+  width:90%;
+}
+
+
+.link-cell {
+  min-width: 100px;
+}
+
+.mobileLandscapeImg {
+  height:35px;
+}
+
+.mobilePortraitImg {
+  height:60px;
+}
+
+.myheader {
+  flex: 0 1 auto;
+}
+
+.myrow {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.pad-text {
+  padding-left: 5px;
+  padding-top: 10px;
 }
 
 .padit {
   padding: 10px;
 }
 
-.myrow {
-  display: flex;
-  justify-content: center;
+.radio-input {
+  margin-right: 5px;
+}
+
+
+.remote {
+  height: 100%;
+  z-index: 2;
+}
+
+.remote_video {
+  height:100%;
+  z-index:3;
+  transform: translateX(-50%);
+  left:50%;
+  position: fixed;
+}
+
+.self {
+  position: absolute;
+  z-index: 4;
+  display: inline-block;
+}
+
+.self_video {
+  width: 150px;
+  z-index: 5;
+  transform: translateX(-75px);
+}
+
+.sms-button {
+  position: absolute;
+}
+
+#call_buttons {
+  position:absolute;
+  left:0;
+  right:0;
+  margin:auto;
+  bottom:0;
+  margin-bottom:10px;
+  z-index: 1000;
+}
+
+#call_container {
+  flex: 1 1 auto;
+  text-align: center;
+  z-index:1;
+}
+
+#close-settings {
+  position: absolute;
+  right:0;
+	font-size: 20px;
+	margin-right: 20px;
+	margin-top: 5px;
+	cursor:pointer;
+}
+
+#error-number-input {
+  display: none;
+  color: red;
 }
 
 #expire_div {
   width:max-content;
 }
 
-#error-number-input {
-  display: none;
-  color: red;
+#expiry_radio_div-custom {
+  display: inline-flex;
+}
+
+#expiry_radio-custom-dateselector {
+  display: inherit;
 }
 
 #overlay {
@@ -44,6 +192,13 @@
   background-color: rgba(0,0,0,0.5);
   z-index: 2;
   cursor: pointer;
+}
+
+
+#settings-content {
+  padding: 15px;
+	padding-top: 30px;
+	text-align: left;
 }
 
 #sms-input{

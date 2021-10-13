@@ -57,6 +57,7 @@ flatpickr("#flatpckr", {
   allowInput: true,
 });*/
 
+console.log(Cookies.get("avatar"));
 
 let create_button = document.getElementById('create_button');
 create_button.onclick = function (event){
@@ -84,6 +85,10 @@ $("#sip_uri_radio-pmr").click(function(){
   $('.radio-input[name=sip_uri][value=pmr]').prop("checked", true);
 })
 
+$("#sip_uri_radio-hour").click(function(){
+  $('.radio-input[name=sip_uri][value=ad_hoc]').prop("checked", true);
+})
+
 let guest_data = {};
 async function create_guest_data_object(){
   let sipval = $("input[type='radio'][name='sip_uri']:checked").val();
@@ -91,6 +96,7 @@ async function create_guest_data_object(){
   guest_data.sip_target = sipval;
   guest_data.expiry_date = picked_date;
   guest_data.offset = offset;
+  guest_data.background_url = document.getElementById('background_url').value
   return guest_data;
 };
 

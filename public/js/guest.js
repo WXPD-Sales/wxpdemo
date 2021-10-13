@@ -72,7 +72,6 @@ if(mobileCheck()){ //increase button sizes for mobile devices
 let timeout;
 let isActiveMeeting = false;
 let listenOnly = false;
-let manualLeave = false;
 let credentials = {
   logger: {
     level: "debug"
@@ -86,9 +85,15 @@ const urlParams = new URLSearchParams(queryString);
 const userType = urlParams.get('userType') == null ? Cookies.get("userType") : urlParams.get('userType');
 const destination = urlParams.get('destination') == null ? Cookies.get("target") : urlParams.get('destination');
 const token = urlParams.get('token') == null ? Cookies.get("token") : urlParams.get('token');
+const backgroundImage = urlParams.get('backgroundImage') == null ? Cookies.get("backgroundImage") : urlParams.get('backgroundImage');
+
 console.log(destination);
 console.log(token);
 console.log(userType);
+console.log(backgroundImage);
+
+$('body').css({'background-image':`url(${backgroundImage})`});
+
 if(userType == "guest"){
   console.log(`Found JWT - ${token}`);
 } else {
@@ -270,7 +275,7 @@ function bindMeetingEvents(meeting) {
   meeting.on('meeting:self:guestAdmitted', () => {
     document.getElementById('log').innerHTML = 'Admitted to meeting as guest';
     console.log('Admitted to meeting as guest to call');
-    return joinMeeting(meeting);
+    return addMedia(meeting);
   });
 
   meeting.on('meeting:self:mutedByOthers', () => {
@@ -314,7 +319,7 @@ function bindMeetingEvents(meeting) {
       document.getElementById("self-view").srcObject = media.stream;
     }
     if (media.type === "remoteVideo") {
-      console.log('wow!')
+      console.log('remoteVideo media received.');
       document.getElementById("remote-view-video").srcObject = media.stream;
     }
     if (media.type === "remoteAudio") {
@@ -322,7 +327,7 @@ function bindMeetingEvents(meeting) {
     }
     if (media.type === 'remoteShare') {
       // Remote share streams become active immediately on join, even if nothing is being shared
-      console.log('sharing!')
+      console.log('remoteShare media received.');
       document.getElementById("remote-view-share").srcObject = media.stream;
     }
     if (media.type === 'localShare') {
@@ -468,7 +473,6 @@ function bindMeetingEvents(meeting) {
     document.getElementById("remote-view-audio").srcObject = null;
     if(meeting.state != "JOINED"){
       resetControls();
-      manualLeave = true;
     }
     try{
       meeting.leave(meeting.id);
@@ -558,9 +562,6 @@ function resetControls(){
   $("#call_div").show();
   $("#call_listen_div").show();
   $("#hangup_div").hide();
-  /*$("#v_select").hide();
-  $("#a_select").hide();
-  $("#layout_select").hide();*/
   for(let i in inMeetingDivs){
     $(`#${inMeetingDivs[i]}_div`).hide();
   }
@@ -594,79 +595,31 @@ function addMediaFunction(meeting, localStream, localShare) {
   });
 }
 
+function addMedia(meeting){
+  if(listenOnly === true){
+    if(meeting.state == "JOINED"){
+      meeting.addMedia({mediaSettings});
+    } else {
+      console.log('**Not joined, waiting for admission event.');
+    }
+  } else {
+    // Get our local media stream and add it to the meeting
+    return meeting.getMediaStreams(mediaSettings,{audio:true, video:true}).then(mediaStreams => {
+      const [localStream, localShare] = mediaStreams;
+      if(meeting.state == "JOINED"){
+        addMediaFunction(meeting, localStream, localShare);
+      } else {
+        console.log('**Not joined, waiting for admission event.');
+      }
+    });
+  }
+}
+
 // Join the meeting and add media
 function joinMeeting(meeting) {
-  manualLeave = false;
   let connectCounter = 0;
   return meeting.join().then(() => {
-
-    if(listenOnly === true){
-      console.log('help');
-      if(meeting.state == "JOINED"){
-        meeting.addMedia({mediaSettings});
-        //showHangup();
-      } else {
-        var intervalID = setInterval(function(){
-          console.log(meeting.state);
-          if(meeting.state == "JOINED"){
-            console.log('clearing interval');
-            clearInterval(intervalID);
-            connectCounter = 0;
-            meeting.addMedia({mediaSettings});
-            //showHangup();
-          } else {
-            connectCounter += 1;
-            if(connectCounter > maxCounterAttempts || manualLeave || meeting.state == "LEFT"){
-              let err_msg = `no one let me in, clearing interval`;
-              console.log(err_msg);
-              clearInterval(intervalID);
-              connectCounter = 0;
-              try {
-                resetControls();
-                meeting.leave()
-              } catch (e) {
-                console.log('probably already left, thus the reason for this error:');
-                console.log(e);
-              }
-            }
-          }
-        }, pollMeetingStateInterval);
-      }
-    } else {
-      // Get our local media stream and add it to the meeting
-      return meeting.getMediaStreams(mediaSettings,{audio:true, video:true}).then(mediaStreams => {
-        const [localStream, localShare] = mediaStreams;
-        if(meeting.state == "JOINED"){
-          addMediaFunction(meeting, localStream, localShare);
-        } else {
-          var intervalID = setInterval(function(){
-            console.log(meeting.state);
-            if(meeting.state == "JOINED"){
-              console.log('clearing interval');
-              clearInterval(intervalID);
-              connectCounter = 0;
-              addMediaFunction(meeting, localStream, localShare);
-            } else {
-              connectCounter += 1;
-              if(connectCounter > maxCounterAttempts || manualLeave || meeting.state == "LEFT"){
-                let err_msg = `no one let me in, clearing interval`;
-                console.log(err_msg);
-                clearInterval(intervalID);
-                connectCounter = 0;
-                try {
-                  resetControls();
-                  meeting.leave()
-                } catch (e) {
-                  console.log('probably already left, thus the reason for this error:');
-                  console.log(e);
-                }
-              }
-            }
-          }, pollMeetingStateInterval);
-        }
-
-      });
-    }
+    addMedia(meeting);
   });
 }
 
@@ -679,8 +632,7 @@ function callFunction(event){
   audio.noiseSuppression=false;
   audio.echoCancellation=true;
   video.deviceId = {exact: videoInputSelect.value};
-  return webex.meetings
-    .create(destination)
+  return webex.meetings.create(destination)
     .then(meeting => {
       // Call our helper function for binding events to meetings
       bindMeetingEvents(meeting);
