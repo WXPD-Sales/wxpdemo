@@ -28,11 +28,11 @@ module.exports = function createJWT(display_name){
       Buffer.from(process.env.SECRET, 'base64'),
       { expiresIn: '1h' }
     );
-  
-  // sanity output to the console 
+
+  // sanity output to the console
   //console.log ("Payload - "+ JSON.stringify(payload));
   //console.log ("Token - "+ JSON.stringify(token));
-  
+
   var dataobj = {
     token : token,
     label : genSub
@@ -40,4 +40,4 @@ module.exports = function createJWT(display_name){
   // send back the token to whoever called this function
   return dataobj;
 
-  };
+};

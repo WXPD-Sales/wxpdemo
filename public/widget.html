@@ -51,7 +51,12 @@
       const destinationType = urlParams.get('destinationType') == null ? Cookies.get('destinationType') : urlParams.get('destinationType');
       const token = urlParams.get('token') == null ? Cookies.get('token') : urlParams.get('token');
       let label = urlParams.get('label') == null ? Cookies.get('label') : urlParams.get('label');
-      if(label == undefined){
+      console.log(`Cookies.get('label'): ${Cookies.get('label')}`);
+      console.log(`urlParams.get('label'): ${urlParams.get('label')}`);
+      console.log(`label: ${label}`);
+      console.log(typeof(label))
+      console.log(label == "undefined")
+      if(label === undefined){
         label = "User";
       }
       console.log(destination);

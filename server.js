@@ -167,21 +167,21 @@ router.post(`/verify`, function(req, res, next) {
     );
 })
 
-function setRenderedCookies(res, userType, jParse, token, label){
+function setRenderedCookies(res, userType, redisStore, token, label){
   res.cookie("userType", userType, cookieOptions);
   if(userType == "guest"){
-    res.cookie("token", tokgen(jParse.display_name).token, cookieOptions);
-    res.cookie("label", jParse.display_name, cookieOptions);
+    res.cookie("token", tokgen(redisStore.display_name).token, cookieOptions);
+    res.cookie("label", redisStore.display_name, cookieOptions);
   } else {
     res.cookie("token", token, cookieOptions);
     res.cookie("label", label, cookieOptions);
   }
-  res.cookie("target", jParse.sip_target, cookieOptions);
-  res.cookie("destinationType", jParse.destination_type, cookieOptions);
+  res.cookie("target", redisStore.sip_target, cookieOptions);
+  res.cookie("destinationType", redisStore.destination_type, cookieOptions);
   //let backgroundImage = 'https://cdn.glitch.com/e627e173-ddba-434f-ad34-e11549d64430%2F1_Ud5vq4XLOohhVKT1Nv94NQ.png?v=1585690687557';
   let backgroundImage = 'images/hero-seethrough1.webp';
-  if(["", null, undefined].indexOf(jParse.background_url) < 0){
-    backgroundImage = jParse.background_url;
+  if(["", null, undefined].indexOf(redisStore.background_url) < 0){
+    backgroundImage = redisStore.background_url;
   }
   res.cookie("backgroundImage", backgroundImage, cookieOptions);
   return res;
@@ -241,10 +241,11 @@ function renderEmployeeFunc(req, res) {
               url: 'https://webexapis.com/people/me',
               headers: { 'Authorization': `Bearer ${req.session.userToken}` }
             },function(error, resp, body) {
-              console.log(body);
+                console.log(body);
                 if (!error && resp.statusCode === 200) {
-                  jbody = JSON.parse(result);
-                  res = setRenderedCookies(res, "employee", jbody, req.session.userToken, jbody.displayName);
+                  selfBody = JSON.parse(body);
+                  redisStore = JSON.parse(result);
+                  res = setRenderedCookies(res, "employee", redisStore, req.session.userToken, selfBody.displayName);
                   res.sendFile(__dirname + `/public/${employeePaths[parts[2]]}.html`);
                 } else {
                   res.json(error);
@@ -382,7 +383,7 @@ router.post(`/create_url`, function(req, res) {
           );
       } else if(req.body.sip_target == "ad_hoc"){
         console.log("AD HOC!");
-        let start_date = new Date(new Date().getTime() + (2 * 60 * 1000))//2 minutes in the future
+        let start_date = new Date(new Date().getTime() + (90 * 1000))//90 seconds in the future
         let end_date = new Date(start_date.getTime() + (1 * 60 * 60 * 1000));//1 hour after start_date
         console.log(start_date.toISOString());
         console.log(end_date.toISOString());
