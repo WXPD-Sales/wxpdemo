@@ -92,6 +92,11 @@ console.log(token);
 console.log(userType);
 console.log(backgroundImage);
 
+showSMS = false;
+if(window.location.pathname.indexOf("licensed-sms") > 0){
+  showSMS = true;
+}
+
 $('body').css({'background-image':`url(${backgroundImage})`});
 
 if(userType == "guest"){
@@ -195,8 +200,7 @@ function finalizeWebexAuth(data){
 
     webex.meetings.register()
       .then((data) => {
-        $("#call_div").show();
-        $("#call_listen_div").show();
+        showStartButtons();
       })
       .catch(err => {
       console.error(err);
@@ -556,11 +560,20 @@ function showHangup(){
   $("#hangup_div").show();
   $("#call_div").hide();
   $("#call_listen_div").hide();
+  $("#sms_div").hide();
+}
+
+function showStartButtons(){
+  $("#call_div").show();
+  if(showSMS){
+    $("#sms_div").show();
+  } else {
+    $("#call_listen_div").show();
+  }
 }
 
 function resetControls(){
-  $("#call_div").show();
-  $("#call_listen_div").show();
+  showStartButtons();
   $("#hangup_div").hide();
   for(let i in inMeetingDivs){
     $(`#${inMeetingDivs[i]}_div`).hide();
@@ -655,8 +668,16 @@ function callButtonListenFunction(event){
   callFunction(event);
 }
 
+function smsButtonFunction(event){
+  let root = 'licensed-sms';
+  let link = window.location.toString();
+  let path = window.location.pathname.split(root)[0];
+  smsFunction(link.replace(root, 'guest'), path);
+}
+
 document.getElementById("call").addEventListener("click", callButtonFunction);
 document.getElementById("call-listen").addEventListener("click", callButtonListenFunction);
+document.getElementById("sms").addEventListener("click", smsButtonFunction);
 document.addEventListener("mousemove", showControls);
 
 

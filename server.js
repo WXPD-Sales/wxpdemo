@@ -210,7 +210,7 @@ function renderFunc(req, res) {
   });
 }
 
-let useFiles = {"guest":"guest", "widget":"widget", "employee":"guest", "employee-widget":"widget"}
+let useFiles = {"guest":"guest", "widget":"widget", "licensed":"guest", "licensed-widget":"widget", "licensed-sms":"guest"}
 function quickRenderFunc(req, res) {
   parts = req.originalUrl.split("/");
   console.log(parts);
@@ -229,8 +229,8 @@ router.use(`/widget`, express.static(__dirname + '/public'));
 router.use(`/guest`, express.static(__dirname + '/public'));
 
 
-let employeePaths = {"employee":"guest", "employee-widget":"widget"}
-function renderEmployeeFunc(req, res) {
+
+function renderLicensedFunc(req, res) {
   rr.get(`URL:${req.params.guest_session_id}`).then(result => {
     if (result == 1) {
       rr.get(req.params.guest_session_id).then(result => {
@@ -245,8 +245,8 @@ function renderEmployeeFunc(req, res) {
                 if (!error && resp.statusCode === 200) {
                   selfBody = JSON.parse(body);
                   redisStore = JSON.parse(result);
-                  res = setRenderedCookies(res, "employee", redisStore, req.session.userToken, selfBody.displayName);
-                  res.sendFile(__dirname + `/public/${employeePaths[parts[2]]}.html`);
+                  res = setRenderedCookies(res, "licensed", redisStore, req.session.userToken, selfBody.displayName);
+                  res.sendFile(__dirname + `/public/${useFiles[parts[2]]}.html`);
                 } else {
                   res.json(error);
                 }
@@ -262,13 +262,16 @@ function renderEmployeeFunc(req, res) {
   });
 }
 
-router.get(`/employee`, quickRenderFunc);
-router.get(`/employee-widget`, quickRenderFunc);
-router.get(`/employee/:guest_session_id`, renderEmployeeFunc);
-router.get(`/employee-widget/:guest_session_id`, renderEmployeeFunc);
+router.get(`/licensed`, quickRenderFunc);
+router.get(`/licensed-widget`, quickRenderFunc);
+router.get(`/licensed-sms`, quickRenderFunc);
+router.get(`/licensed/:guest_session_id`, renderLicensedFunc);
+router.get(`/licensed-widget/:guest_session_id`, renderLicensedFunc);
+router.get(`/licensed-sms/:guest_session_id`, renderLicensedFunc);
 
-router.use(`/employee`, express.static(__dirname + '/public'));
-router.use(`/employee-widget`, express.static(__dirname + '/public'));
+router.use(`/licensed`, express.static(__dirname + '/public'));
+router.use(`/licensed-widget`, express.static(__dirname + '/public'));
+router.use(`/licensed-sms`, express.static(__dirname + '/public'));
 
 
 function isRoomId(myTarget){
@@ -318,7 +321,7 @@ router.get(`/create_token`, function(req, res, next) {
 });
 
 function generateLinks(req, res, Urlexpiry, destinationType){
-  let urlPaths = {"guest":["guest", "widget"], "employee": ["employee", "employee-widget"]};
+  let urlPaths = {"guest":["guest", "widget"], "licensed": ["licensed", "licensed-widget", "licensed-sms"]};
   let respObjects = {};
   let rrPromises = [];
   for(let i in urlPaths){

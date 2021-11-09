@@ -48,6 +48,13 @@
               </span>
             </button>
           </div>
+          <div id="sms_div" class="padit call-button" style="display:None">
+            <button id="sms" class="md-button md-button--circle md-button--44 md-button--grey" title="Send Meeting Link SMS" type="button">
+              <span class="md-button__children">
+                <img src="images/icons/sms_16@2x.png" class="desktopImg"></img>
+              </span>
+            </button>
+          </div>
           <div id="hangup_div" class="padit call-button" style="display:None">
             <button id="hangup" class="md-button md-button--circle md-button--44 md-button--red" alt="Reject call" type="button" aria-label="reject call">
               <span class="md-button__children">
@@ -122,9 +129,22 @@
         </div>
       </div><!--end call container div-->
     </div><!--end box div-->
+    <div id="overlay">
+      <div id="sms-input">Enter a mobile number to send link
+        <br>
+        <input class="cui-input" id="number-input" type="text">
+        <br>
+        <p id="error-number-input"></p>
+        <br>
+        <button class="cui-button" id="send-sms" onclick="sendSMS();">Send SMS</button>
+        <br>
+        <img id="spinner" src="images/icons/spinner_16.png">
+      </div>
+    </div>
     <div id="log" class="padit"></div>
     <script crossorigin src="https://unpkg.com/webex@^1/umd/webex.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/sms.js" async ></script>
     <script src="js/avatar.js" async ></script>
     <script src="js/guest.js" async ></script>
   </body>

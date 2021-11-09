@@ -138,11 +138,15 @@ function buildTable(response_message){
   if(response_message.hasOwnProperty('urls')){
     for(let urlType in response_message['urls']){
       table.append($('<tr>', {class:"header-row"})
-        .append($('<td>', {class:"link-cell", "style":"font-weight:bold"}).text(urlType + ' URLs'))
+        .append($('<td>', {class:"link-cell", "style":"font-weight:bold"}).text(urlType + ' User URLs'))
         .append($('<td>', {class:"link-cell"})));
       for(let url in response_message['urls'][urlType]){
         let cellTitle = "SDK";
-        if(response_message['urls'][urlType][url].indexOf("widget") > 0) cellTitle = "Widget";
+        if(response_message['urls'][urlType][url].indexOf("widget") > 0){
+          cellTitle = "Widget";
+        } else if(response_message['urls'][urlType][url].indexOf("sms") > 0){
+          cellTitle = "SDK + SMS";
+        }
         table.append($('<tr>')
           .append($('<td>', {class:"link-cell"}).text(cellTitle))
           .append($('<td>', {class:"link-cell"})
@@ -152,7 +156,7 @@ function buildTable(response_message){
                             .text(response_message['urls'][urlType][url]))
             .append($('<button>', {class:'md-button md-button--circle md-button--32 copy-button', onclick:'copyFunction("'+response_message['urls'][urlType][url]+'")'})
               .append($('<i>', {class:'cui-icon icon icon-copy_16'})))
-            .append($('<button>', {class:'md-button md-button--circle md-button--32 sms-button', onclick:'smsFunction("'+response_message['urls'][urlType][url]+'")'})
+            .append($('<button>', {class:'md-button md-button--circle md-button--32 sms-button', onclick:'smsFunction("'+response_message['urls'][urlType][url]+'","'+deployPath+'")'})
               .append($('<img>', {class:'', src:"images/icons/sms_16.png"})))
           )
         )
@@ -209,75 +213,4 @@ async function send_to_email(){
   });
 
 
-}
-
-let selectedLink = null;
-function smsFunction(link){
-  selectedLink = link;
-  document.getElementById("error-number-input").style.display = "none";
-  enableSMSButton();
-  overlayOn();
-}
-
-async function sendSMS(){
-  let number = document.getElementById("number-input").value;
-  console.log(number);
-  if(phoneValidate(number) == false){
-      let errEle = document.getElementById("error-number-input");
-      errEle.innerHTML = "Please enter a valid phone number"
-      errEle.style.display = "inline";
-  } else {
-    disableSMSButton();
-    $("#error-number-input").hide();
-    fetch(deployPath + '/sms', {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({number:number, url:selectedLink}),
-    })
-    .then(response => response.json())
-    .then(function(data){
-      console.log(data);
-      console.log(data.status);
-      let msgEle = document.getElementById("error-number-input");
-      if(data.status == "success"){
-        //overlayOff();
-        //overlayOff2();
-        msgEle.style.color = "green";
-        msgEle.innerHTML = "Success! (check spam)";
-      } else {
-        msgEle.style.color = "red";
-        msgEle.innerHTML = data.message;
-      }
-      msgEle.style.display = "inline";
-      enableSMSButton();
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
-  }
-}
-
-$("#overlay").on('click', function(e){
-  if(e.target.id=="overlay"){
-    $("#overlay").hide();
-  }
-});
-
-function overlayOn(){
-  document.getElementById("overlay").style.display = "block";
-}
-
-function disableSMSButton(){
-  $("#send-sms").hide();
-  $("#spinner").show();
-}
-
-function enableSMSButton(){
-  $("#send-sms").show();
-  $("#spinner").hide();
-}
-
-function overlayOff(){
-  $("#overlay").hide();
 }
