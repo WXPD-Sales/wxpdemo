@@ -5,11 +5,11 @@ function phoneValidate(number){
 }
 
 let selectedLink = null;
-let deployPath = null;
+let commandDeployPath = null;
 function smsFunction(link, path){
   selectedLink = link;
-  deployPath = path;
-  console.log(`deployPath:${deployPath}`)
+  commandDeployPath = path;
+  console.log(`commandDeployPath:${commandDeployPath}`)
   document.getElementById("error-number-input").style.display = "none";
   enableSMSButton();
   overlayOn();
@@ -25,7 +25,7 @@ async function sendSMS(){
   } else {
     disableSMSButton();
     $("#error-number-input").hide();
-    fetch(deployPath + '/sms', {
+    fetch(commandDeployPath + '/sms', {
       method: 'POST',
       credentials: 'same-origin',
       headers: {'Content-Type': 'application/json'},
