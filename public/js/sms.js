@@ -54,6 +54,16 @@ async function sendSMS(){
   }
 }
 
+function pressEnter(e){
+  var key = e.which;
+  if(key ==13){
+    $(`#send-sms`).click();
+    return false;
+  }
+}
+
+$("#number-input").keypress(pressEnter);
+
 $("#overlay").on('click', function(e){
   if(e.target.id=="overlay"){
     $("#overlay").hide();

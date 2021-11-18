@@ -170,8 +170,9 @@ router.post(`/verify`, function(req, res, next) {
 function setRenderedCookies(res, userType, redisStore, token, label){
   res.cookie("userType", userType, cookieOptions);
   if(userType == "guest"){
-    res.cookie("token", tokgen(redisStore.display_name).token, cookieOptions);
-    res.cookie("label", redisStore.display_name, cookieOptions);
+    let name = "Guest";
+    res.cookie("token", tokgen(name).token, cookieOptions);
+    res.cookie("label", name, cookieOptions);
   } else {
     res.cookie("token", token, cookieOptions);
     res.cookie("label", label, cookieOptions);
@@ -195,7 +196,7 @@ function renderFunc(req, res) {
       rr.get(req.params.guest_session_id).then(result => {
         if(req.session.codeComplete){
           parts = req.originalUrl.split("/");
-          console.log(parts);
+          console.log(`renderFunc:${parts}`);
           res = setRenderedCookies(res, "guest", JSON.parse(result));
 
           res.sendFile(__dirname + `/public/${parts[2]}.html`);
@@ -324,32 +325,30 @@ function generateLinks(req, res, Urlexpiry, destinationType){
   let urlPaths = {"guest":["guest", "widget"], "licensed": ["licensed", "licensed-widget", "licensed-sms"]};
   let respObjects = {};
   let rrPromises = [];
-  for(let i in urlPaths){
-    let guestSessionID = randomize("Aa0", 16);
-    let displayName = i.charAt(0).toUpperCase() + i.slice(1);//capitalize first letter
-    req.body.display_name = displayName
-    req.body.destination_type = destinationType
-    let rrPromise = rr.setURL(guestSessionID, JSON.stringify(req.body), Urlexpiry)
-      .then(() => {
-        respObjects[displayName] = [];
+  let guestSessionID = randomize("Aa0", 16);
+
+  req.body.destination_type = destinationType
+  let rrPromise = rr.setURL(guestSessionID, JSON.stringify(req.body), Urlexpiry)
+    .then(() => {
+      for(let i in urlPaths){
+        let objName = i.charAt(0).toUpperCase() + i.slice(1);//capitalize first letter
+        respObjects[objName] = [];
         for(let j in urlPaths[i]){
-          respObjects[displayName].push(`${process.env.BASE_URL}${process.env.MY_ROUTE}/${urlPaths[i][j]}/${guestSessionID}`);
+          respObjects[objName].push(`${process.env.BASE_URL}${process.env.MY_ROUTE}/${urlPaths[i][j]}/${guestSessionID}`);
         }
-      })
-      .catch(function(err) {
-        console.log(err.message);
+      }
+      console.log(respObjects);
+      res.send({
+        result: "OK",
+        message: "Session Created",
+        urls: respObjects,
+        expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}`
       });
-    rrPromises.push(rrPromise);
-  }
-  Promise.all(rrPromises).then(results => {
-    console.log(respObjects);
-    res.send({
-      result: "OK",
-      message: "Session Created",
-      urls: respObjects,
-      expires: `in ${thismoment.duration(Urlexpiry, "seconds").humanize()}`
+    })
+    .catch(function(err) {
+      console.log(err.message);
     });
-  })
+
 }
 
 
