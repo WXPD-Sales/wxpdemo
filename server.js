@@ -184,15 +184,17 @@ function setRenderedCookies(res, userType, redisStore, token, label){
   if(["", null, undefined].indexOf(redisStore.background_url) < 0){
     backgroundImage = redisStore.background_url;
   }
-  //let meetButtonColor = redisStore.meet_button_color.replace("#","")
+  let meetButtonColor = redisStore.meet_button_color;
+  if(meetButtonColor !== undefined){
+    meetButtonColor = meetButtonColor.replace("#","");
+  }
   res.cookie("headerToggle", redisStore.header_toggle, cookieOptions);
   res.cookie("listenOnlyOption", redisStore.listen_only_option, cookieOptions);
-  res.cookie("meetButtonColor", redisStore.meet_button_color.replace("#",""), cookieOptions);
+  res.cookie("meetButtonColor", meetButtonColor, cookieOptions);
   res.cookie("backgroundImage", backgroundImage, cookieOptions);
   return res;
-
-
 }
+
 
 function renderFunc(req, res) {
   rr.get(`URL:${req.params.guest_session_id}`).then(result => {
