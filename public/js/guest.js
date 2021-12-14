@@ -92,10 +92,14 @@ const meetButtonColor = urlParams.get('meetButtonColor') == null ? Cookies.get("
 
 if(headerToggle !== undefined){
   headerToggle = headerToggle.toLowerCase() == "true";
+} else {
+  headerToggle = true;
 }
 
 if(listenOnlyOption !== undefined){
   listenOnlyOption = listenOnlyOption.toLowerCase() == "true";
+} else {
+  listenOnlyOption = true;
 }
 
 console.log(destination);
