@@ -122,17 +122,17 @@ The guest.html page accepts the following URL parameters:
 | token | required | The Webex Bearer token of the local user ([your token from the developer portal](https://developer.webex.com/docs/api/getting-started#accounts-and-authentication)) |
 | userType | optional | "guest" (if using a guest JWT. If using a developer or OAuth token, do not include this parameter.) |
 | backgroundImage | optional | The publicly accessible URL of a custom background image to use. |
-| headerToggle | optional | true/false - whether to display the header at the top of the page or not. |
-| listenOnlyOption | optional | true/false - whether to display the listen Only meet button or not.  |
+| headerToggle | optional | true/false - defaults to true - whether to display the header at the top of the page or not. |
+| listenOnlyOption | optional | true/false - defaults to true - whether to display the listen Only meet button or not.  |
 | meetButtonColor | optional | a hex color string for the meet button(s) i.e. 0000ff for blue |
 
 All URL parameters must be properly URL encoded, for example:
 
 **Valid:**  
-https://wxsd-sales.github.io/wxpdemo/public/guest.html?destination=someone%2Btest@gmail.com&token=ABCD-EFG_HIJK
+https://wxsd-sales.github.io/wxpdemo/public/guest.html?destination=someone%2Btest@gmail.com&token=ABCD-EFG_HIJK&backgroundImage=https%3A%2F%2Fcdn.glitch.me%2Fe8c2cec0-da34-46dc-bede-0e3e44f3b149%2Fuaflight.jpg%3Fv%3D1639499886494&headerToggle=false&listenOnlyOption=false&meetButtonColor=0000ff
 
-**NOT Valid:** (because email address includes "+", but is not URL encoded)  
-https://wxsd-sales.github.io/wxpdemo/public/guest.html?destination=someone+test@gmail.com&token=ABCD-EFG_HIJK
+**NOT Valid:** (because email address includes "+", but is not URL encoded, nor is backgroundImage)  
+https://wxsd-sales.github.io/wxpdemo/public/guest.html?destination=someone+test@gmail.com&token=ABCD-EFG_HIJK&backgroundImage=https://cdn.glitch.me/e8c2cec0-da34-46dc-bede-0e3e44f3b149/uaflight.jpg?v=1639499886494&headerToggle=false&listenOnlyOption=false&meetButtonColor=0000ff
 
 
 ## License
