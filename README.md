@@ -95,11 +95,11 @@ https://wxsd-sales.github.io/wxpdemo/public/widget.html
 The widget.html page accepts the following URL parameters:
 | Parameter  | Required | Description |
 | ------------- | ------------- | ------------- |
-| destination | required | The email address, roomId, or SIP URI  |
+| destination | required | The email address, roomId, or SIP URI. |
 | destinationType | required | "email", "spaceId", "sip" |
 | token | required | The Webex Bearer token of the local user ([your token from the developer portal](https://developer.webex.com/docs/api/getting-started#accounts-and-authentication)) |
-| label | optional | The email address, roomId, or SIP URI  |
-| backgroundImage | optional | The publicly accessible URL of a custom background image to use |
+| label | optional | The email address, roomId, or SIP URI.  |
+| backgroundImage | optional | The publicly accessible URL of a custom background image to use. |
 
 All URL parameters must be properly URL encoded, for example:
 
@@ -121,6 +121,10 @@ The guest.html page accepts the following URL parameters:
 | destination | required | The email address, roomId, or SIP URI  |
 | token | required | The Webex Bearer token of the local user ([your token from the developer portal](https://developer.webex.com/docs/api/getting-started#accounts-and-authentication)) |
 | userType | optional | "guest" (if using a guest JWT. If using a developer or OAuth token, do not include this parameter.) |
+| backgroundImage | optional | The publicly accessible URL of a custom background image to use. |
+| headerToggle | optional | true/false - whether to display the header at the top of the page or not. |
+| listenOnlyOption | optional | true/false - whether to display the listen Only meet button or not.  |
+| meetButtonColor | optional | a hex color string for the meet button(s) i.e. 0000ff for blue |
 
 All URL parameters must be properly URL encoded, for example:
 
