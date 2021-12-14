@@ -86,9 +86,17 @@ const userType = urlParams.get('userType') == null ? Cookies.get("userType") : u
 const destination = urlParams.get('destination') == null ? Cookies.get("target") : urlParams.get('destination');
 const token = urlParams.get('token') == null ? Cookies.get("token") : urlParams.get('token');
 const backgroundImage = urlParams.get('backgroundImage') == null ? Cookies.get("backgroundImage") : urlParams.get('backgroundImage');
-const headerToggle = (urlParams.get('headerToggle') == null ? Cookies.get("headerToggle") : urlParams.get('headerToggle')).toLowerCase() == "true";
-const listenOnlyOption = (urlParams.get('listenOnlyOption') == null ? Cookies.get("listenOnlyOption") : urlParams.get('listenOnlyOption')).toLowerCase() == "true";
+let headerToggle = urlParams.get('headerToggle') == null ? Cookies.get("headerToggle") : urlParams.get('headerToggle');
+let listenOnlyOption = urlParams.get('listenOnlyOption') == null ? Cookies.get("listenOnlyOption") : urlParams.get('listenOnlyOption');
 const meetButtonColor = urlParams.get('meetButtonColor') == null ? Cookies.get("meetButtonColor") : urlParams.get('meetButtonColor');
+
+if(headerToggle !== undefined){
+  headerToggle = headerToggle.toLowerCase() == "true";
+}
+
+if(listenOnlyOption !== undefined){
+  listenOnlyOption = listenOnlyOption.toLowerCase() == "true";
+}
 
 console.log(destination);
 console.log(token);
