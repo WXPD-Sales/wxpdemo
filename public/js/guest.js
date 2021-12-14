@@ -86,11 +86,17 @@ const userType = urlParams.get('userType') == null ? Cookies.get("userType") : u
 const destination = urlParams.get('destination') == null ? Cookies.get("target") : urlParams.get('destination');
 const token = urlParams.get('token') == null ? Cookies.get("token") : urlParams.get('token');
 const backgroundImage = urlParams.get('backgroundImage') == null ? Cookies.get("backgroundImage") : urlParams.get('backgroundImage');
+const headerToggle = (urlParams.get('headerToggle') == null ? Cookies.get("headerToggle") : urlParams.get('headerToggle')).toLowerCase() == "true";
+const listenOnlyOption = (urlParams.get('listenOnlyOption') == null ? Cookies.get("listenOnlyOption") : urlParams.get('listenOnlyOption')).toLowerCase() == "true";
+const meetButtonColor = urlParams.get('meetButtonColor') == null ? Cookies.get("meetButtonColor") : urlParams.get('meetButtonColor');
 
 console.log(destination);
 console.log(token);
 console.log(userType);
 console.log(backgroundImage);
+console.log(headerToggle);
+console.log(listenOnlyOption);
+console.log(meetButtonColor);
 
 showSMS = false;
 if(window.location.pathname.indexOf("licensed-sms") > 0){
@@ -98,6 +104,15 @@ if(window.location.pathname.indexOf("licensed-sms") > 0){
 }
 
 $('body').css({'background-image':`url(${backgroundImage})`});
+
+if(headerToggle){
+  $(".myheader").show();
+}
+
+if(meetButtonColor !== null && meetButtonColor !== undefined){
+  $('#call').css({"background-color":"#" + meetButtonColor});
+  $('#call-listen').css({"background-color":"#" + meetButtonColor});
+}
 
 if(userType == "guest"){
   console.log(`Found JWT - ${token}`);
@@ -559,7 +574,7 @@ function showLayoutSelect(){
 function showHangup(){
   $("#hangup_div").show();
   $("#call_div").hide();
-  $("#call_listen_div").hide();
+  if(listenOnlyOption){ $("#call_listen_div").hide(); }
   $("#sms_div").hide();
 }
 
@@ -567,7 +582,7 @@ function showStartButtons(){
   $("#call_div").show();
   if(showSMS){
     $("#sms_div").show();
-  } else {
+  } else if(listenOnlyOption) {
     $("#call_listen_div").show();
   }
 }

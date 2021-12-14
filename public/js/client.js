@@ -57,6 +57,40 @@ flatpickr("#flatpckr", {
   allowInput: true,
 });*/
 
+// It's all sliders
+var sliderPicker = new iro.ColorPicker("#sliderPicker", {
+  width: 300,
+  color: "rgb(36, 171, 49)",
+  borderWidth: 1,
+  borderColor: "#fff",
+  layout: [
+    {
+      component: iro.ui.Slider,
+      options: {
+        sliderType: 'hue'
+      }
+    },
+    {
+      component: iro.ui.Slider,
+      options: {
+        sliderType: 'saturation'
+      }
+    },
+    {
+      component: iro.ui.Slider,
+      options: {
+        sliderType: 'value'
+      }
+    },
+  ]
+});
+
+sliderPicker.on(['color:init', 'color:change'], function(color) {
+  // log the current color as a HEX string
+  //console.log(color.hexString);
+  $('#selectedColor').css({"background-color":color.hexString});
+});
+
 console.log(Cookies.get("avatar"));
 
 let create_button = document.getElementById('create_button');
@@ -96,7 +130,10 @@ async function create_guest_data_object(){
   guest_data.sip_target = sipval;
   guest_data.expiry_date = picked_date;
   guest_data.offset = offset;
-  guest_data.background_url = document.getElementById('background_url').value
+  guest_data.background_url = document.getElementById('background_url').value;
+  guest_data.header_toggle = $("#pageHeaderToggle").prop('checked');
+  guest_data.listen_only_option = $("#listenOnlyOption").prop('checked');
+  guest_data.meet_button_color = sliderPicker.color.hexString;
   return guest_data;
 };
 

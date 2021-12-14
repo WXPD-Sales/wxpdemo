@@ -138,6 +138,10 @@
   position: absolute;
 }
 
+#background_url {
+  min-width: 300px;
+}
+
 #call_buttons {
   position:absolute;
   left:0;
@@ -194,6 +198,11 @@
   cursor: pointer;
 }
 
+#selectedColor {
+  width:30px;
+  height:20px;
+  border-radius: 5px;
+}
 
 #settings-content {
   padding: 15px;
@@ -226,4 +235,10 @@
   margin-top: -20px;
 
   animation: 1.5s linear infinite spinner;
+}
+
+#toggles {
+  max-width: fit-content;
+  display: grid;
+  justify-items: left;
 }
