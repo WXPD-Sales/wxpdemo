@@ -129,7 +129,7 @@ The guest.html page accepts the following URL parameters:
 All URL parameters must be properly URL encoded, for example:
 
 **Valid:**  
-https://wxsd-sales.github.io/wxpdemo/public/guest.html?destination=someone%2Btest@gmail.com&token=ABCD-EFG_HIJK&backgroundImage=https%3A%2F%2Fcdn.glitch.me%2Fe8c2cec0-da34-46dc-bede-0e3e44f3b149%2Fuaflight.jpg%3Fv%3D1639499886494&headerToggle=false&listenOnlyOption=false&meetButtonColor=0000ff
+https://wxsd-sales.github.io/wxpdemo/public/guest.html?destination=someone%2Btest%40gmail.com&token=ABCD-EFG_HIJK&backgroundImage=https%3A%2F%2Fcdn.glitch.me%2Fe8c2cec0-da34-46dc-bede-0e3e44f3b149%2Fuaflight.jpg%3Fv%3D1639499886494&headerToggle=false&listenOnlyOption=false&meetButtonColor=0000ff
 
 **NOT Valid:** (because email address includes "+", but is not URL encoded, nor is backgroundImage)  
 https://wxsd-sales.github.io/wxpdemo/public/guest.html?destination=someone+test@gmail.com&token=ABCD-EFG_HIJK&backgroundImage=https://cdn.glitch.me/e8c2cec0-da34-46dc-bede-0e3e44f3b149/uaflight.jpg?v=1639499886494&headerToggle=false&listenOnlyOption=false&meetButtonColor=0000ff
