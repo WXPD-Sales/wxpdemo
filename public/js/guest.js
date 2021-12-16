@@ -102,8 +102,13 @@ if(listenOnlyOption !== undefined){
   listenOnlyOption = true;
 }
 
+let urlShowSMS = false;
+try{
+  urlShowSMS = urlParams.get('showSMS').toLowerCase() == "true";
+} catch (e){}
+
 showSMS = false;
-if(window.location.pathname.indexOf("licensed-sms") > 0 || urlParams.get('showSMS').toLowerCase() == "true"){
+if(window.location.pathname.indexOf("licensed-sms") > 0 || urlShowSMS){
   showSMS = true;
 }
 
