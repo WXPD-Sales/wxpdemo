@@ -102,6 +102,11 @@ if(listenOnlyOption !== undefined){
   listenOnlyOption = true;
 }
 
+showSMS = false;
+if(window.location.pathname.indexOf("licensed-sms") > 0 || urlParams.get('showSMS').toLowerCase() == "true"){
+  showSMS = true;
+}
+
 console.log(destination);
 console.log(token);
 console.log(userType);
@@ -109,11 +114,7 @@ console.log(backgroundImage);
 console.log(headerToggle);
 console.log(listenOnlyOption);
 console.log(meetButtonColor);
-
-showSMS = false;
-if(window.location.pathname.indexOf("licensed-sms") > 0){
-  showSMS = true;
-}
+console.log(showSMS);
 
 $('body').css({'background-image':`url(${backgroundImage})`});
 
