@@ -360,7 +360,7 @@ function generateLinks(req, res, Urlexpiry, destinationType){
 
 router.post(`/create_url`, function(req, res) {
   if (req.body.expire_hours || req.body.expiry_date) {
-    if(email_validator.validate(req.body.sip_target) || isRoomId(req.body.sip_target) || ["pmr", "ad_hoc"].indexOf(req.body.sip_target) >= 0){
+    if(req.body.skip_validation || email_validator.validate(req.body.sip_target) || isRoomId(req.body.sip_target) || ["pmr", "ad_hoc"].indexOf(req.body.sip_target) >= 0){
       let Urlexpiry = req.body.expire_hours * 60 * 60 //convert hours to seconds;
       if(req.body.expiry_date){
         Urlexpiry = Math.round(

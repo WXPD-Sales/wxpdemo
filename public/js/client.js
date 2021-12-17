@@ -96,17 +96,9 @@ console.log(Cookies.get("avatar"));
 let create_button = document.getElementById('create_button');
 create_button.onclick = function (event){
   try {
-    create_guest_data_object()
-    .then((result) => {
-      console.log (result)
-      if (result){
-        post_data();
-      } else {
-
-      }
-    });
-  }
-  catch (err){
+    let guest_data = create_guest_data_object();
+    post_data(guest_data);
+  } catch (err){
     console.log(err);
   }
 }
@@ -123,8 +115,8 @@ $("#sip_uri_radio-hour").click(function(){
   $('.radio-input[name=sip_uri][value=ad_hoc]').prop("checked", true);
 })
 
-let guest_data = {};
-async function create_guest_data_object(){
+function create_guest_data_object(){
+  let guest_data = {};
   let sipval = $("input[type='radio'][name='sip_uri']:checked").val();
   if(sipval == "custom") sipval = document.getElementById('sipuri').value;
   guest_data.sip_target = sipval;
@@ -138,7 +130,7 @@ async function create_guest_data_object(){
 };
 
 
-async function post_data(){
+async function post_data(guest_data){
   fetch(deployPath + '/create_url', {
     method: 'POST',
     credentials: 'same-origin',
@@ -232,11 +224,10 @@ function handleResponse(response) {
 
 console.log(`timezone offset = ${offset}`);
 
+/*
 async function send_to_email(){
-
   guest_data.send_to_email = document.getElementById('send_to_email').value;
   console.log(guest_data);
-
   fetch(deployPath + '/email_invite', {
     method: 'POST',
     credentials: 'same-origin',
@@ -248,6 +239,4 @@ async function send_to_email(){
   .catch(function(err) {
     showMessage(err.message);
   });
-
-
-}
+}*/

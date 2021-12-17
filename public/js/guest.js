@@ -78,35 +78,6 @@ let credentials = {
   }
 };
 
-
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
-
-const userType = urlParams.get('userType') == null ? Cookies.get("userType") : urlParams.get('userType');
-const destination = urlParams.get('destination') == null ? Cookies.get("target") : urlParams.get('destination');
-const token = urlParams.get('token') == null ? Cookies.get("token") : urlParams.get('token');
-const backgroundImage = urlParams.get('backgroundImage') == null ? Cookies.get("backgroundImage") : urlParams.get('backgroundImage');
-let headerToggle = urlParams.get('headerToggle') == null ? Cookies.get("headerToggle") : urlParams.get('headerToggle');
-let listenOnlyOption = urlParams.get('listenOnlyOption') == null ? Cookies.get("listenOnlyOption") : urlParams.get('listenOnlyOption');
-const meetButtonColor = urlParams.get('meetButtonColor') == null ? Cookies.get("meetButtonColor") : urlParams.get('meetButtonColor');
-
-if(headerToggle !== undefined){
-  headerToggle = headerToggle.toLowerCase() == "true";
-} else {
-  headerToggle = true;
-}
-
-if(listenOnlyOption !== undefined){
-  listenOnlyOption = listenOnlyOption.toLowerCase() == "true";
-} else {
-  listenOnlyOption = true;
-}
-
-let urlShowSMS = false;
-try{
-  urlShowSMS = urlParams.get('showSMS').toLowerCase() == "true";
-} catch (e){}
-
 showSMS = false;
 if(window.location.pathname.indexOf("licensed-sms") > 0 || urlShowSMS){
   showSMS = true;
@@ -701,18 +672,24 @@ function callButtonListenFunction(event){
   callFunction(event);
 }
 
-function smsButtonFunction(event){
+
+async function smsButtonFunction(event){
   let root = 'licensed-sms';
-  let link = window.location.toString();
-  let path = window.location.pathname.split(root)[0];
-  smsFunction(link.replace(root, 'guest'), path);
+  if(window.location.pathname.indexOf(root) >= 0){
+    let link = window.location.toString();
+    let path = window.location.pathname.split(root)[0];
+    smsFunction(link.replace(root, 'guest'), path);
+  } else {
+    let guestUrl = await create_url();
+    console.log(guestUrl);
+    smsFunction(guestUrl, deployUrl);
+  }
 }
 
 document.getElementById("call").addEventListener("click", callButtonFunction);
 document.getElementById("call-listen").addEventListener("click", callButtonListenFunction);
 document.getElementById("sms").addEventListener("click", smsButtonFunction);
 document.addEventListener("mousemove", showControls);
-
 
 
 if(userType != "guest"){

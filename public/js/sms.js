@@ -6,6 +6,7 @@ function phoneValidate(number){
 
 let selectedLink = null;
 let commandDeployPath = null;
+
 function smsFunction(link, path){
   selectedLink = link;
   commandDeployPath = path;
