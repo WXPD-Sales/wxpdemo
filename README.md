@@ -125,6 +125,7 @@ The guest.html page accepts the following URL parameters:
 | headerToggle | optional | true/false - defaults to true - whether to display the header at the top of the page or not. |
 | listenOnlyOption | optional | true/false - defaults to true - whether to display the listen Only meet button or not.  |
 | meetButtonColor | optional | a hex color string for the meet button(s) i.e. 0000ff for blue |
+| showSMS | optional | true/false - defaults to false - whether to display the send guest link via SMS to guest button. |
 
 All URL parameters must be properly URL encoded, for example:
 
