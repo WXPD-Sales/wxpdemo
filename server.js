@@ -253,7 +253,7 @@ function renderLicensedFunc(req, res) {
         console.log(parts);
         if(req.session.userToken){
           request.get({
-              url: 'https://webexapis.com/people/me',
+              url: 'https://webexapis.com/v1/people/me',
               headers: { 'Authorization': `Bearer ${req.session.userToken}` }
             },function(error, resp, body) {
                 console.log(body);
@@ -297,40 +297,43 @@ function isRoomId(myTarget){
 router.get(`/create_token`, function(req, res, next) {
   let redirectURI = `https://${req.get("host")}${process.env.MY_ROUTE}${req.route.path}`;
   console.log(`/create_token redirectURI: ${redirectURI}`);
+  let myForm = {
+    grant_type: 'authorization_code',
+    client_id: process.env.WEBEX_AUTH_CLIENT,
+    client_secret: process.env.WEBEX_AUTH_SECRET,
+    code: req.query.code,
+    redirect_uri: redirectURI
+  };
+  //console.log(myForm);
   request.post({
-      url: 'https://webexapis.com/access_token',
-      form: {
-        grant_type: 'authorization_code',
-        client_id: process.env.WEBEX_AUTH_CLIENT,
-        client_secret: process.env.WEBEX_AUTH_SECRET,
-        code: req.query.code,
-        redirect_uri: redirectURI
-      }
+      url: 'https://webexapis.com/v1/access_token',
+      form: myForm
     },function(error, resp, body) {
-      console.log(body);
-        if (!error && resp.statusCode === 200) {
-          jbody = JSON.parse(body);
-          console.log(req.query.state);
-          req.session.userToken = jbody.access_token;
-          request.get({
-              url: 'https://webexapis.com/people/me',
-              headers: { 'Authorization': `Bearer ${req.session.userToken}` }
-            },function(error, resp, body) {
-              console.log(body);
-                if (!error && resp.statusCode === 200) {
-                  jbody = JSON.parse(body);
-                  //req.session.avatar = jbody.avatar;
-                  req.session.save();
-                  res.cookie('avatar', jbody.avatar);
-                  redirect(res, `/${req.query.state}`);
-                } else {
-                  res.json(error);
-                }
+      //console.log('/access_token response body:');
+      //console.log(body);
+      if (!error && resp.statusCode === 200) {
+        jbody = JSON.parse(body);
+        console.log(req.query.state);
+        req.session.userToken = jbody.access_token;
+        request.get({
+            url: 'https://webexapis.com/v1/people/me',
+            headers: { 'Authorization': `Bearer ${req.session.userToken}` }
+          },function(error, resp, body) {
+            console.log(body);
+              if (!error && resp.statusCode === 200) {
+                jbody = JSON.parse(body);
+                //req.session.avatar = jbody.avatar;
+                req.session.save();
+                res.cookie('avatar', jbody.avatar);
+                redirect(res, `/${req.query.state}`);
+              } else {
+                res.json(error);
               }
-            );
-        } else {
-          res.json(error);
-        }
+            }
+          );
+      } else {
+        res.json(error);
+      }
       }
     );
 });

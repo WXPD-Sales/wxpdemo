@@ -119,13 +119,29 @@
         	</div>
         </div>
         <div id="remote" class="remote">
-          <div id="self" class="self">
-            <video id="self-view" class="self_video" muted autoplay="" playsinline=""></video>
-            <video id="self-share" class="self_video" muted autoplay="" playsinline=""></video>
+          <video id="self-view" class="self_video" muted autoplay="" playsinline=""></video>
+          <video id="self-share" class="self_video self_share" muted autoplay="" playsinline=""></video>
+          <div id="people-button-div" class="padit people_button">
+            <button id="people-button" class="md-button md-button--circle md-button--44 md-button--grey" alt="Show Participants" type="button" aria-label="show participants">
+              <span class="md-button__children">
+                <img id="people-button-add" src="images/icons/participant-list_16@3x.png" class="desktopImg"></img>
+                <img id="people-button-list" src="images/icons/participant-wait_16@3x.png" class="desktopImg" style="display:none"></img>
+              </span>
+            </button>
           </div>
-          <audio id="remote-view-audio" autoplay></audio>
+          <div id="people" class="people">
+            <div id="lobby" style="display:none;">
+              <div class="people_title">Lobby</div>
+              <div class="people_list"></div>
+            </div>
+            <div id="participants">
+              <div class="people_title">Participants</div>
+              <div class="people_list"></div>
+            </div>
+          </div>
           <video id="remote-view-video" class="remote_video" autoplay="" playsinline=""></video>
-          <video id="remote-view-share" class="" autoplay="" playsinline=""></video>
+          <audio id="remote-view-audio" autoplay></audio>
+          <!--<video id="remote-view-share" class="" autoplay="" playsinline=""></video>-->
         </div>
       </div><!--end call container div-->
     </div><!--end box div-->
