@@ -253,7 +253,7 @@ function renderLicensedFunc(req, res) {
         console.log(parts);
         if(req.session.userToken){
           request.get({
-              url: 'https://webexapis.com/people/me',
+              url: 'https://webexapis.com/v1/people/me',
               headers: { 'Authorization': `Bearer ${req.session.userToken}` }
             },function(error, resp, body) {
                 console.log(body);
@@ -298,7 +298,7 @@ router.get(`/create_token`, function(req, res, next) {
   let redirectURI = `https://${req.get("host")}${process.env.MY_ROUTE}${req.route.path}`;
   console.log(`/create_token redirectURI: ${redirectURI}`);
   request.post({
-      url: 'https://webexapis.com/access_token',
+      url: 'https://webexapis.com/v1/access_token',
       form: {
         grant_type: 'authorization_code',
         client_id: process.env.WEBEX_AUTH_CLIENT,
@@ -313,7 +313,7 @@ router.get(`/create_token`, function(req, res, next) {
           console.log(req.query.state);
           req.session.userToken = jbody.access_token;
           request.get({
-              url: 'https://webexapis.com/people/me',
+              url: 'https://webexapis.com/v1/people/me',
               headers: { 'Authorization': `Bearer ${req.session.userToken}` }
             },function(error, resp, body) {
               console.log(body);
