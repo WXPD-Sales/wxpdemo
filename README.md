@@ -123,7 +123,8 @@ The guest.html page accepts the following URL parameters:
 | userType | optional | "guest" (if using a guest JWT. If using a developer or OAuth token, do not include this parameter.) |
 | backgroundImage | optional | The publicly accessible URL of a custom background image to use. |
 | headerToggle | optional | true/false - defaults to true - whether to display the header at the top of the page or not. |
-| listenOnlyOption | optional | true/false - defaults to true - whether to display the listen Only meet button or not.  |
+| listenOnlyOption | optional | true/false - defaults to false - whether to display the listen Only meet button or not.  |
+| shareOnlyOption | optional | true/false - defaults to false - to only receive and send shared screen  |
 | meetButtonColor | optional | a hex color string for the meet button(s) i.e. 0000ff for blue |
 | showSMS | optional | true/false - defaults to false - whether to display the send guest link via SMS to guest button. |
 

@@ -89,6 +89,7 @@ console.log(userType);
 console.log(backgroundImage);
 console.log(headerToggle);
 console.log(listenOnlyOption);
+console.log(shareOnlyOption);
 console.log(meetButtonColor);
 console.log(showSMS);
 
@@ -124,13 +125,14 @@ const videoInputSelect = document.querySelector('select#videoSource');
 
 const audio = {};
 const video = {};
-const mediaSettings = {
-  receiveVideo: true,
-  receiveAudio: true,
-  receiveShare: false, //this should be true to split the inbound streams
+
+let mediaSettings = {
+  receiveVideo: listenOnlyOption ? true : !shareOnlyOption,
+  receiveAudio: listenOnlyOption ? true : !shareOnlyOption,
+  receiveShare: true, //this should be true to split the inbound streams
   sendShare: false,
-  sendVideo: true,
-  sendAudio: true
+  sendVideo: !(listenOnlyOption || shareOnlyOption),
+  sendAudio: !(listenOnlyOption || shareOnlyOption)
 };
 
 // setting up the devices
@@ -174,10 +176,6 @@ selectors.forEach((select, selectorIndex) => {
   }
 })
 }).catch(e => console.err(e));
-
-//-----
-
-
 
 let m, remoteShareStream;
 
@@ -312,7 +310,8 @@ function bindMeetingEvents(meeting) {
     console.log(`meeting:startedSharingLocal - ${JSON.stringify(payload)}`);
   });
 
-  meeting.on('meeting:startedSharingRemote', (payload) => {
+  meeting.on('meeting:stoppedSharingRemote', (payload) => {
+    document.getElementById("remote-view-share").srcObject = null;
     console.log(`meeting:stoppedSharingRemote - ${JSON.stringify(payload)}`);
   });
 
@@ -350,6 +349,7 @@ function bindMeetingEvents(meeting) {
     resetControls();
     isActiveMeeting = false;
     listenOnly = false;
+    shareOnly = false;
     if (media.type === "local") {
       document.getElementById("self-view").srcObject = null;
     }
@@ -358,6 +358,9 @@ function bindMeetingEvents(meeting) {
     }
     if (media.type === "remoteAudio") {
       document.getElementById("remote-view-audio").srcObject = null;
+    }
+    if (media.type === 'remoteShare') {
+      document.getElementById("remote-view-share").srcObject = null;
     }
   });
 
@@ -564,6 +567,7 @@ function showHangup(){
   $("#hangup_div").show();
   $("#call_div").hide();
   if(listenOnlyOption){ $("#call_listen_div").hide(); }
+  if(shareOnlyOption) { $("#share_screen_div").show();}
   $("#sms_div").hide();
 }
 
@@ -573,6 +577,8 @@ function showStartButtons(){
     $("#sms_div").show();
   } else if(listenOnlyOption) {
     $("#call_listen_div").show();
+  } else if(shareOnlyOption) {
+    // do we need another join button here?
   }
 }
 
@@ -590,26 +596,29 @@ function resetControls(){
 
 function addMediaFunction(meeting, localStream, localShare) {
   meeting.addMedia({localShare, localStream, mediaSettings});
-  let myTracks = localStream.getTracks();
-  meeting.getDevices().then(devices => {
-    console.log("devices:");
-    console.log(devices);
-    for(var i in devices){
-      let selector = "audioSource";
-      if(devices[i].kind == "videoinput"){
-        selector = "videoSource";
-      }
-      selected = false;
-      for(var j in myTracks){
-        if(myTracks[j].kind + "Source" == selector && myTracks[j].label == devices[i].label){
-          selected = true;
+
+  if(localStream) {
+    let myTracks = localStream.getTracks();
+    meeting.getDevices().then(devices => {
+      console.log("devices:");
+      console.log(devices);
+      for(var i in devices){
+        let selector = "audioSource";
+        if(devices[i].kind == "videoinput"){
+          selector = "videoSource";
         }
+        selected = false;
+        for(var j in myTracks){
+          if(myTracks[j].kind + "Source" == selector && myTracks[j].label == devices[i].label){
+            selected = true;
+          }
+        }
+        $(`#${selector} option[value="${devices[i].deviceId}"]`).text(devices[i].label).prop('selected', selected);
       }
-      $(`#${selector} option[value="${devices[i].deviceId}"]`).text(devices[i].label).prop('selected', selected);
-    }
-    isActiveMeeting = true;
-    showControls();
-  });
+      isActiveMeeting = true;
+      showControls();
+    });
+  }
 }
 
 function addMedia(meeting){
@@ -620,15 +629,19 @@ function addMedia(meeting){
       console.log('**Not joined, waiting for admission event.');
     }
   } else {
-    // Get our local media stream and add it to the meeting
-    return meeting.getMediaStreams(mediaSettings,{audio:true, video:true}).then(mediaStreams => {
-      const [localStream, localShare] = mediaStreams;
-      if(meeting.state == "JOINED"){
-        addMediaFunction(meeting, localStream, localShare);
-      } else {
-        console.log('**Not joined, waiting for admission event.');
-      }
-    });
+    if(shareOnlyOption || listenOnlyOption) {
+      addMediaFunction(meeting, undefined, undefined);
+    } else {
+      // Get our local media stream and add it to the meeting
+      return meeting.getMediaStreams(mediaSettings,{audio:true, video:true}).then(mediaStreams => {
+        const [localStream, localShare] = mediaStreams;
+        if(meeting.state == "JOINED"){
+          addMediaFunction(meeting, localStream, localShare);
+        } else {
+          console.log('**Not joined, waiting for admission event.');
+        }
+      }).catch((error => console.log(error)));
+    }
   }
 }
 

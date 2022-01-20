@@ -8,6 +8,7 @@ const token           = urlParams.get('token') == null ? Cookies.get("token") : 
 const backgroundImage = urlParams.get('backgroundImage') == null ? Cookies.get("backgroundImage") : urlParams.get('backgroundImage');
 let headerToggle      = urlParams.get('headerToggle') == null ? Cookies.get("headerToggle") : urlParams.get('headerToggle');
 let listenOnlyOption  = urlParams.get('listenOnlyOption') == null ? Cookies.get("listenOnlyOption") : urlParams.get('listenOnlyOption');
+let shareOnlyOption   = urlParams.get('shareOnlyOption') == null ? Cookies.get("shareOnlyOption") : urlParams.get('shareOnlyOption');
 const meetButtonColor = urlParams.get('meetButtonColor') == null ? Cookies.get("meetButtonColor") : urlParams.get('meetButtonColor');
 let urlShowSMS        = false;
 
@@ -27,6 +28,13 @@ if(listenOnlyOption !== undefined){
   listenOnlyOption = false;
 }
 
+if(shareOnlyOption !== undefined){
+  shareOnlyOption = shareOnlyOption.toLowerCase() == "true";
+} else {
+  shareOnlyOption = false;
+}
+
+
 try{
   urlShowSMS = urlParams.get('showSMS').toLowerCase() == "true";
 } catch (e){}
@@ -43,10 +51,12 @@ function concatUrl(concat) {
 
 function create_guest_data_object(){
     let guest_data = {};
+    console.log(guest_data);
     guest_data.sip_target = destination;
     guest_data.background_url = backgroundImage;
     guest_data.header_toggle = headerToggle;
     guest_data.listen_only_option = listenOnlyOption;
+    guest_data.share_only_option = shareOnlyOption;
     guest_data.meet_button_color = meetButtonColor;
     guest_data.expire_hours = 6;
     guest_data.skip_validation = true;
@@ -60,7 +70,6 @@ function create_guest_data_object(){
         $('#sms').prop('disabled',true);
         try{
             let guest_data = create_guest_data_object();
-            console.log(guest_data);
             //console.log(concatUrl(deployUrl, '/create_url'))
             let createUrl = concatUrl('/create_url');
             let res = await fetch(createUrl, {
