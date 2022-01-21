@@ -509,6 +509,20 @@ function stopMediaTrack(type, meeting) {
   }
 }
 
+function showVideoElements(){
+  $("#self-view").show();
+  $("#self-share").show();
+  $("#remote-view-video").show();
+  $("#remote-view-share").show();
+}
+
+function hideVideoElements(){
+  $("#self-view").hide();
+  $("#self-share").hide();
+  $("#remote-view-video").hide();
+  $("#remote-view-share").hide();
+}
+
 function resetShareIcon(){
   $("#screen_share_off").show();
   $("#screen_share_on").hide();
@@ -577,6 +591,7 @@ function showStartButtons(){
 }
 
 function resetControls(){
+  hideVideoElements();
   showStartButtons();
   $("#hangup_div").hide();
   for(let i in inMeetingDivs){
@@ -635,6 +650,7 @@ function addMedia(meeting){
 // Join the meeting and add media
 function joinMeeting(meeting) {
   let connectCounter = 0;
+  showVideoElements();
   return meeting.join().then(() => {
     addMedia(meeting);
   });
