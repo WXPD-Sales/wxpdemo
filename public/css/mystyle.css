@@ -73,9 +73,57 @@
   width:90%;
 }
 
-
 .link-cell {
   min-width: 100px;
+}
+
+.member {
+  
+}
+
+.member_admit_icon {
+  background-color: #00a0d1;
+}
+
+.member_admit_button_old {
+  padding: 0;
+  height: 1.25rem;
+  color: #fff;
+  background-color: #00a0d1;
+  border-color:transparent;
+  border-radius: 1.125rem;
+  min-width: 3.4rem;
+  font-size: .875rem;
+  cursor: pointer;
+  border:none;
+  left: 2px;
+}
+
+.member_admit_icon:hover{
+  background-color: #007AA0;
+  cursor:pointer;
+}
+
+.member_name {
+  margin-left: 35px;
+  overflow: hidden;
+  white-space: nowrap;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.member_option {
+  border-radius: 30%;
+  height: 22px;
+  left: 4px;
+  margin-top:2px;
+  padding: 3px;
+  position: absolute;
+}
+
+.member_mute_icon {
+  background: #ff5c4a;
 }
 
 .mobileLandscapeImg {
@@ -108,10 +156,11 @@
 .people {
   background-color:white;
   height: 100%;
-  width:20%;
   position: absolute;
   right:0;
   padding-top: 65px;
+  overflow: hidden;
+  width: 20%;
 }
 
 .people_button {
