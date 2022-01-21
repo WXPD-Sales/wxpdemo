@@ -325,10 +325,12 @@ function bindMeetingEvents(meeting) {
     }
     if (media.type === "local") {
       document.getElementById("self-view").srcObject = media.stream;
+      $('#self-view').show();
     }
     if (media.type === "remoteVideo") {
       console.log('remoteVideo media received.');
       document.getElementById("remote-view-video").srcObject = media.stream;
+      $('#remote-view-video').show();
     }
     if (media.type === "remoteAudio") {
       document.getElementById("remote-view-audio").srcObject = media.stream;
@@ -337,9 +339,11 @@ function bindMeetingEvents(meeting) {
       // Remote share streams become active immediately on join, even if nothing is being shared
       console.log('remoteShare media received.');
       document.getElementById("remote-view-share").srcObject = media.stream;
+      $('#remote-view-share').show();
     }
     if (media.type === 'localShare') {
       document.getElementById('self-share').srcObject = media.stream;
+      $('#self-share').show();
     }
   });
 
@@ -508,13 +512,13 @@ function stopMediaTrack(type, meeting) {
       break;
   }
 }
-
+/*
 function showVideoElements(){
   $("#self-view").show();
   $("#self-share").show();
   $("#remote-view-video").show();
   $("#remote-view-share").show();
-}
+}*/
 
 function hideVideoElements(){
   $("#self-view").hide();
@@ -650,7 +654,7 @@ function addMedia(meeting){
 // Join the meeting and add media
 function joinMeeting(meeting) {
   let connectCounter = 0;
-  showVideoElements();
+  //showVideoElements();
   return meeting.join().then(() => {
     addMedia(meeting);
   });
