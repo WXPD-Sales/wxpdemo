@@ -32,7 +32,7 @@
     "pug": "^3.0.0",
     "randomatic": "^3.1.1",
     "typescript": "*",
-    "webex":"^1.125.3"
+    "webex": "^1.125.3"
   },
   "engines": {
     "node": "12.x"

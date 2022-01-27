@@ -10,6 +10,7 @@
 
 .background-class {
   background-size: cover;
+  overflow: hidden;
 }
 
 .box {
@@ -85,32 +86,26 @@
   background-color: #00a0d1;
 }
 
-.member_admit_button_old {
-  padding: 0;
-  height: 1.25rem;
-  color: #fff;
-  background-color: #00a0d1;
-  border-color:transparent;
-  border-radius: 1.125rem;
-  min-width: 3.4rem;
-  font-size: .875rem;
-  cursor: pointer;
-  border:none;
-  left: 2px;
-}
-
 .member_admit_icon:hover{
   background-color: #007AA0;
   cursor:pointer;
 }
 
 .member_name {
-  margin-left: 35px;
+  margin-left: 30px;
   overflow: hidden;
   white-space: nowrap;
   word-wrap: break-word;
   text-overflow: ellipsis;
   text-align: left;
+}
+
+.member_name_mobile_portrait {
+  margin-left: 75px;
+}
+
+.member_name_mobile_landscape {
+  margin-left: 45px;
 }
 
 .member_option {
@@ -120,6 +115,20 @@
   margin-top:2px;
   padding: 3px;
   position: absolute;
+}
+
+.member_option_mobile_portrait {
+  height: 55px;
+  left: 6px;
+  margin-top: 14px;
+  padding: 8px;
+}
+
+.member_option_mobile_landscape {
+  height: 30px;
+  left: 6px;
+  margin-top: 8px;
+  padding: 6px;
 }
 
 .member_mute_icon {
@@ -154,13 +163,29 @@
 }
 
 .people {
+  z-index: 5;
   background-color:white;
-  height: 100%;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 5%;
+  overflow: hidden;
+  padding-bottom: 20px;
+  padding-top: 65px;
   position: absolute;
   right:0;
-  padding-top: 65px;
-  overflow: hidden;
   width: 20%;
+  overflow-y: auto;
+}
+
+.people_mobile_portrait {
+  padding-top: 180px;
+  font-size: 50px;
+  width: 50%;
+}
+
+.people_mobile_landscape {
+  padding-top: 90px;
+  font-size: 28px;
+  width: 40%;
 }
 
 .people_button {
@@ -168,48 +193,59 @@
   position: absolute;
   right:10%;
   transform: translateX(32px);
+  margin-top: 10px;
+}
+
+.people_button_mobile_portrait {
+  right: 19%;
+}
+
+.people_div {
+  background-color:white;
+  border-radius: 5%;
+  margin-top: 20px;
+}
+
+.people_title {
+  background-color: rgb(230,230,230);
 }
 
 .radio-input {
   margin-right: 5px;
 }
 
-.remote {
-  height: calc(100% - 88px);
-  z-index: 2;
+.remote_desktop {
   position: absolute;
   left:50%;
   transform: translateX(-50%);
 }
 
-.remote_video {
-  display: block;
+.remote_view_video {
   z-index: 3;
-  max-height: 100%;
   height: 100%;
-
-  background-color:grey;
+  border-radius: 1%;
+  /*background-color:grey;*/
 }
 
-.self {
-  position: absolute;
-  z-index: 4;
-  display: inline-block;
+.rvv_mobile_portrait {
+  position:fixed;
+  transform: translateX(-50%);
+  left:50%;
 }
 
 .self_video {
   display: block;
   position: absolute;
-  height: 20%;
   z-index: 5;
-
-  background-color:black;
+  border-radius: 5%;
+  /*background-color:black;*/
+  max-height: 20%;
 }
 
 .self_share {
+  max-height: 20%;
   left:20%;
-
-  background-color:red;
+  /*background-color:red;*/
 }
 
 .sms-button {
@@ -226,7 +262,8 @@
   right:0;
   margin:auto;
   bottom:0;
-  margin-bottom:10px;
+  /*margin-bottom:10px;*/
+  padding-bottom: 10px;
   z-index: 1000;
 }
 
@@ -319,4 +356,39 @@
   max-width: fit-content;
   display: grid;
   justify-items: left;
+}
+
+.flash {
+  -moz-animation: flash 2s ease-out;
+  -moz-animation-iteration-count: 2;
+
+  -webkit-animation: flash 2s ease-out;
+  -webkit-animation-iteration-count: 2;
+
+  -ms-animation: flash 2s ease-out;
+  -ms-animation-iteration-count: 2;
+}
+
+@keyframes flash {
+  100% { background-color: #e6e8e8; }
+  50% { background-color:rgb(36, 171, 49); }
+  100% { background-color: #e6e8e8; }
+}
+
+@-webkit-keyframes flash {
+  100% { background-color: #e6e8e8; }
+  50% { background-color: rgb(36, 171, 49); }
+  100% { background-color: #e6e8e8; }
+}
+
+@-moz-keyframes flash {
+  100% { background-color: #e6e8e8; }
+  50% { background-color: rgb(36, 171, 49); }
+  100% { background-color: #e6e8e8; }
+}
+
+@-ms-keyframes flash {
+  100% { background-color: #e6e8e8; }
+  50% { background-color: rgb(36, 171, 49); }
+  100% { background-color: #e6e8e8; }
 }

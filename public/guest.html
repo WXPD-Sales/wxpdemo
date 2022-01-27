@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="css/collab-ui.min.css" />
     <link rel="stylesheet" href="css/momentum-ui.min.css" />
     <link rel="icon" type="image/png" href="images/favicon.ico"/>
+    <!--<meta name="viewport" content="width=device-width, initial-scale=0.41, maximum-scale=1" />-->
+    <!--<meta name="viewport" content="width=800" />-->
     <!-- cookie parser for JS-->
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
@@ -31,7 +33,7 @@
           </div>
         </header>
       </div>
-      <div id="call_container" class="desktopDimensions">
+      <div id="call_container" class="">
         <div id="call_buttons" class="myrow" style="width:auto;">
           <div id="call_div" class="padit call-button" style="display:None">
             <button id="call" class="md-button md-button--circle md-button--44 md-button--green" title="Make Video Call" type="button">
@@ -118,29 +120,28 @@
         		</div>
         	</div>
         </div>
-        <div id="remote" class="remote">
+        <div id="remote" class="remote_desktop">
           <video id="self-view" class="self_video" muted autoplay="" playsinline=""></video>
           <video id="self-share" class="self_video self_share" muted autoplay="" playsinline=""></video>
-          <div id="people-button-div" class="padit people_button">
+          <div id="people-button_div" class="padit people_button" style="display:none">
             <button id="people-button" class="md-button md-button--circle md-button--44 md-button--grey" alt="Show Participants" type="button" aria-label="show participants">
               <span class="md-button__children">
-                <img id="people-button-add" src="images/icons/participant-list_16@3x.png" class="desktopImg"></img>
-                <img id="people-button-list" src="images/icons/participant-wait_16@3x.png" class="desktopImg" style="display:none"></img>
+                <img id="people-button-list" src="images/icons/participant-list_16@3x.png" class="desktopImg"></img>
+                <img id="people-button-wait" src="images/icons/participant-wait_16@3x.png" class="desktopImg" style="display:none"></img>
               </span>
             </button>
           </div>
           <div id="people" class="people" style="display:none;">
-            <div id="lobby" style="display:none;">
+            <div id="lobby" class="people_div lobby_div" style="display:none;">
               <div class="people_title">Lobby</div>
               <div id="lobby-members" class="people_list"></div>
-              <br/>
             </div>
-            <div id="participants">
+            <div id="participants" class="people_div">
               <div class="people_title">Participants</div>
               <div id="meeting-members" class="people_list"></div>
             </div>
           </div>
-          <video id="remote-view-video" class="remote_video" autoplay="" playsinline=""></video>
+          <video id="remote-view-video" class="remote_view_video" autoplay="" playsinline=""></video>
           <audio id="remote-view-audio" autoplay></audio>
           <!--<video id="remote-view-share" class="" autoplay="" playsinline=""></video>-->
         </div>
@@ -158,7 +159,6 @@
         <img id="spinner" src="images/icons/spinner_16.png">
       </div>
     </div>
-    <div id="log" class="padit"></div>
     <script crossorigin src="https://unpkg.com/webex@^1/umd/webex.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="js/sms.js" async ></script>
