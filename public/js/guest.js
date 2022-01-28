@@ -1,40 +1,78 @@
+function setRemoteHeight(offset){
+  if(offset === undefined){
+    offset = 0;
+  }
+  $("#remote").css({"height": 'calc(100% - ' + offset + 'px)'});
+  $("#people").css({"max-height": 'calc(100% - ' + offset + 'px)'});
+  console.log('remote height set');
+}
+
+if(headerToggle){
+  setRemoteHeight(88);
+} else {
+  setRemoteHeight();
+}
+
 window.mobileCheck = function() {
   let check = false;
   (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);
   return check;
 };
 
-function rearrangeVideoViews(){
-  //TODO: Something is up with the width on mobile?
-  $("#self").css({"position":"initial"});
-  $("#self-view").css({"height":"50%",
-                       "margin":"auto",
-                       "position":"absolute",
-                       "left":"0",
-                       "right":"0",
-                       "bottom":"0",
-                       "width":"initial"})
-  $("#remote-view-video").css({"height":"50%",
-                               "position":"absolute",
-                               "left":"0",
-                               "right":"0",
-                               "top":"0",
-                               "margin":"auto"})
+function mobilePeopleSetup(){
+  if(Math.abs(window.orientation) == 90){//landscape
+    mobilePeopleLandscapeSetup();
+  } else {//portrait
+    mobilePeoplePortraitSetup();
+  }
+}
+
+function mobilePeopleLandscapeSetup(){
+  $('.member_option').each(function(){
+    $(this).addClass('member_option_mobile_landscape');
+    $(this).removeClass('member_option_mobile_portrait');
+  });
+  $('.member_name').each(function(){
+    $(this).addClass('member_name_mobile_landscape');
+    $(this).removeClass('member_name_mobile_portrait');
+  });
+}
+
+function mobilePeoplePortraitSetup(){
+  $('.member_option').each(function(){
+    $(this).addClass('member_option_mobile_portrait');
+    $(this).removeClass('member_option_mobile_landscape');
+  });
+  $('.member_name').each(function(){
+    $(this).addClass('member_name_mobile_portrait');
+    $(this).removeClass('member_name_mobile_landscape');
+  });
 }
 
 function mobileSetup(){
-  //rearrangeVideoViews();
-  $("#call_container").removeClass("desktopDimensions");
-  $("#call_container").addClass("mobileDimensions");
   if(Math.abs(window.orientation) == 90){//landscape
+    $('#remote').addClass('remote_desktop');
+    $('#remote-view-video').removeClass('rvv_mobile_portrait');
+    $('#people').removeClass('people_mobile_portrait');
+    $('#people').addClass('people_mobile_landscape');
+    $('#people-button_div').removeClass('people_button_mobile_portrait');
     $(".md-top-bar").hide();
-    $(".information").removeClass("informationPortrait");
+    mobilePeopleLandscapeSetup();
+    setRemoteHeight();
     $("#settings-content i").each(function(){
       $(this).css({'font-size': ''});
     });
   } else {//portrait
-    $(".md-top-bar").show();
-    $(".information").addClass("informationPortrait");
+    $('#remote').removeClass('remote_desktop');
+    $('#remote-view-video').addClass('rvv_mobile_portrait');
+    $('#people').removeClass('people_mobile_landscape');
+    $('#people').addClass('people_mobile_portrait');
+    $('#people-button_div').addClass('people_button_mobile_portrait');
+    mobilePeoplePortraitSetup();
+    if(headerToggle){
+      $(".md-top-bar").show();
+      setRemoteHeight(76);
+    }
     $("#settings-content i").each(function(){
       $(this).css({'font-size': '4rem'});
     });
@@ -55,21 +93,24 @@ function mobileSetup(){
         icon.removeClass("mobileLandscapeImg");
         icon.addClass("mobilePortraitImg");
       }
-      $('.padit').css('padding', '20px');
+      //$('.padit').css('padding', '20px');
     });
     });
 
 }
 
+let isMobile = mobileCheck();
 window.addEventListener("orientationchange", function(){
   mobileSetup();
 })
 
-if(mobileCheck()){ //increase button sizes for mobile devices
+if(isMobile){ //increase button sizes for mobile devices
   mobileSetup();
 }
 
 let timeout;
+let flashTimeout;
+let peopleButtonTimeout;
 let isActiveMeeting = false;
 let listenOnly = false;
 let credentials = {
@@ -219,47 +260,46 @@ function bindMeetingEvents(meeting) {
   console.log('This meeting', meeting);
   //meeting.setMeetingQuality('HIGH');
   meeting.on("error", err => {
-    console.error("Meeting error -", err);
+    console.error("<Meeting error> -", err);
   });
 
   //meeting:stateChange
   meeting.on('meeting:stateChange', (payload) => {
-    console.log("Meeting State Change", payload);
+    console.log("<meeting:stateChange>", payload);
+    console.log(`currentState:${payload.payload.currentState}`);
+    //resetMeeting(payload.payload.currentState == "INACTIVE", meeting);
+    if(payload.payload.currentState == "INACTIVE"){
+      resetControls();
+      //alert('The meeting was ended.'); // TODO: put an in page message for this.  alert() freezes video redraws so it looks stuck until ok is clicked.
+    }
   });
 
   meeting.on('meeting:ringing', (payload) => {
-    document.getElementById('log').innerHTML = 'Ringing';
-    setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
-    console.log("Meeting Ringing", payload);
+    console.log("<meeting:ringing>", payload);
   });
 
   meeting.on('meeting:ringingStop', (payload) => {
-    document.getElementById('log').innerHTML = 'Ringing Stop';
-    console.log("Meeting Ringing Stop", payload);
+    console.log("<meeting:ringingStop>", payload);
   });
 
   meeting.on('meeting:added', (payload) => {
-    document.getElementById('log').innerHTML = 'Meeting Added';
-    console.log("meeting:added", payload);
+    console.log("<meeting:added>", payload);
   });
 
   meeting.on('meeting:removed', (payload) => {
-    document.getElementById('log').innerHTML = 'Meeting Removed';
-    console.log("meeting:removed", payload);
+    console.log('<meeting:removed>');
   });
 
   meeting.on('meeting:locked', () => {
-    document.getElementById('log').innerHTML = 'Meeting is Locked';
-    console.error("Meeting locked");
+    console.log('<meeting:locked>');
   });
 
   meeting.on('meeting:unlocked', () => {
-    document.getElementById('log').innerHTML = 'Meeting is UnLocked';
-    console.error("Meeting unlocked");
+    console.log('<meeting:unlocked>');
   });
 
   meeting.on('meeting:self:lobbyWaiting', () => {
-    document.getElementById('log').innerHTML = 'Waiting in lobby';
+    console.log('<meeting:self:lobbyWaiting>');
     console.log('User is guest to space, waiting to be admitted, wait to use addMedia');
   });
 
@@ -268,40 +308,41 @@ function bindMeetingEvents(meeting) {
   });
 
   meeting.on('meeting:reconnectionStarting', () => {
-    document.getElementById('log').innerHTML = 'Reconnecting...';
+    console.log('<meeting:reconnectionStarting>');
   });
 
   meeting.on('meeting:reconnectionSuccess', () => {
-    document.getElementById('log').innerHTML = 'Reconnected';
-    setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
+    console.log('<meeting:reconnectionSuccess>');
+    //setTimeout(() => { document.getElementById('log').innerHTML = ''; }, 5000);
   });
 
   meeting.on('meeting:reconnectionFailure', () => {
-    document.getElementById('log').innerHTML = 'reconnection failure';
+    console.log('<meeting:reconnectionFailure>');
   });
 
   meeting.on('meeting:self:guestAdmitted', () => {
-    document.getElementById('log').innerHTML = 'Admitted to meeting as guest';
+    console.log('<meeting:self:guestAdmitted>');
     console.log('Admitted to meeting as guest to call');
     return addMedia(meeting);
   });
 
+  meeting.on('meeting:self:left', (payload) => {
+    console.log(`<meeting:self:left> - ${JSON.stringify(payload)}`);
+  });
+
   meeting.on('meeting:self:mutedByOthers', () => {
-    document.getElementById('log').innerHTML = 'Muted by others';
-    setTimeout(() => {
-      document.getElementById('log').innerHTML = '';
-    }, 10000);
+    console.log('<meeting:self:mutedByOthers>');
   });
 
   meeting.on('meeting:stoppedSharingLocal', (payload) => {
-    console.log(`meeting:stoppedSharingLocal - ${JSON.stringify(payload)}`);
+    console.log(`<meeting:stoppedSharingLocal> - ${JSON.stringify(payload)}`);
     resetShareIcon();
     isSharing = false;
     document.getElementById('self-share').srcObject = null;
   });
 
   meeting.on('meeting:startedSharingLocal', (payload) => {
-    console.log(`meeting:startedSharingLocal - ${JSON.stringify(payload)}`);
+    console.log(`<meeting:startedSharingLocal> - ${JSON.stringify(payload)}`);
     $("#screen_share_off").hide();
     $("#screen_share_on").show();
     $("#screen_share").removeClass("md-button--grey");
@@ -309,11 +350,11 @@ function bindMeetingEvents(meeting) {
   });
 
   meeting.on('meeting:startedSharingRemote', (payload) => {
-    console.log(`meeting:startedSharingLocal - ${JSON.stringify(payload)}`);
+    console.log(`<meeting:startedSharingLocal> - ${JSON.stringify(payload)}`);
   });
 
   meeting.on('meeting:startedSharingRemote', (payload) => {
-    console.log(`meeting:stoppedSharingRemote - ${JSON.stringify(payload)}`);
+    console.log(`<meeting:stoppedSharingRemote> - ${JSON.stringify(payload)}`);
   });
 
 
@@ -325,12 +366,14 @@ function bindMeetingEvents(meeting) {
     }
     if (media.type === "local") {
       document.getElementById("self-view").srcObject = media.stream;
-      $('#self-view').show();
+      //showVideoElements();
+      //$('#self-view').show();
     }
     if (media.type === "remoteVideo") {
       console.log('remoteVideo media received.');
       document.getElementById("remote-view-video").srcObject = media.stream;
-      $('#remote-view-video').show();
+      //showVideoElements();
+      //$('#remote-view-video').show();
     }
     if (media.type === "remoteAudio") {
       document.getElementById("remote-view-audio").srcObject = media.stream;
@@ -339,11 +382,13 @@ function bindMeetingEvents(meeting) {
       // Remote share streams become active immediately on join, even if nothing is being shared
       console.log('remoteShare media received.');
       document.getElementById("remote-view-share").srcObject = media.stream;
-      $('#remote-view-share').show();
+      //showVideoElements();
+      //$('#remote-view-share').show();
     }
     if (media.type === 'localShare') {
       document.getElementById('self-share').srcObject = media.stream;
-      $('#self-share').show();
+      //showVideoElements();
+      //$('#self-share').show();
     }
   });
 
@@ -363,6 +408,12 @@ function bindMeetingEvents(meeting) {
     if (media.type === "remoteAudio") {
       document.getElementById("remote-view-audio").srcObject = null;
     }
+  });
+
+  //careful - this event is on meeting.members, not meeting.
+  meeting.members.on('members:update', (payload) => {
+    console.log("<members:update>", payload);
+    updateMeetingMembers(payload.delta, meeting);
   });
 
   let isSharing = false;
@@ -483,18 +534,97 @@ function bindMeetingEvents(meeting) {
     document.getElementById("self-share").srcObject = null;
     document.getElementById("remote-view-video").srcObject = null;
     document.getElementById("remote-view-audio").srcObject = null;
-    if(meeting.state != "JOINED"){
-      resetControls();
-    }
-    try{
-      meeting.leave(meeting.id);
-    } catch (e) {
-      console.log('caught meeting.leave error:');
-      console.log(e);
-    }
-
+    resetMeeting(meeting.state != "JOINED" || meeting.meetingState == "INACTIVE", meeting);
   });
+
 }
+
+function updateMeetingMembers(deltaMeetingMembers, meeting){
+  //console.log(JSON.stringify(deltaMeetingMembers));
+  //TODO:DELETE THIS!
+  /*
+  deltaMeetingMembers = {"added":[],"updated":[{"namespace":"Meetings","participant":{"isCreator":true,"identity":"cb9bf613-facd-4927-812f-5337ffe643b8","url":"https://locus-b.wbx2.com/locus/api/v1/loci/7f501849-ebdd-3a7…429a79a7c44/participant/c0f630ff-e664-3e72-8ee7-b33d36fc7373","state":"JOINED","type":"USER","isSiteInternal":true,"person":{"id":"cb9bf613-facd-4927-812f-5337ffe643b8","name":"Taylor Hanson (WXSD)","isExternal":false,"orgId":"952e87f4-5c49-4ca1-b285-ee0570c2498c","incomingCallProtocols":[]},"devices":[{"url":"https://wdm-r.wbx2.com/wdm/api/v1/devices/6a8769c0-7cdd-4bcc-a15c-c59511d75ef2","deviceType":"WEB","state":"JOINED","intents":[null],"correlationId":"a94169a0-839c-4851-99c2-60f2de8562f5","isVideoCallback":false,"csis":[2623864320,2623864321,1671102721,1671102720],"replaces":[]}],"status":{"audioStatus":"RECVONLY","videoStatus":"SENDRECV","videoSlidesStatus":"INACTIVE","audioSlidesStatus":"INACTIVE","csis":[2623864320,2623864321,1671102721,1671102720]},"controls":{"audio":{"muted":false,"requestedToUnmute":false,"localAudioUnmuteRequired":false,"disallowUnmute":false,"meta":{}},"video":{"muted":false,"meta":{}},"localRecord":{"recording":false,"meta":{}},"layouts":[{"type":"ActivePresence","deviceUrl":"https://wdm-r.wbx2.com/wdm/api/v1/devices/6a8769c0-7cdd-4bcc-a15c-c59511d75ef2"}],"role":{"presenter":false,"roles":[{"type":"COHOST","hasRole":true,"meta":{"lastModified":"2022-01-26T23:13:56.596Z"}},{"type":"MODERATOR","hasRole":true,"meta":{"lastModified":"2022-01-26T23:13:56.596Z"}},{"type":"PRESENTER","hasRole":false,"meta":{"lastModified":"2022-01-26T23:13:43.144Z"}}]}},"doesNotSupportBreakouts":true,"id":"c0f630ff-e664-3e72-8ee7-b33d36fc7373","guest":false,"resourceGuest":false,"moderator":true,"panelist":false,"moveToLobbyNotAllowed":true,"cmrHost":true,"deviceUrl":"https://wdm-r.wbx2.com/wdm/api/v1/devices/6a8769c0-7cdd-4bcc-a15c-c59511d75ef2"},"id":"c0f630ff-e664-3e72-8ee7-b33d36fc7373","name":"Taylor Hanson (WXSD)","isAudioMuted":true,"isVideoMuted":false,"isSelf":true,"isHost":true,"isGuest":false,"isInLobby":false,"isInMeeting":true,"isNotAdmitted":false,"isContentSharing":false,"status":"IN_MEETING","isDevice":false,"isUser":true,"associatedUser":null,"isRecording":false,"isMutable":false,"isRemovable":false,"type":"MEETING","isModerator":true},{"namespace":"Meetings","participant":{"isCreator":false,"identity":"580cd72a-2d00-44dd-b608-a8b8a32d0cd7","url":"https://locus-b.wbx2.com/locus/api/v1/loci/7f501849-ebdd-3a7…429a79a7c44/participant/73f5e1f8-b807-319c-b95d-4598d7ee6a80","state":"LEFT","reason":"INACTIVE","type":"USER","isSiteInternal":false,"person":{"id":"580cd72a-2d00-44dd-b608-a8b8a32d0cd7","name":"Guest","isExternal":false,"orgId":"7426d9b4-7859-4134-9371-8fe2fa13f9c3","incomingCallProtocols":[]},"devices":[],"status":{"audioStatus":"INACTIVE","videoStatus":"INACTIVE","csis":[]},"controls":{"role":{"presenter":false,"roles":[{"type":"MODERATOR","hasRole":false,"meta":{"lastModified":"2022-01-26T22:43:51.988Z"}},{"type":"PRESENTER","hasRole":false,"meta":{"lastModified":"2022-01-26T22:43:52.215Z"}}]}},"doesNotSupportBreakouts":true,"id":"73f5e1f8-b807-319c-b95d-4598d7ee6a80","guest":false,"resourceGuest":false,"moderator":false,"panelist":false,"moveToLobbyNotAllowed":true},"id":"73f5e1f8-b807-319c-b95d-4598d7ee6a80","name":"Guest","isAudioMuted":false,"isVideoMuted":null,"isSelf":false,"isHost":false,"isGuest":false,"isInLobby":true,"isInMeeting":false,"isNotAdmitted":false,"isContentSharing":false,"status":"NOT_IN_MEETING","isDevice":false,"isUser":true,"associatedUser":null,"isRecording":false,"isMutable":false,"isRemovable":false,"type":"MEETING","isModerator":false},{"namespace":"Meetings","participant":{"isCreator":false,"identity":"fb4d160d-048f-4e6a-95bb-3e0446e173f8","url":"https://locus-b.wbx2.com/locus/api/v1/loci/7f501849-ebdd-3a7…429a79a7c44/participant/a7e3a4bf-b633-3174-b978-1df28a4937b7","state":"JOINED","type":"USER","isSiteInternal":false,"person":{"id":"fb4d160d-048f-4e6a-95bb-3e0446e173f8","name":"Guest","isExternal":false,"orgId":"7426d9b4-7859-4134-9371-8fe2fa13f9c3","incomingCallProtocols":[]},"devices":[{"url":"https://wdm-a.wbx2.com/wdm/api/v1/devices/e1e9fd9a-724a-4240-a3ea-ed8448986109","deviceType":"WEB","state":"JOINED","intents":[null],"correlationId":"df17ffd7-5a28-4b4e-88d6-3022cd1d01a2","isVideoCallback":false,"csis":[879033856,879033857,3415933185,3415933184],"replaces":[]}],"status":{"audioStatus":"SENDRECV","videoStatus":"SENDRECV","videoSlidesStatus":"INACTIVE","audioSlidesStatus":"INACTIVE","csis":[879033856,879033857,3415933185,3415933184]},"controls":{"audio":{"muted":false,"requestedToUnmute":false,"localAudioUnmuteRequired":false,"disallowUnmute":false,"meta":{}},"video":{"muted":false,"meta":{}},"layouts":[{"type":"ActivePresence","deviceUrl":"https://wdm-a.wbx2.com/wdm/api/v1/devices/e1e9fd9a-724a-4240-a3ea-ed8448986109"}],"role":{"presenter":true,"roles":[{"type":"MODERATOR","hasRole":false,"meta":{"lastModified":"2022-01-26T23:13:56.596Z"}},{"type":"PRESENTER","hasRole":true,"meta":{"lastModified":"2022-01-26T23:13:43.144Z"}}]}},"doesNotSupportBreakouts":true,"id":"a7e3a4bf-b633-3174-b978-1df28a4937b7","guest":false,"resourceGuest":false,"moderator":false,"panelist":false,"moveToLobbyNotAllowed":true,"deviceUrl":"https://wdm-a.wbx2.com/wdm/api/v1/devices/e1e9fd9a-724a-4240-a3ea-ed8448986109"},"id":"a7e3a4bf-b633-3174-b978-1df28a4937b7","name":"Guest","isAudioMuted":false,"isVideoMuted":false,"isSelf":false,"isHost":false,"isGuest":false,"isInLobby":false,"isInMeeting":true,"isNotAdmitted":false,"isContentSharing":false,"status":"IN_MEETING","isDevice":false,"isUser":true,"associatedUser":null,"isRecording":false,"isMutable":false,"isRemovable":true,"type":"MEETING","isModerator":false}, 
+    {"namespace":"Meetings","participant":{"isCreator":false,"identity":"d80cd72a-2d00-44dd-b608-a8b8a32d0cd7",
+        "url":"https://locus-b.wbx2.com/locus/api/v1/loci/7f501849-ebdd-3a7…429a79a7c44/participant/73f5e1f8-b807-319c-b95d-4598d7ee6a80","state":"LEFT","reason":
+        "INACTIVE","type":"USER","isSiteInternal":false,"person":{"id":"d80cd72a-2d00-44dd-b608-a8b8a32d0cd7","name":"Guest","isExternal":false,
+            "orgId":"7426d9b4-7859-4134-9371-8fe2fa13f9c3","incomingCallProtocols":[]},"devices":[],"status":{"audioStatus":"INACTIVE","videoStatus":
+                "INACTIVE","csis":[]},"controls":{"role":{"presenter":false,"roles":[{"type":"MODERATOR","hasRole":false,"meta":{"lastModified":"2022-01-26T22:43:51.988Z"}},
+                    {"type":"PRESENTER","hasRole":false,"meta":{"lastModified":"2022-01-26T22:43:52.215Z"}}]}},"doesNotSupportBreakouts":true,
+                        "id":"d3f5e1f8-b807-319c-b95d-4598d7ee6a80","guest":false,"resourceGuest":false,"moderator":false,"panelist":false,"moveToLobbyNotAllowed":true},
+                        "id":"d3f5e1f8-b807-319c-b95d-4598d7ee6a80","name":"Guest","isAudioMuted":false,"isVideoMuted":null,"isSelf":false,"isHost":false,"isGuest":false,
+                        "isInLobby":true,"isInMeeting":false,"isNotAdmitted":false,"isContentSharing":false,"status":"NOT_IN_MEETING","isDevice":false,"isUser":true,"associatedUser":null,"isRecording":false,"isMutable":false,"isRemovable":false,"type":"MEETING","isModerator":false},{"namespace":"Meetings","participant":{"isCreator":false,"identity":"fb4d160d-048f-4e6a-95bb-3e0446e173f8","url":"https://locus-b.wbx2.com/locus/api/v1/loci/7f501849-ebdd-3a7…429a79a7c44/participant/a7e3a4bf-b633-3174-b978-1df28a4937b7","state":"JOINED","type":"USER","isSiteInternal":false,"person":{"id":"fb4d160d-048f-4e6a-95bb-3e0446e173f8","name":"Guest","isExternal":false,"orgId":"7426d9b4-7859-4134-9371-8fe2fa13f9c3","incomingCallProtocols":[]},"devices":[{"url":"https://wdm-a.wbx2.com/wdm/api/v1/devices/e1e9fd9a-724a-4240-a3ea-ed8448986109","deviceType":"WEB","state":"JOINED","intents":[null],"correlationId":"df17ffd7-5a28-4b4e-88d6-3022cd1d01a2","isVideoCallback":false,"csis":[879033856,879033857,3415933185,3415933184],"replaces":[]}],"status":{"audioStatus":"SENDRECV","videoStatus":"SENDRECV","videoSlidesStatus":"INACTIVE","audioSlidesStatus":"INACTIVE","csis":[879033856,879033857,3415933185,3415933184]},"controls":{"audio":{"muted":false,"requestedToUnmute":false,"localAudioUnmuteRequired":false,"disallowUnmute":false,"meta":{}},"video":{"muted":false,"meta":{}},"layouts":[{"type":"ActivePresence","deviceUrl":"https://wdm-a.wbx2.com/wdm/api/v1/devices/e1e9fd9a-724a-4240-a3ea-ed8448986109"}],"role":{"presenter":true,"roles":[{"type":"MODERATOR","hasRole":false,"meta":{"lastModified":"2022-01-26T23:13:56.596Z"}},{"type":"PRESENTER","hasRole":true,"meta":{"lastModified":"2022-01-26T23:13:43.144Z"}}]}},"doesNotSupportBreakouts":true,"id":"a7e3a4bf-b633-3174-b978-1df28a4937b7","guest":false,"resourceGuest":false,"moderator":false,"panelist":false,"moveToLobbyNotAllowed":true,"deviceUrl":"https://wdm-a.wbx2.com/wdm/api/v1/devices/e1e9fd9a-724a-4240-a3ea-ed8448986109"},"id":"a7e3a4bf-b633-3174-b978-1df28a4937b7","name":"Guest","isAudioMuted":false,"isVideoMuted":false,"isSelf":false,"isHost":false,"isGuest":false,"isInLobby":false,"isInMeeting":true,"isNotAdmitted":false,"isContentSharing":false,"status":"IN_MEETING","isDevice":false,"isUser":true,"associatedUser":null,"isRecording":false,"isMutable":false,"isRemovable":true,"type":"MEETING","isModerator":false}]}
+                        */
+  let meetingMembers = deltaMeetingMembers.added.concat(deltaMeetingMembers.updated);
+  for(let user of meetingMembers){
+    if($('#user_div_'+user.id).length){
+      $('#user_div_'+user.id).remove();
+    }
+    let member = $(`<div id="user_div_${user.id}" class="member">`);
+    let name = user.name;
+    if(user.isSelf){
+      name += " (You)";
+    } else if(user.isSiteInternal == false){
+      name += " (Guest)";
+    }
+    let memberName = $('<div class="member_name">');
+    let memberOption = null;
+    member.append(memberName.text(name));
+    let myself = meeting.members.membersCollection.members[meeting.selfId];
+    if(user.isInLobby){
+      //TODO: put this back!
+      if(myself.isModerator){
+        //if(true){
+        memberOption = $(`<img id="${user.id}" src="images/icons/enter-room_16_w.png" class="member_option member_admit_icon">`);
+        member.prepend(
+          $('<div>').append(memberOption
+            .on('click', function(e){
+              console.log('click');
+              console.log(this.id);
+              meeting.admit([this.id]);//TODO: Put this back!
+            }))
+        );
+      }
+      $('#lobby-members').append(member);
+    } else if(user.isInMeeting) {
+      if(user.isAudioMuted){
+        memberOption = $('<img src="images/icons/microphone-muted_16_w.png" class="member_option member_mute_icon">');
+        member.prepend($('<div>').append(memberOption));
+      }
+      $('#meeting-members').append(member);
+    }
+    if(isMobile){
+      mobilePeopleSetup();
+    }
+    if(meeting.meetingState != "INACTIVE" && meeting.state != "LEFT"){
+      if($('#lobby-members').children().length > 0){
+        console.log('there is someone in the lobby.');
+        $('#lobby').show();//prepare the lobby when someone views people roster
+        if($("#people").is(":visible") == false && !myself.isInLobby){
+          showLobbyWaitingIcon();
+        }
+      } else {//no one is in the lobby
+        $('#lobby').hide();
+        resetLobbyIcon();
+      }
+      if(peopleButtonTimeout){ clearTimeout(peopleButtonTimeout)}
+      peopleButtonTimeout = setTimeout(fadeOutPeopleButton, 3000);
+    }
+  }
+}
+
+//TODO: comment this out!
+//updateMeetingMembers();
+
+$("#people-button").on("click", () => {
+  console.log('people button');
+  var people = $("#people");
+  people.animate({width:'toggle'});
+  if($("#people").is(":visible")){ //viewing the lobby
+    resetLobbyIcon();
+  }
+  if(peopleButtonTimeout){ clearTimeout(peopleButtonTimeout)}
+    peopleButtonTimeout = setTimeout(fadeOutPeopleButton, 3000);
+});
 
 function stopMediaTrack(type, meeting) {
   if (!meeting) return;
@@ -512,13 +642,13 @@ function stopMediaTrack(type, meeting) {
       break;
   }
 }
-/*
+
 function showVideoElements(){
   $("#self-view").show();
   $("#self-share").show();
   $("#remote-view-video").show();
   $("#remote-view-share").show();
-}*/
+}
 
 function hideVideoElements(){
   $("#self-view").hide();
@@ -548,6 +678,26 @@ function resetVideoIcon(){
   $("#video_mute").addClass("md-button--grey");
 }
 
+function resetLobbyIcon(){
+  $('#people-button').removeClass('md-button--blue');
+  $("#people-button-list").show();
+  $("#people-button-wait").hide();
+}
+
+function clearPeopleFlash(){
+  $('#people-button').removeClass('flash');
+}
+
+function showLobbyWaitingIcon(){
+  console.log('showLobbyWaiting');
+  $('#people-button_div').show();
+  //$('#people-button').addClass('flash');
+  //if(!flashTimeout){flashTimeout = setTimeout(clearPeopleFlash, 3000)}
+  $('#people-button').addClass('md-button--blue');
+  $("#people-button-wait").show();
+  $("#people-button-list").hide();
+}
+
 function resetSettings(){
   $("#settings-popup").hide();
   viewSettings = false;
@@ -562,8 +712,24 @@ function showControls(){
     for(let i in inMeetingDivs){
       $(`#${inMeetingDivs[i]}_div`).show();
     }
+    $('#people-button_div').show();
     if(timeout) clearTimeout(timeout);
+    if(peopleButtonTimeout) clearTimeout(peopleButtonTimeout);
     timeout = setTimeout(fadeOutControls, 3000);
+  }
+}
+
+function debugShowControls(){
+  showHangup();
+  for(let i in inMeetingDivs){
+    $(`#${inMeetingDivs[i]}_div`).show();
+  }
+  $('#people-button_div').show();
+}
+
+function fadeOutPeopleButton(){
+  if($("#people").is(":visible") == false && $("#people-button-wait").is(":visible") == false){
+    $('#people-button_div').fadeOut();
   }
 }
 
@@ -572,6 +738,7 @@ function fadeOutControls(){
   for(let i in inMeetingDivs){
     $(`#${inMeetingDivs[i]}_div`).fadeOut();
   }
+  fadeOutPeopleButton();
 }
 
 function showLayoutSelect(){
@@ -594,20 +761,43 @@ function showStartButtons(){
   }
 }
 
+function resetParticipantList(){
+  $('#people-button_div').hide();
+  $('#people').hide();
+  $('#lobby-members').empty();
+  $('#meeting-members').empty();
+}
+
 function resetControls(){
-  hideVideoElements();
   showStartButtons();
   $("#hangup_div").hide();
   for(let i in inMeetingDivs){
     $(`#${inMeetingDivs[i]}_div`).hide();
   }
+  resetParticipantList();
   resetShareIcon();
   resetAudioIcon();
   resetVideoIcon();
+  resetLobbyIcon();
   resetSettings();
+  hideVideoElements();
+}
+
+function resetMeeting(condition, meeting){
+  if(condition){
+    console.log('condition to reset meeting met.')
+    resetControls();
+  }
+  try{
+    meeting.leave(meeting.id);
+  } catch (e) {
+    console.log('caught meeting.leave error:');
+    console.log(e);
+  }
 }
 
 function addMediaFunction(meeting, localStream, localShare) {
+  showVideoElements();
   meeting.addMedia({localShare, localStream, mediaSettings});
   let myTracks = localStream.getTracks();
   meeting.getDevices().then(devices => {
