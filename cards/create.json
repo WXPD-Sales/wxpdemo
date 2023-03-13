@@ -1,0 +1,286 @@
+{
+    "type": "AdaptiveCard",
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.2",
+    "body": [
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "auto",
+                    "items": [
+                        {
+                            "type": "Image",
+                            "url": "https://wxsd.wbx.ninja/wxsd-guest-demo/images/cisco/cisco-logo-blue.png",
+                            "width": "64px"
+                        }
+                    ]
+                },
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "wrap": true,
+                            "text": "Webex Demo Session Generator",
+                            "size": "Medium"
+                        }
+                    ],
+                    "verticalContentAlignment": "Center"
+                }
+            ]
+        },
+        {
+            "type": "TextBlock",
+            "text": "This utility will allow you to demonstrate a clientless join experience using the Browser SDK or Widget.",
+            "wrap": true,
+            "weight": "Lighter"
+        },
+        {
+            "type": "Input.Text",
+            "placeholder": "Webex SIP URI or roomId",
+            "id": "destination"
+        },
+        {
+            "type": "TextBlock",
+            "text": "*[Known SIP URI dialing restrictions](https://developer.webex.com/docs/sdks/browser#features)",
+            "wrap": true,
+            "spacing": "Small",
+            "size": "Small"
+        },
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "auto",
+                    "spacing": "None",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Expires in (hours):",
+                            "weight": "Lighter"
+                        }
+                    ],
+                    "verticalContentAlignment": "Center"
+                },
+                {
+                    "type": "Column",
+                    "width": "auto",
+                    "items": [
+                        {
+                            "type": "Input.ChoiceSet",
+                            "choices": [
+                                {
+                                    "title": "1",
+                                    "value": "1"
+                                },
+                                {
+                                    "title": "4",
+                                    "value": "4"
+                                },
+                                {
+                                    "title": "8",
+                                    "value": "8"
+                                },
+                                {
+                                    "title": "12",
+                                    "value": "12"
+                                },
+                                {
+                                    "title": "24",
+                                    "value": "24"
+                                }
+                            ],
+                            "id": "expires_in",
+                            "spacing": "None",
+                            "value": "8"
+                        }
+                    ],
+                    "verticalContentAlignment": "Center"
+                }
+            ]
+        },
+        {
+            "type": "TextBlock",
+            "text": "Optional:",
+            "wrap": true,
+            "spacing": "Medium",
+            "weight": "Bolder",
+            "color": "Accent"
+        },
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "120px",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Link Types",
+                            "wrap": true,
+                            "size": "Small"
+                        }
+                    ],
+                    "verticalContentAlignment": "Center"
+                },
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "Input.ChoiceSet",
+                            "choices": [
+                                {
+                                    "title": "All",
+                                    "value": "all"
+                                },
+                                {
+                                    "title": "Embeddable",
+                                    "value": "Embeddable"
+                                },
+                                {
+                                    "title": "SDK",
+                                    "value": "SDK"
+                                },
+                                {
+                                    "title": "Widget",
+                                    "value": "Widget"
+                                }
+                            ],
+                            "placeholder": "Return Link Type",
+                            "spacing": "None",
+                            "id": "link_type",
+                            "value": "all"
+                        }
+                    ]
+                }
+            ],
+            "spacing": "Small"
+        },
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "120px",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Background Image",
+                            "wrap": true,
+                            "spacing": "Small",
+                            "size": "Small"
+                        }
+                    ],
+                    "verticalContentAlignment": "Center"
+                },
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "Input.Text",
+                            "placeholder": "Public URL of .png/.jpg",
+                            "spacing": "None",
+                            "id": "background_url"
+                        }
+                    ]
+                }
+            ],
+            "spacing": "Small"
+        },
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "120px",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Meet Button Color",
+                            "wrap": true,
+                            "size": "Small"
+                        }
+                    ],
+                    "verticalContentAlignment": "Center"
+                },
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "Input.Text",
+                            "placeholder": "Hex color string for the meet button.",
+                            "value": "24AB31",
+                            "id": "meet_button_color"
+                        }
+                    ]
+                }
+            ],
+            "spacing": "Small"
+        },
+        {
+            "type": "Input.Toggle",
+            "title": "Show Self View",
+            "id": "self_view",
+            "value": "true"
+        },
+        {
+            "type": "Input.Toggle",
+            "title": "Show Webex Branding",
+            "id": "header_toggle",
+            "value": "true",
+            "spacing": "None"
+        },
+        {
+            "type": "Input.Toggle",
+            "title": "Show SMS Button",
+            "id": "sms_button",
+            "value": "true",
+            "spacing": "None"
+        },
+        {
+            "type": "Input.Toggle",
+            "title": "Show \"Share Only\" Button",
+            "id": "share_only_option",
+            "value": "false",
+            "spacing": "None"
+        },
+        {
+            "type": "Input.Toggle",
+            "title": "Show \"Listen Only\" Button",
+            "id": "listen_only_option",
+            "value": "false",
+            "spacing": "None"
+        },
+        {
+            "type": "Input.Text",
+            "spacing": "None",
+            "value": "2",
+            "isVisible": false,
+            "id": "version"
+        },
+        {
+            "type": "ActionSet",
+            "actions": [
+                {
+                    "type": "Action.Submit",
+                    "title": "Create",
+                    "data": {
+                        "submit": "create"
+                    }
+                },
+                {
+                    "type": "Action.OpenUrl",
+                    "title": "Read Me",
+                    "url": "https://github.com/WXSD-Sales/wxpdemo/edit/main/README.md#generate-links"
+                }
+            ]
+        }
+    ]
+}

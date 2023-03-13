@@ -1,0 +1,191 @@
+{
+    "type": "AdaptiveCard",
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.2",
+    "body": [
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "auto",
+                    "items": [
+                        {
+                            "type": "Image",
+                            "url": "https://wxsd.wbx.ninja/wxsd-guest-demo/images/cisco/cisco-logo-blue.png",
+                            "width": "64px"
+                        }
+                    ]
+                },
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "wrap": true,
+                            "text": "Webex Demo Session Links",
+                            "size": "Medium"
+                        }
+                    ],
+                    "verticalContentAlignment": "Center"
+                }
+            ]
+        },
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Meeting Destination:"
+                        }
+                    ],
+                    "verticalContentAlignment": "Center",
+                    "width": 35
+                },
+                {
+                    "type": "Column",
+                    "width": 65,
+                    "verticalContentAlignment": "Center",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "2@webex.com",
+                            "weight": "Lighter"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "ColumnSet",
+            "spacing": "None",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": 35,
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Expires in:",
+                            "wrap": true
+                        }
+                    ],
+                    "verticalContentAlignment": "Center"
+                },
+                {
+                    "type": "Column",
+                    "width": 65,
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "in 8 hours",
+                            "wrap": true,
+                            "weight": "Lighter"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Container"
+        },
+        {
+            "type": "TextBlock",
+            "text": "Select a choice above, enter your mobile phone number, and click **Send** to receive the link as an SMS. You can also receive the link via email.",
+            "wrap": true,
+            "weight": "Lighter"
+        },
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "Input.Text",
+                            "placeholder": "US/UK/Irish Mobile Number",
+                            "id": "phone"
+                        }
+                    ],
+                    "verticalContentAlignment": "Bottom"
+                },
+                {
+                    "type": "Column",
+                    "items": [
+                        {
+                            "type": "ActionSet",
+                            "actions": [
+                                {
+                                    "type": "Action.Submit",
+                                    "title": " Send SMS ",
+                                    "data": {
+                                        "submit": "sms_links"
+                                    },
+                                    "id": "send_sms"
+                                }
+                            ]
+                        }
+                    ],
+                    "width": "100px",
+                    "verticalContentAlignment": "Bottom"
+                }
+            ],
+            "spacing": "Small"
+        },
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "Input.Text",
+                            "placeholder": "Email Address",
+                            "id": "email"
+                        }
+                    ],
+                    "verticalContentAlignment": "Bottom"
+                },
+                {
+                    "type": "Column",
+                    "width": "100px",
+                    "items": [
+                        {
+                            "type": "ActionSet",
+                            "actions": [
+                                {
+                                    "type": "Action.Submit",
+                                    "title": "Send Email",
+                                    "data": {
+                                        "submit": "email_links"
+                                    },
+                                    "id": "send_email"
+                                }
+                            ]
+                        }
+                    ],
+                    "verticalContentAlignment": "Bottom"
+                }
+            ],
+            "spacing": "Small"
+        },
+        {
+            "type": "ActionSet",
+            "actions": [
+                {
+                    "type": "Action.Submit",
+                    "title": "Show Link(s)",
+                    "data": {
+                        "submit": "show_links"
+                    }
+                }
+            ]
+        }
+    ]
+}

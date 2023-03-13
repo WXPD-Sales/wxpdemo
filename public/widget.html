@@ -1,0 +1,88 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>WXSD Guest Link Generator Widget</title>
+    <meta name="description" content="WXSD Guest Link Generator Widget">
+    <link rel="icon" type="image/png" href="/images/favicon.ico"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/mystyle.css">
+    <link rel="stylesheet" href="/css/momentum-ui.min.css">
+    <link rel="stylesheet" href="/css/momentum-ui-icons.min.css">
+    <link rel="stylesheet" href="/css/collab-ui.min.css">
+    <link rel="stylesheet" href="/css/collab-ui-icons.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+
+      $( function() {
+        $( "#dialog" ).dialog({
+          width: 700,
+          height: 600
+        });
+      } );
+    </script>
+
+    <!-- import Cisco Webex Teams Widget library -->
+    <script src="https://code.s4d.io/widget-space/alpha/bundle.js"></script>
+    <link rel="stylesheet" href="https://code.s4d.io/widget-space/alpha/main.css">
+
+    <!-- cookie parser for JS-->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+  </head>
+  <body class="background-class">
+    <header>
+    </header>
+      <div id="dialog" title=".">
+        <div id="my-ciscospark-widget"></div>
+      </div>
+
+    <script>
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const backgroundImage = urlParams.get('backgroundImage') == null ? Cookies.get("backgroundImage") : urlParams.get('backgroundImage');
+      const destination = urlParams.get('destination') == null ? Cookies.get('sip_target') : urlParams.get('destination');
+      const destinationType = urlParams.get('destinationType') == null ? Cookies.get('destination_type') : urlParams.get('destinationType');
+      const token = urlParams.get('token') == null ? Cookies.get('token') : urlParams.get('token');
+      let label = urlParams.get('label') == null ? Cookies.get('label') : urlParams.get('label');
+      console.log(`Cookies.get('label'): ${Cookies.get('label')}`);
+      console.log(`urlParams.get('label'): ${urlParams.get('label')}`);
+      console.log(`label: ${label}`);
+      console.log(typeof(label))
+      console.log(label == "undefined")
+      if(label === undefined){
+        label = "User";
+      }
+      console.log(destination);
+      console.log(destinationType);
+      console.log(token);
+
+      $('body').css({'background-image':`url(${backgroundImage})`});
+
+      var widgetEl = document.getElementById('my-ciscospark-widget');
+      const userType = Cookies.get("userType");
+      // Init a new widget
+      let widgetOptions = {
+        destinationId: destination,
+        destinationType: destinationType,
+        spaceActivities: {"files":true,"meet":true,"message":true,"people":false},
+        initialActivity: destinationType == "email" ? 'message' : 'meet',
+        secondaryActivitiesFullWidth: false
+      }
+      if(userType == "guest"){
+        widgetOptions.guestToken = token;
+      } else {
+        widgetOptions.accessToken = token;
+      }
+      ciscospark.widget(widgetEl).spaceWidget(widgetOptions);
+      document.getElementById('dialog').title = `Hello, ${label}!`;
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/css/mystyle.css">
+    <!--<link rel="stylesheet" href="css/guest.css">-->
+    <link rel="stylesheet" href="/css/collab-ui.min.css" />
+    <link rel="stylesheet" href="/css/momentum-ui.min.css" />
+    <link rel="icon" type="image/png" href="/images/favicon.ico"/>
+    <!--<meta name="viewport" content="width=device-width, initial-scale=0.41, maximum-scale=1" />-->
+    <!--<meta name="viewport" content="width=800" />-->
+    <!-- cookie parser for JS-->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+  </head>
+  <title>WXSD Guest Link Generator</title>
+  <body class="background-class">
+    <div class="box">
+      <div class="myheader" style="display:none;">
+        <header class="md-top-bar md-top-bar--dark myrow" role="navigation">
+          <div class="md-top-bar__container">
+            <div class="md-top-bar__brand">
+              <a class="md-brand" href="/">
+                <div class="md-brand__logo md-brand__logo--pad">
+                  <!--<i class="icon icon-cisco-logo"></i>-->
+                  <img src="/images/cisco-webex/webex-logo_128.png"></img>
+                </div>
+                <div id="main-title" class="md-brand__title">Guest User Access</div>
+              </a>
+            </div>
+          </div>
+          <div class="md-brand__logo md-brand__logo--pad avatar-position">
+            <img id="user-avatar" class="circle-icon avatar-size" src="/images/user.png" alt="User Avatar">
+          </div>
+        </header>
+      </div>
+      <div id="call_container" class="">
+        <div id="call_buttons" class="myrow" style="width:auto;">
+          <div id="call_div" class="call-button" style="display:None">
+            <button id="call" class="custom-button button-desktop button-green" title="Make Video Call" type="button">
+              <span class="md-button__children">
+                <img src="/images/icons/audio-video_24@3x.png" class="img-desktop"></img>
+              </span>
+            </button>
+          </div>
+          <div id="call_listen_div" class="call-button" style="display:None">
+            <button id="call-listen" class="custom-button button-desktop button-green" title="Join Meeting as Listener" type="button">
+              <span class="md-button__children">
+                <img src="/images/icons/telepresence_24@3x.png" class="img-desktop"></img>
+              </span>
+            </button>
+          </div>
+          <div id="sms_div" class="call-button" style="display:None">
+            <button id="sms" class="custom-button button-desktop button-grey" title="Send Meeting Link SMS" type="button">
+              <span class="md-button__children">
+                <img src="/images/icons/sms_16@2x.png" class="img-desktop"></img>
+              </span>
+            </button>
+          </div>
+          <div id="email_div" class="call-button" style="display:None">
+            <button id="email" class="custom-button button-desktop button-grey" title="Send Meeting Link Email" type="button">
+              <span class="md-button__children">
+                <img src="/images/icons/email_16@2x.png" class="img-desktop"></img>
+              </span>
+            </button>
+          </div>
+          <div id="hangup_div" class="call-button" style="display:None">
+            <button id="hangup" class="custom-button button-desktop button-red" alt="Reject call" type="button" aria-label="reject call">
+              <span class="md-button__children">
+                <img src="/images/icons/cancel_24@3x.png" class="img-desktop"></img>
+              </span>
+            </button>
+          </div>
+          <div id="share_screen_div" class="call-button" style="display:None">
+            <button id="screen_share" class="custom-button button-desktop button-grey" alt="Share screen" type="button" aria-label="share screen">
+              <span class="md-button__children">
+                <img id="screen_share_off" src="/images/icons/content-share_24@3x.png" class="img-desktop"></img>
+                <img id="screen_share_on" src="/images/icons/stop-content-share_20@3x.png" class="img-desktop" style="display:none"></img>
+              </span>
+            </button>
+          </div>
+          <div id="audio_mute_div" class="call-button" style="display:None">
+            <button id="audio_mute" class="custom-button button-desktop button-grey" alt="Mute audio" type="button" aria-label="mute audio">
+              <span class="md-button__children">
+                <img id="audio_mute_off" src="/images/icons/microphone_24@3x.png" class="img-desktop"></img>
+                <img id="audio_mute_on" src="/images/icons/microphone-muted_24@3x.png" class="img-desktop" style="display:none"></img>
+              </span>
+            </button>
+          </div>
+          <div id="video_mute_div" class="call-button" style="display:None">
+            <button id="video_mute" class="custom-button button-desktop button-grey" alt="Mute video" type="button" aria-label="mute video">
+              <span class="md-button__children">
+                <img id="video_mute_off" src="/images/icons/camera_24@3x.png" class="img-desktop"></img>
+                <img id="video_mute_on" src="/images/icons/camera-muted_24@3x.png" class="img-desktop" style="display:none"></img>
+              </span>
+            </button>
+          </div>
+          <div id="settings_div" class="call-button" style="display:None">
+            <button id="settings" class="custom-button button-desktop button-grey" alt="Settings" type="button" aria-label="settings">
+              <span class="md-button__children">
+                <img id="settings_off" src="/images/icons/settings_24@3x.png" class="img-desktop"></img>
+                <img id="settings_on" src="/images/icons/settings-active_24@3x.png" class="img-desktop" style="display:none"></img>
+              </span>
+            </button>
+          </div>
+        </div>
+        <div id="settings-popup" class="documentation">
+        	<div class="information">
+        		<div id="close-settings"><i class="icon icon-cancel_16 circle-icon"></i></div>
+        		<div id="settings-content">
+              <div id="v_select" class="padit myrow" style="justify-content:center;">
+                <i class="icon icon-camera-swap_24 circle-icon"></i><select id="videoSource" style=""></select>
+              </div>
+              <div id="a_select" class="padit myrow" style="justify-content:center;">
+                <i class="icon icon-microphone_24 circle-icon"></i><select id="audioSource" style=""></select>
+              </div>
+              <div id="layout_select" class="padit myrow" style="justify-content:center;">
+                <i class="icon icon-video-layout-overlay_24 circle-icon"></i>
+                <select id="videoLayout" style="">
+                  <option value="Single">Single</option>
+                  <option value="Equal">Equal</option>
+                  <option value="ActivePresence">ActivePresence</option>
+                  <option value="Prominent">Prominent</option>
+                  <option value="OnePlusN">OnePlusN</option>
+                </select>
+              </div>
+        		</div>
+        	</div>
+        </div>
+        <div id="remote" class="remote_desktop">
+          <video id="self-view" class="self_video" muted autoplay="" playsinline="" style="display:none"></video>
+          <video id="self-share" class="self_video self_share" muted autoplay="" playsinline="" style="display:none"></video>
+          <div id="people-button_div" class="people_button" style="display:none">
+            <button id="people-button" class="custom-button button-desktop button-grey" alt="Show Participants" type="button" aria-label="show participants">
+              <span class="md-button__children">
+                <img id="people-button-list" src="/images/icons/participant-list_16@3x.png" class="img-desktop"></img>
+                <img id="people-button-wait" src="/images/icons/participant-wait_16@3x.png" class="img-desktop" style="display:none"></img>
+              </span>
+            </button>
+          </div>
+          <div id="people" class="people" style="display:none;">
+            <div id="lobby" class="people_div lobby_div" style="display:none;">
+              <div class="people_title">Lobby</div>
+              <div id="lobby-members" class="people_list"></div>
+            </div>
+            <div id="participants" class="people_div">
+              <div class="people_title">Participants</div>
+              <div id="meeting-members" class="people_list"></div>
+            </div>
+          </div>
+          <video id="remote-view-video" class="remote_view_video" autoplay="" playsinline="" style="display:none"></video>
+          <audio id="remote-view-audio" autoplay></audio>
+          <div class="lobby-waiting" style="display: none;">
+            <div id="lobby-message-overlay" class="lobby-text lobby-text-desktop">Thanks for waiting. You are in the lobby and will be admitted when the Host lets you in.</div>
+          </div>
+          <!--<video id="remote-view-share" class="" autoplay="" playsinline="" style="display:none"></video>-->
+        </div>
+      </div><!--end call container div-->
+    </div><!--end box div-->
+    <div id="overlay">
+      <div id="send-input">
+        <p id="send-input-description"></p>
+        <input class="cui-input" id="sms-input" type="text" style="display:none;">
+        <input class="cui-input" id="email-input" type="text" style="display:none;">
+        <br>
+        <p id="error-input"></p>
+        <br>
+        <button class="cui-button" id="send-sms" onclick="sendSMS();" style="display: none;">Send SMS</button>
+        <button class="cui-button" id="send-email" onclick="sendEmail();" style="display: none;">Send Email</button>
+        <br>
+        <img id="spinner" src="/images/icons/spinner_16.png" style="display: none;">
+      </div>
+    </div>
+    <script crossorigin src="https://unpkg.com/webex@^1/umd/webex.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/js/sms-and-email.js" async ></script>
+    <script src="/js/avatar.js" async ></script>
+    <script src="/js/socket.io.min.js"></script>
+    <script src="/js/embed.js" ></script>
+    <script src="/js/guest.js" ></script>
+  </body>
+</html>

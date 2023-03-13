@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WXSD Guest Link Generator</title>
+    <meta name="description" content="A cool Webex Programmable Platform demo made with Glitch">
+    <meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link id="favicon" rel="icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/css/collab-ui.min.css">
+    <link rel="stylesheet" href="/css/momentum-ui.min.css">
+    <link rel="stylesheet" href="/css/mystyle.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+  </head>
+  <header class="md-top-bar md-top-bar--dark myrow" role="navigation">
+    <div class="md-top-bar__container">
+      <div class="md-top-bar__brand">
+        <a class="md-brand" href="/">
+          <div class="md-brand__logo md-brand__logo--pad">
+            <!-- Note: use either image or icon, but not both-->
+            <img id="webex-logo" src="/images/cisco-webex/webex-logo_128.png" alt="Webex Logo">
+            <!--i.icon.icon-cisco-logo-->
+          </div>
+          <div class="md-brand__title">    Guest Link Generator</div>
+        </a>
+      </div>
+    </div>
+    <div class="md-brand__logo md-brand__logo--pad avatar-position">
+      <img id="user-avatar" class="circle-icon avatar-size" src="/images/user.png" alt="User Avatar">
+    </div>
+  </header>
+  <div id="container" align="center" style="margin: 10px; align-content: center;">
+    <main>
+      <div id="overlay">
+        <div id="send-input">
+          <p id="send-input-description"></p>
+          <input class="cui-input" id="sms-input" type="text" style="display:none;">
+          <input class="cui-input" id="email-input" type="text" style="display:none;">
+          <br>
+          <p id="error-input"></p>
+          <br>
+          <button class="cui-button" id="send-sms" onclick="sendSMS();" style="display: none;">Send SMS</button>
+          <button class="cui-button" id="send-email" onclick="sendEmail();" style="display: none;">Send Email</button>
+          <br>
+          <img id="spinner" src="/images/icons/spinner_16.png" style="display: none;">
+        </div>
+      </div>
+      <br>
+      <section class="dreams" id="guest_info_section">
+        <h4>To what endpoint should we connect the users?</h4>
+        <div class="display-radio" id="sip_uri_radio">
+          <div id="sip_uri_radio-pmr">
+            <input class="radio-input-wide" type="radio" name="sip_uri" value="pmr" checked>My Personal Meeting Room
+          </div>
+          <div id="sip_uri_radio-hour">
+            <input class="radio-input-wide" type="radio" name="sip_uri" value="ad_hoc">Ad hoc meeting now!
+          </div>
+          <div id="sip_uri_radio-custom">
+            <input class="radio-input" type="radio" name="sip_uri" value="custom">
+            <input class="cui-input" id="sipuri" type="email" placeholder="SIP URI or roomId" required="">
+          </div>
+        </div>
+        <br>
+        <h4>When should the session expire?</h4>
+        <h5 id="selected_expiry">Select a Date and Time...</h5>
+        <i class="md-button--circle md-button--48 cui-icon icon icon-calendar-month_36" id="flatpckr" style="color:#000000"></i>
+        <br>
+        <h4>Background Image (Optional):</h4>
+        <div>
+          <input class="cui-input" id="background_url" type="text" placeholder="URL of image .jpg/.png" required="">
+        </div>
+        <div id="toggles">
+          <div class="md-input-container md-toggle-switch ">
+            <input class="md-input md-toggle-switch__input" type="checkbox" aria-checked="true"
+              id="selfView" checked=checked/>
+            <label class="md-toggle-switch__label" for="selfView">
+              <span class="md-toggle-switch__label__container"></span>
+              <span class="md-toggle-switch__label__text">Self View</span>
+            </label>
+          </div>
+          <div class="md-input-container md-toggle-switch ">
+            <input class="md-input md-toggle-switch__input" type="checkbox" aria-checked="true"
+              id="pageHeaderToggle" checked=checked/>
+            <label class="md-toggle-switch__label" for="pageHeaderToggle">
+              <span class="md-toggle-switch__label__container"></span>
+              <span class="md-toggle-switch__label__text">Page Header</span>
+            </label>
+          </div>
+          <div class="md-input-container md-toggle-switch ">
+            <input class="md-input md-toggle-switch__input" type="checkbox" aria-checked="true"
+              id="smsButton" checked=checked/>
+            <label class="md-toggle-switch__label" for="smsButton">
+              <span class="md-toggle-switch__label__container"></span>
+              <span class="md-toggle-switch__label__text">SMS Button</span>
+            </label>
+          </div>
+          <div class="md-input-container md-toggle-switch ">
+            <input class="md-input md-toggle-switch__input" type="checkbox" aria-checked="true"
+              id="showEmail" value=""/>
+            <label class="md-toggle-switch__label" for="showEmail">
+              <span class="md-toggle-switch__label__container"></span>
+              <span class="md-toggle-switch__label__text">Email Button</span>
+            </label>
+          </div>
+          <div class="md-input-container md-toggle-switch ">
+            <input class="md-input md-toggle-switch__input" type="checkbox" aria-checked="true"
+              id="listenOnlyOption"/>
+            <label class="md-toggle-switch__label" for="listenOnlyOption">
+              <span class="md-toggle-switch__label__container"></span>
+              <span class="md-toggle-switch__label__text">Listen Only Button</span>
+            </label>
+          </div>
+          <div class="md-input-container md-toggle-switch ">
+            <input class="md-input md-toggle-switch__input" type="checkbox" aria-checked="true"
+              id="autoDial"/>
+            <label class="md-toggle-switch__label" for="autoDial">
+              <span class="md-toggle-switch__label__container"></span>
+              <span class="md-toggle-switch__label__text">Auto Dial</span>
+            </label>
+          </div>
+        </div>
+        <div style="display: inline-flex;">
+          <div>Meet Button Color</div>
+          <div id="selectedColor" style="margin: 3px 10px;"></div>
+        </div>
+        <div id="sliderPicker"></div>
+      </section>
+      <section>
+        <div>
+          <br/>
+          <p id="messages"></p>
+        </div>
+      </section>
+      <button class="cui-button" id="create_button">Create Session</button>
+      <button class="cui-button" id="reload_button" onclick="window.location.reload();" style="display:none;">Create Another Session</button>
+    </main>
+    <br/>
+    <footer>Made with <img id="heart" src="/images/icons/emoji-heart_16.png"> by the WXSD team (wxsd@external.cisco.com)</footer>
+  </div>
+  <script src="https://browser.sentry-cdn.com/5.23.0/bundle.tracing.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+  <script src="/js/sms-and-email.js" defer=""></script>
+  <script src="/js/avatar.js" defer=""></script>
+  <script src="/js/client.js" defer=""></script>
+</html>

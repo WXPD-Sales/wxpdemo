@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Webex Demo SMS or Email Validation</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="/images/favicon.ico"/>
+	<link rel="stylesheet" type="text/css" href="/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+	<link rel="stylesheet" type="text/css" href="/vendor/animate/animate.css">
+	<link rel="stylesheet" type="text/css" href="/vendor/css-hamburgers/hamburgers.min.css">
+	<link rel="stylesheet" type="text/css" href="/vendor/animsition/css/animsition.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/login-util.css">
+	<link rel="stylesheet" type="text/css" href="/css/login.css">
+
+</head>
+<body>
+
+	<div class="limiter">
+		<div class="container-login100" style="background-image: url('/images/bg-01.jpg');">
+			<div id="part1" class="wrap-login100 p-l-100 p-r-100 p-t-52 p-b-33">
+				<div class="login100-form validate-form flex-sb flex-w">
+					<span class="login100-form-title p-b-43">
+						SMS or Email Validation
+					</span>
+
+					<div class="p-t-13 p-b-4">
+						<span class="txt1">
+							US/UK/Irish Phone Number
+						</span>
+					</div>
+					<div class="input-group mb-3">
+						<input id="tel" type="tel" name="tel" class="input100 form-control border-radius-input-override" placeholder="Phone Number" aria-label="Phone Number" aria-describedby="basic-addon2">
+						<span class="focus-input100"></span>
+						<div class="input-group-append">
+							<button id="send_tel" class="input100 btn btn-outline-secondary btn-override" type="button">Send SMS</button>
+						</div>
+					</div>
+
+					<div class="w-full text-center p-t-20">
+						<span class="txt2">
+							----- or -----
+						</span>
+					</div>
+					<div class="p-t-13 p-b-4">
+						<span class="txt1">
+							Email
+						</span>
+					</div>
+					<div class="input-group mb-3">
+						<input id="email" type="email" name="email" class="input100 form-control border-radius-input-override" placeholder="Email Address" aria-label="Email Address" aria-describedby="basic-addon2">
+						<span class="focus-input100"></span>
+						<div class="input-group-append">
+							<button id="send_email" class="input100 btn btn-outline-secondary btn-override" type="button">Send Email</button>
+						</div>
+					</div>
+
+					<div class="w-full text-center p-t-20">
+						<span class="txt2">
+							powered by imimobile
+						</span>
+					</div>
+				</div>
+			</div>
+			<div id="part2" class="wrap-login100 p-l-110 p-r-110 p-t-62 p-b-33" style="display:none">
+				<div class="login100-form validate-form flex-sb flex-w">
+					<span class="login100-form-title p-b-53">
+						Verify Code
+					</span>
+
+					<div class="p-t-13 p-b-4">
+						<span class="txt1">
+							Code
+						</span>
+					</div>
+					<div class="input-group mb-1">
+						<input id="code" type="tel" pattern="[0-9]{4}" class="input100 form-control border-radius-input-override" placeholder="Phone Number" aria-label="Phone Number" aria-describedby="basic-addon2">
+						<span class="focus-input100"></span>
+						<div class="input-group-append">
+							<button id="verify" class="input100 btn btn-outline-secondary btn-override" type="button">Verify</button>
+						</div>
+					</div>
+					<span id="restart" class="txt2" style="cursor:pointer">
+						Start Over
+					</span>
+
+					<div class="w-full text-center p-t-55">
+						<span class="txt2">
+							powered by imimobile
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
+	<script src="/vendor/animsition/js/animsition.min.js"></script>
+	<script src="/vendor/bootstrap/js/popper.js"></script>
+	<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/vendor/daterangepicker/moment.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+	<script src="/js/sms-and-email.js"></script>
+	<script src="/js/login.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+Dockerfile
+*.yaml
+.DS_Store
+*.old
+*.env
+node_modules/
+test_email.js
+test_files/
+package-lock.json
