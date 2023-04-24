@@ -15,20 +15,10 @@
 </p>
 
 
-Welcome to our WXSD DEMO Repo! <!-- Keep this here --> 
-
-<!-- Keep the following here -->  
- *_Everything included is for demo and Proof of Concept purposes only. Your use of the site is solely at your own risk. This site may contain links to third party content, which we do not warrant, endorse, or assume liability for. These demos are for Cisco Webex usecases, but are not Official Cisco Webex Branded demos._
 ## About The Project
 
 ### Video Demo
 [![Guest Link Generator Video Demo](https://img.youtube.com/vi/PI4Noo1S_nM/0.jpg)](https://youtu.be/PI4Noo1S_nM, "Guest Link Generator Video Demo")
-
-
-### Built With
-
-- Node v12.16.1 (npm v6.13.4)
-- Webex JS SDK
 
 <!-- GETTING STARTED -->
 
@@ -68,6 +58,14 @@ The Embeddable links are intended to be used inside of something like an iframe,
     
 ### Customization Options Diagram
 <img src="https://user-images.githubusercontent.com/19175490/154361112-f98dd75a-854e-4a7a-b40a-b73ad8b1bf89.png" width="900"/>
+
+
+## Setup
+
+### Prerequisites & Dependencies: 
+
+- Node v12.16.1 (npm v6.13.4)
+- [Webex JS SDK](https://www.npmjs.com/package/webex)
 
 ## Installation
 
@@ -265,11 +263,13 @@ The SDK session pages currently emit messages to Soapbox for 3 SDK events:
 {"room":sessionId, "data":{"event":"meeting-state-change", "payload":payload.payload}}
 ```
 
-
 ## License
+All contents are licensed under the MIT license. Please see [license](LICENSE) for details.
 
-Distributed under the MIT License. See `LICENSE` for more information.
 
+## Disclaimer
+<!-- Keep the following here -->  
+ Everything included is for demo and Proof of Concept purposes only. Use of the site is solely at your own risk. This site may contain links to third party content, which we do not warrant, endorse, or assume liability for. These demos are for Cisco Webex usecases, but are not Official Cisco Webex Branded demos.
 <!-- CONTACT -->
 
 ## Contact
