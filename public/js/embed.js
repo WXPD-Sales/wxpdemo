@@ -18,6 +18,7 @@ let urlShowSMS        = false;
 let rootUrl           = Cookies.get("rootUrl");
 
 let autoDial          = urlParams.get('autoDial') == null ? Cookies.get("auto_dial") : urlParams.get('autoDial');
+let autoRecord        = urlParams.get('autoRecord') == null ? Cookies.get("auto_record") : urlParams.get('autoRecord');
 let socketUrl         = urlParams.get('socketUrl') == null ? Cookies.get("socket_url") : urlParams.get('socketUrl');
 
 const embedSize       = urlParams.get('embedSize');
@@ -68,6 +69,12 @@ if(autoDial !== undefined){
   autoDial = autoDial.toLowerCase() == "true";
 } else {
   autoDial = false;
+}
+
+if(autoRecord !== undefined){
+  autoRecord = autoRecord.toLowerCase() == "true";
+} else {
+  autoRecord = false;
 }
 
 /*

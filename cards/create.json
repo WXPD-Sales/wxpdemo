@@ -259,6 +259,20 @@
             "spacing": "None"
         },
         {
+            "type": "Input.Toggle",
+            "title": "Auto Dial",
+            "id": "auto_dial",
+            "value": "false",
+            "spacing": "None"
+        },
+        {
+            "type": "Input.Toggle",
+            "title": "Auto Record",
+            "id": "auto_record",
+            "value": "false",
+            "spacing": "None"
+        },
+        {
             "type": "Input.Text",
             "spacing": "None",
             "value": "2",

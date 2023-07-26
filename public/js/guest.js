@@ -109,7 +109,7 @@ function mobileSetup(){
 }
 
 let isMobile;
-if(embedSize != "desktop"){
+if(embedSize != "desktop" && embedSize != "mobile"){
   isMobile = mobileCheck();
   window.addEventListener("orientationchange", function(){
     mobileSetup();
@@ -158,6 +158,7 @@ console.log(`showEmail:${showEmail}`);
 console.log(`selfView:${selfView}`);
 console.log(`rootUrl:${rootUrl}`);
 console.log(`autoDial:${autoDial}`);
+console.log(`autoRecord:${autoRecord}`);
 console.log(`socketUrl:${socketUrl}`);
 console.log(`embedSize:${embedSize}`);
 
@@ -884,6 +885,11 @@ function addMediaFunction(meeting, localStream, localShare) {
       showControls();
       resizeCallButtonDiv();
       resetLobbyWaiting();
+      if(autoRecord && userType != "guest"){
+        meeting.startRecording().then(r => {
+          console.log('startRecording res:' + r);
+        });
+      }
     });
   }
 }

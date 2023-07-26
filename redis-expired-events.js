@@ -2,7 +2,6 @@
 
 const PubSub = require('./pubsub');
 const RedisRepo = require('./redis-repo');
-
 const redisRepo = new RedisRepo();
 
 //const RedisExpiredEvents = function(){

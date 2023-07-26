@@ -4,7 +4,6 @@ require('dotenv').config();
 const base64url = require('base64url');
 const express = require("express");
 const bodyParser = require("body-parser");
-const RedisExpiredEvents = require("./redis-expired-events");
 const expiry = require("./expiry");
 const app = express();
 const fs = require('fs');
@@ -13,8 +12,16 @@ const thismoment = require("moment");
 const url = require("url");
 const randomize = require("randomatic");
 const session = require("express-session");
-const RedisRepo = require("./redis-repo");
-const rr = new RedisRepo();
+var RedisExpiredEvents;
+var RedisRepo;
+var rr = null;
+if(process.env.REDIS_CONN){
+  RedisExpiredEvents = require("./redis-expired-events");
+  RedisRepo = require("./redis-repo");
+  rr = new RedisRepo();
+} else {
+  console.warn('No REDIS DB configured.  Running in Embedded Only Mode.')
+}
 const tokgen = require("./token-generator");
 const email_validator = require("email-validator");
 const request = require("request");
@@ -47,9 +54,14 @@ var sess = {
 };
 
 const redirect_uri = encodeURIComponent(new URL(path.join(process.env.MY_ROUTE, 'create_token'), process.env.BASE_URL));
-console.log(redirect_uri);
+console.log(`redirect_url:${redirect_uri}`);
+
 const AUTH_URL = `https://webexapis.com/v1/authorize?client_id=${process.env.WEBEX_AUTH_CLIENT}&response_type=code&redirect_uri=${redirect_uri}&scope=${process.env.WEBEX_AUTH_SCOPES}`;
-console.log(AUTH_URL);
+if(process.env.WEBEX_AUTH_CLIENT){
+  console.log(AUTH_URL);
+} else {
+  console.warn('AUTH_URL is not correctly configured. Only Embedded URLs will work.');
+}
 
 const cookieOptions = { maxAge: 40000, secure:true, sameSite: "lax"}
 
@@ -264,7 +276,7 @@ function setRenderedCookies(sessionId, res, userType, redisStore, token, label){
 
   //redisStore[options] can include:
   // ['sip_target', 'destination_type', 'header_toggle', 'listen_only_option', 'share_only_option', 'self_view', 'sms_button', 
-  //  'show_email', 'auto_dial', 'socket_url',]
+  //  'show_email', 'auto_dial', 'auto_record', 'socket_url',]
   for(let option of Object.keys(redisStore)){
     res.cookie(option, redisStore[option], cookieOptions);
   }
@@ -459,7 +471,7 @@ function embedLink(userType, body){
   if([null, undefined, ''].indexOf(body.share_only_option) < 0){
     url +=`&shareOnlyOption=${body.share_only_option}`;
   }
-  url += `&listenOnlyOption=${body.listen_only_option}&selfView=${body.self_view}&showSMS=${body.sms_button}&autoDial=${body.auto_dial}`;
+  url += `&listenOnlyOption=${body.listen_only_option}&selfView=${body.self_view}&showSMS=${body.sms_button}&autoDial=${body.auto_dial}&autoRecord=${body.auto_record}`;
   if([null, undefined, ''].indexOf(body.meet_button_color) < 0){
     let meetButtonColor = body.meet_button_color.replace("#","");
     url +=`&meetButtonColor=${meetButtonColor}`;
@@ -1057,4 +1069,7 @@ const listener = app.listen(process.env.PORT, function() {
   console.log("Your app is listening on port " + listener.address().port);
 });
 
-RedisExpiredEvents();
+if(process.env.REDIS_CONN){
+  RedisExpiredEvents();
+}
+

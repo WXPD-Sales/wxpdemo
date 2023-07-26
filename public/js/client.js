@@ -127,6 +127,7 @@ function create_guest_data_object(){
   guest_data.sms_button = $("#smsButton").prop('checked');
   guest_data.show_email = $("#showEmail").prop('checked');
   guest_data.auto_dial = $("#autoDial").prop('checked');
+  guest_data.auto_record = $("#autoRecord").prop('checked');
   guest_data.meet_button_color = sliderPicker.color.hexString;
   guest_data.version = 2
   return guest_data;
