@@ -170,6 +170,8 @@ The guest.html page accepts the following URL parameters:
 | destination | required | The email address, roomId, or SIP URI  |
 | token | required | The Webex Bearer token of the local user ([your token from the developer portal](https://developer.webex.com/docs/api/getting-started#accounts-and-authentication)) |
 | userType | optional | "guest" (if using a guest JWT. If using a developer or OAuth token, do not include this parameter.) |
+| autoDial | optional | true/false - If true, SDK session page will immediately begin dialing the destination on finalizad page load. |
+| autoUnmute | optional | true/false - If true, SDK session page will automatically unmute when requested to do so by meeting Host. |
 | backgroundImage | optional | The publicly accessible URL of a custom background image to use. |
 | embedSize | optional | if embedSize == "small" the self video video window will lock to the corner of the screen, instead of the corner of the remote video. |
 | meetButtonColor | optional | a hex color string for the meet button(s) i.e. 0000ff for blue |
@@ -206,6 +208,7 @@ The Content-Type is expected to be in JSON format, with the following JSON objec
 | sip_target | true | -- | String - The email address, roomId, or SIP URI. |
 | expire_hours | true | -- | Positive Integer - number of hours the generated links should be valid. |
 | auto_dial | false | false | Boolean - If true, SDK session page will immediately begin dialing on finalizad page load. |
+| auto_unmute | false | false | Boolean - If true, SDK session page will automatically unmute when requested to do so by meeting Host. |
 | background_url | false | "[/hero-seethrough1.webp](https://raw.githubusercontent.com/wxsd-sales/wxsd-guest-demo/main/public/images/hero-seethrough1.webp)" | String - The publicly accessible URL of a custom background image to use. |
 | header_toggle | false | true | Boolean - If true, shows the header bar at the top of each session page for licensed and guest users. |
 | listen_only_option | false | false | Boolean - If true, shows the "join in listen only mode" button. |
