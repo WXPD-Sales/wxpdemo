@@ -244,6 +244,7 @@ function validateEmail(email){
 
 function setRenderedCookies(sessionId, res, userType, redisStore, token, label){
   res.cookie("session_id", sessionId, cookieOptions)
+  res.cookie("appdynamics_key", process.env.APPDYNAMICS_KEY, cookieOptions);
   res.cookie("userType", userType, cookieOptions);
   if(userType == "guest"){
     let name = "Guest";
@@ -276,7 +277,7 @@ function setRenderedCookies(sessionId, res, userType, redisStore, token, label){
 
   //redisStore[options] can include:
   // ['sip_target', 'destination_type', 'header_toggle', 'listen_only_option', 'share_only_option', 'self_view', 'sms_button', 
-  //  'show_email', 'auto_dial', 'auto_record', 'socket_url',]
+  //  'show_email', 'auto_dial', 'auto_record', 'auto_unmute', 'socket_url',]
   for(let option of Object.keys(redisStore)){
     res.cookie(option, redisStore[option], cookieOptions);
   }
@@ -306,6 +307,7 @@ function quickRenderFunc(req, res) {
   let useFile = getCorrectFileName(req.originalUrl);
   if(useFile.indexOf("?") > 0) useFile = useFile.split("?")[0];
   useFile = useFiles[useFile];
+  res.cookie("appdynamics_key", process.env.APPDYNAMICS_KEY, cookieOptions);
   res.sendFile(__dirname + `/public/${useFile}.html`);
 }
 
@@ -471,7 +473,7 @@ function embedLink(userType, body){
   if([null, undefined, ''].indexOf(body.share_only_option) < 0){
     url +=`&shareOnlyOption=${body.share_only_option}`;
   }
-  url += `&listenOnlyOption=${body.listen_only_option}&selfView=${body.self_view}&showSMS=${body.sms_button}&autoDial=${body.auto_dial}&autoRecord=${body.auto_record}`;
+  url += `&listenOnlyOption=${body.listen_only_option}&selfView=${body.self_view}&showSMS=${body.sms_button}&autoDial=${body.auto_dial}&autoUnmute=${body.auto_unmute}&autoRecord=${body.auto_record}`;
   if([null, undefined, ''].indexOf(body.meet_button_color) < 0){
     let meetButtonColor = body.meet_button_color.replace("#","");
     url +=`&meetButtonColor=${meetButtonColor}`;
@@ -570,7 +572,6 @@ function sendExpiryError(res){
     message: "Expire time must be great than 0."
   });
 }
-
 
 router.post(`/create_url`, function(req, res) {
   if (req.body.expire_hours || req.body.expire_timestamp || req.body.expiry_date) {

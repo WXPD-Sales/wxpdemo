@@ -19,9 +19,16 @@ let rootUrl           = Cookies.get("rootUrl");
 
 let autoDial          = urlParams.get('autoDial') == null ? Cookies.get("auto_dial") : urlParams.get('autoDial');
 let autoRecord        = urlParams.get('autoRecord') == null ? Cookies.get("auto_record") : urlParams.get('autoRecord');
+let autoUnmute        = urlParams.get('autoUnmute') == null ? Cookies.get("auto_unmute") : urlParams.get('autoUnmute');
 let socketUrl         = urlParams.get('socketUrl') == null ? Cookies.get("socket_url") : urlParams.get('socketUrl');
 
 const embedSize       = urlParams.get('embedSize');
+const appdynamicsKey  = Cookies.get("appdynamics_key");
+
+//These 3 are only used as calls from democast.
+const democast        = urlParams.get('democast'); //The video name
+const userEmail       = urlParams.get('userEmail'); //The email address of the democast launching user
+
 
 let selectedLink = null;
 
@@ -75,6 +82,12 @@ if(autoRecord !== undefined){
   autoRecord = autoRecord.toLowerCase() == "true";
 } else {
   autoRecord = false;
+}
+
+if(autoUnmute !== undefined){
+  autoUnmute = autoUnmute.toLowerCase() == "true";
+} else {
+  autoUnmute = false;
 }
 
 /*

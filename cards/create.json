@@ -273,6 +273,13 @@
             "spacing": "None"
         },
         {
+            "type": "Input.Toggle",
+            "title": "Auto Unmute",
+            "id": "auto_unmute",
+            "value": "false",
+            "spacing": "None"
+        },
+        {
             "type": "Input.Text",
             "spacing": "None",
             "value": "2",

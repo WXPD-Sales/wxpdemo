@@ -177,5 +177,37 @@
     <script src="/js/socket.io.min.js"></script>
     <script src="/js/embed.js" ></script>
     <script src="/js/guest.js" ></script>
+    <script type="text/javascript">
+        console.log(appdynamicsKey);
+        window["adrum-start-time"] = new Date().getTime();
+        (function(config){
+              config.userEventInfo = {
+              PageView: function () {
+
+                return {
+                  userData: {
+                    democastVideo: democast,
+                    democastDestination: destination,
+                    democastUser: userEmail,
+                    guestDemoNumUsers: numMeetingUsers
+                  }
+                };
+              }
+            };
+            config.appKey = appdynamicsKey;
+            config.adrumExtUrlHttp = "http://cdn.appdynamics.com";
+            config.adrumExtUrlHttps = "https://cdn.appdynamics.com";
+            config.beaconUrlHttp = "http://pdx-col.eum-appdynamics.com";
+            config.beaconUrlHttps = "https://pdx-col.eum-appdynamics.com";
+            config.useHTTPSAlways = true;
+            config.resTiming = {"bufSize":200,"clearResTimingOnBeaconSend":true};
+            config.maxUrlLength = 512;
+        })(window["adrum-config"] || (window["adrum-config"] = {}));
+        const script = document.createElement('script');
+        script.src = "//cdn.appdynamics.com/adrum/adrum-23.3.0.4265.js";
+        script.async = false;
+        document.head.appendChild(script);
+      </script>
+      <!--<script src="//cdn.appdynamics.com/adrum/adrum-23.3.0.4265.js"></script>-->
   </body>
 </html>

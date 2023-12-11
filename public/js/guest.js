@@ -1,3 +1,5 @@
+let numMeetingUsers = 0;
+
 function setRemoteHeight(offset){
   if(offset === undefined){
     offset = 0;
@@ -160,6 +162,8 @@ console.log(`rootUrl:${rootUrl}`);
 console.log(`autoDial:${autoDial}`);
 console.log(`autoRecord:${autoRecord}`);
 console.log(`socketUrl:${socketUrl}`);
+console.log(`democast:${democast}`);
+console.log(`userEmail:${userEmail}`);
 console.log(`embedSize:${embedSize}`);
 
 $('body').css({'background-image':`url(${backgroundImage})`});
@@ -252,9 +256,6 @@ for (let i = 0; i !== deviceInfos.length; i += 1) {
   else if (deviceInfo.kind === 'videoinput') {
     option.text = deviceInfo.label || `camera ${videoInputSelect.length + 1}`;
     videoInputSelect.appendChild(option);
-  }
-  else {
-    console.log('Some other kind of source/device: ', deviceInfo);
   }
 }
 selectors.forEach((select, selectorIndex) => {
@@ -386,6 +387,28 @@ function bindMeetingEvents(meeting) {
 
   meeting.on('meeting:self:mutedByOthers', () => {
     console.log('<meeting:self:mutedByOthers>');
+    $("#audio_mute_off").hide();
+    $("#audio_mute_on").show();
+    $("#audio_mute").removeClass("button-grey");
+    $("#audio_mute").addClass("button-red");
+  });
+
+  meeting.on('meeting:self:unmutedByOthers', () => {
+    console.log('<meeting:self:unmutedByOthers>');
+    if(autoUnmute){
+      console.log("autoUnmute is Enabled, unmuting at the request of host.")
+      meeting.unmuteAudio()
+      resetAudioIcon();
+    }
+  });
+
+  meeting.on(' meeting:self:requestedToUnmute', () => {
+    console.log('<meeting:self:requestedToUnmute>');
+    if(autoUnmute){
+      console.log("autoUnmute is Enabled, unmuting at the request of host.")
+      meeting.unmuteAudio()
+      resetAudioIcon();
+    }
   });
 
   meeting.on('meeting:stoppedSharingLocal', (payload) => {
@@ -882,6 +905,8 @@ function addMediaFunction(meeting, localStream, localShare) {
         $(`#${selector} option[value="${devices[i].deviceId}"]`).text(devices[i].label).prop('selected', selected);
       }
       isActiveMeeting = true;
+      meeting.setLocalVideoQuality("HIGH");
+      console.log("Set High Meeting Quality.")
       showControls();
       resizeCallButtonDiv();
       resetLobbyWaiting();
@@ -906,7 +931,18 @@ function addMedia(meeting){
       addMediaFunction(meeting, undefined, undefined);
     } else {
       // Get our local media stream and add it to the meeting
-      return meeting.getMediaStreams(mediaSettings,{audio:true, video:true}).then(mediaStreams => {
+      return meeting.getMediaStreams(mediaSettings, {audio:true, 
+          video:{
+            width: {
+                max: 1920,
+                ideal: 1920
+            },
+            height: {
+                max: 1080,
+                ideal: 1080
+            }
+          }
+        }).then(mediaStreams => {
         const [localStream, localShare] = mediaStreams;
         if(meeting.state == "JOINED"){
           addMediaFunction(meeting, localStream, localShare);
@@ -923,6 +959,7 @@ function joinMeeting(meeting) {
   let connectCounter = 0;
   //showVideoElements();
   return meeting.join().then(() => {
+    console.log(meeting);
     addMedia(meeting);
   });
 }
